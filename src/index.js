@@ -1,19 +1,22 @@
-import 'react-app-polyfill/stable'
-import 'core-js'
-import React from 'react'
-import { createRoot } from 'react-dom/client'
 import App from './App'
-import reportWebVitals from './reportWebVitals'
+import React from 'react'
+import thunk from 'redux-thunk'
 import { Provider } from 'react-redux'
-import store from './store'
+import ReactDOM from 'react-dom/client'
+import reportWebVitals from './reportWebVitals'
+import Reducer from './services/reducer/reducer'
+import { applyMiddleware, legacy_createStore as createStore } from 'redux'
 
-createRoot(document.getElementById('root')).render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+const store = createStore(
+  Reducer,
+  applyMiddleware(thunk)
 )
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+
 reportWebVitals()
