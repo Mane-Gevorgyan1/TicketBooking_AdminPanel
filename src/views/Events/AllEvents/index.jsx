@@ -1,11 +1,12 @@
 import './style.css'
 import ReactImg from 'src/assets/images/react.jpg'
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Calendar, Location, Ticket } from 'src/assets/svg'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { EachEventPopup } from 'src/components/popup/eachEvent'
-import { GetAllEvents } from "src/services/action/event_action"
-import { CCard, CCardBody, CCardImage, CCardText, CCardTitle } from "@coreui/react"
+import { GetAllEvents } from 'src/services/action/event_action'
+import { CCard, CCardBody, CCardImage, CCardText, CCardTitle } from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import { cilCalendar, cilLibraryBuilding, cilLocationPin, cilMoney } from '@coreui/icons'
 
 const AllEvents = () => {
     const dispatch = useDispatch()
@@ -19,7 +20,7 @@ const AllEvents = () => {
     }, [dispatch, currentPage])
 
     return (
-        <div className="allEvents">
+        <div className='allEvents'>
             {openEvent &&
                 <EachEventPopup
                     open={openEvent}
@@ -33,12 +34,13 @@ const AllEvents = () => {
                         (setSelectedEvent(e))
                         setOpenEvent(true)
                     }}>
-                        <CCardImage orientation="top" src={ReactImg} />
+                        <CCardImage orientation='top' src={ReactImg} />
                         <CCardBody>
                             <CCardTitle>{e?.title}</CCardTitle>
-                            <CCardText><Calendar /> {e?.date.split('T')[0]}</CCardText>
-                            <CCardText><Location /> {e?.location}</CCardText>
-                            <CCardText><Ticket /> {e?.priceStart} - {e?.priceEnd}</CCardText>
+                            <CCardText><CIcon icon={cilCalendar} /> {e?.date.split('T')[0]}</CCardText>
+                            <CCardText><CIcon icon={cilLocationPin} /> {e?.location}</CCardText>
+                            <CCardText><CIcon icon={cilLibraryBuilding} size='lg' /> {e?.place}</CCardText>
+                            <CCardText><CIcon icon={cilMoney} size='lg' />  {e?.priceStart} - {e?.priceEnd}</CCardText>
                         </CCardBody>
                     </CCard>
                 ))

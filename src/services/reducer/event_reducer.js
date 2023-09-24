@@ -8,6 +8,11 @@ export const Event_reducer = (state = store, action) => {
                 temp.events = action.payload.events
             }
             break;
+        case 'singleEvent':
+            if(action.payload.success) {
+                temp.event = action.payload.event
+            }
+            break;
         default:
             return temp;
     }
