@@ -13,8 +13,22 @@ const EditEvent = () => {
     const [validated, setValidated] = useState(false)
     const [file, setFile] = useState()
     const [selectedCategories, setSelectedCategories] = useState([])
-
-    console.log('selectedCategories', selectedCategories)
+    const [eventDetails, setEventDetails] = useState({
+        id: '',
+        title: '',
+        location: '',
+        date: '',
+        priceStart: '',
+        priceEnd: '',
+        topEvent: '',
+        generalEvent: '',
+        category: '',
+        subcategory: '',
+        place: '',
+        hall: '',
+        genre: '',
+        description: ''
+    })
 
     useEffect(() => {
         dispatch(GetSingleEvent(eventId))
@@ -37,6 +51,8 @@ const EditEvent = () => {
         if (form.checkValidity() === false) {
             event.preventDefault()
             event.stopPropagation()
+        } else {
+            console.log('asd');
         }
         setValidated(true)
     }

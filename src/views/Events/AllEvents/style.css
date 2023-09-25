@@ -8,3 +8,7 @@
     width: 30%;
     cursor: pointer;
 }
+
+.card-img-top {
+    height: 350px !important;
+}

@@ -1,11 +1,10 @@
 import './style.css'
-import ReactImg from 'src/assets/images/react.jpg'
+import CIcon from '@coreui/icons-react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { EachEventPopup } from 'src/components/popup/eachEvent'
 import { GetAllEvents } from 'src/services/action/event_action'
 import { CCard, CCardBody, CCardImage, CCardText, CCardTitle } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 import { cilCalendar, cilLibraryBuilding, cilLocationPin, cilMoney } from '@coreui/icons'
 
 const AllEvents = () => {
@@ -34,10 +33,10 @@ const AllEvents = () => {
                         (setSelectedEvent(e))
                         setOpenEvent(true)
                     }}>
-                        <CCardImage orientation='top' src={ReactImg} />
+                        <CCardImage orientation='top' src={`${process.env.REACT_APP_IMAGE}/${e?.image}`} />
                         <CCardBody>
                             <CCardTitle>{e?.title}</CCardTitle>
-                            <CCardText><CIcon icon={cilCalendar} /> {e?.date.split('T')[0]}</CCardText>
+                            <CCardText><CIcon icon={cilCalendar} /> {e?.date?.split('T')[0]}</CCardText>
                             <CCardText><CIcon icon={cilLocationPin} /> {e?.location}</CCardText>
                             <CCardText><CIcon icon={cilLibraryBuilding} size='lg' /> {e?.place}</CCardText>
                             <CCardText><CIcon icon={cilMoney} size='lg' />  {e?.priceStart} - {e?.priceEnd}</CCardText>

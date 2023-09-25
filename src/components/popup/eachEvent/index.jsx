@@ -1,6 +1,5 @@
 import './style.css'
 import CIcon from '@coreui/icons-react'
-import ReactImg from 'src/assets/images/react.jpg'
 import { CloseIcon } from 'src/assets/svg'
 import { useNavigate } from 'react-router-dom'
 import { cilApplicationsSettings, cilApps, cilBook, cilCalendar, cilCasino, cilLibraryBuilding, cilLocationPin, cilMoney, cilPencil, cilPeople, cilSortAscending, cilWallet } from '@coreui/icons'
@@ -13,7 +12,7 @@ export const EachEventPopup = ({ open, setOpen, event }) => {
                 <div className='close' onClick={() => setOpen(false)}>
                     <CloseIcon />
                 </div>
-                <img alt='' src={ReactImg} className='eventPopupImage' />
+                <img alt='' src={`${process.env.REACT_APP_IMAGE}/${event?.image}`} className='eventPopupImage' />
                 <div className='eventPopupDetails'>
                     <div className='eventEdit'>
                         <h1>{event?.title}</h1>
@@ -21,7 +20,7 @@ export const EachEventPopup = ({ open, setOpen, event }) => {
                             <span><CIcon icon={cilPencil} /> Փոփոխել</span>
                         </div>
                     </div>
-                    <span><CIcon icon={cilCalendar} /> {event?.date.split('T')[0]}</span>¸
+                    <span><CIcon icon={cilCalendar} /> {event?.date?.split('T')[0]}</span>
                     <span><CIcon icon={cilLocationPin} /> {event?.location}</span>
                     <span><CIcon icon={cilLibraryBuilding} size='lg' /> {event?.place}</span>
                     <span><CIcon icon={cilMoney} /> {event?.priceStart} - {event?.priceEnd}</span>

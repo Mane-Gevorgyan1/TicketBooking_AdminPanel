@@ -53,6 +53,60 @@ const _nav = [
       },
     ],
   },
+  {
+    component: CNavGroup,
+    name: 'Հովանավորներ',
+    to: '/',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Տեսնել բոլորը',
+        to: '/all-sponsors',
+      },
+      {
+        component: CNavItem,
+        name: 'Ստեղծել նորը',
+        to: '/create-sponsor',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Ժանրեր',
+    to: '/',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Տեսնել բոլորը',
+        to: '/all-genres',
+      },
+      {
+        component: CNavItem,
+        name: 'Ստեղծել նորը',
+        to: '/create-genre',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Դահլճներ',
+    to: '/',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Տեսնել բոլորը',
+        to: '/all-halls',
+      },
+      {
+        component: CNavItem,
+        name: 'Ստեղծել նորը',
+        to: '/create-hall',
+      },
+    ],
+  },
 ]
 
 export default _nav

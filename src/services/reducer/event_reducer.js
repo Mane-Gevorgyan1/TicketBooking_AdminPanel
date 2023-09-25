@@ -14,7 +14,6 @@ export const Event_reducer = (state = store, action) => {
             }
             break;
         case 'getAllCategories':
-            console.log(action.payload.categories)
             if (action.payload.success) {
                 let categories = []
                 action.payload.categories.forEach(element => {
