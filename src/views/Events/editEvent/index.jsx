@@ -1,16 +1,37 @@
 import './style.css'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GetSingleEvent } from 'src/services/action/event_action'
+import { MultiSelect } from 'react-multi-select-component'
+import { GetAllCategories, GetSingleEvent } from 'src/services/action/event_action'
 import { CButton, CCol, CForm, CFormCheck, CFormInput, CFormSelect, CFormTextarea } from '@coreui/react'
 
 const EditEvent = () => {
     const dispatch = useDispatch()
     const event = useSelector(st => st.Event_reducer.event)
-    const [eventId] = useState(window.location.pathname.split('/')[2])
-    console.log('event', event);
-
+    const allCategories = useSelector(st => st.Event_reducer.categories)
+    const [eventId] = useState(window.location.hash.split('/')[2])
     const [validated, setValidated] = useState(false)
+    const [file, setFile] = useState()
+    const [selectedCategories, setSelectedCategories] = useState([])
+
+    console.log('event?.category', event?.category)
+
+    useEffect(() => {
+        dispatch(GetSingleEvent(eventId))
+        dispatch(GetAllCategories())
+    }, [eventId, dispatch])
+
+    useEffect(() => {
+        if (event) {
+            setFile(`${process.env.REACT_APP_IMAGE}/${event?.image}`)
+            let categories = []
+            event?.category?.forEach(element => {
+                categories.push({ label: element , value: 1})
+            })
+            setSelectedCategories(categories)
+        }
+    }, [event])
+
     const handleSubmit = (event) => {
         const form = event.currentTarget
         if (form.checkValidity() === false) {
@@ -20,9 +41,27 @@ const EditEvent = () => {
         setValidated(true)
     }
 
-    useEffect(() => {
-        dispatch(GetSingleEvent(eventId))
-    }, [eventId, dispatch])
+    function uploadSingleFile(e) {
+        if (e.target.files.length) {
+            setFile(URL.createObjectURL(e.target.files[0]))
+            // const token = localStorage.getItem('token')
+            // const myHeaders = new Headers();
+            // myHeaders.append("Authorization", `Bearer ${token}`);
+            // const formdata = new FormData();
+            // formdata.append("logo", e.target.files[0]);
+
+            // fetch(`${process.env.REACT_APP_HOSTNAME}/updateLogoProizvoditel`, {
+            //     method: 'POST',
+            //     headers: myHeaders,
+            //     body: formdata,
+            //     redirect: 'follow'
+            // })
+            //     .then(response => response.json())
+            //     .then(result => result.status && setFile(URL.createObjectURL(e.target.files[0])))
+            //     .catch(error => console.log('error', error));
+        }
+    }
+
     return (
         <div>
             <CForm
@@ -32,8 +71,16 @@ const EditEvent = () => {
                 onSubmit={handleSubmit}
             >
                 <CCol md={4}>
-                    Նկար
+                    <img alt='' src={file} className='eventImage' />
+                    <CFormInput
+                        type="file"
+                        defaultValue={file}
+                        feedbackInvalid='Պարտադիր դաշտ'
+                        required={!file?.length}
+                    />
                 </CCol>
+                <CCol md={4}></CCol>
+                <CCol md={4}></CCol>
                 <CCol md={4}>
                     <CFormInput
                         type="text"
@@ -109,11 +156,40 @@ const EditEvent = () => {
                     />
                 </CCol>
                 <CCol md={4}>
-                    {event?.category?.length > 0 &&
+                    <CFormSelect
+                        type="text"
+                        defaultValue={event?.hall}
+                        feedbackInvalid='Պարտադիր դաշտ'
+                        label="Առավելություն"
+                        required
+                    >
+                        <option value={'generalEvent'}>Գլխավոր</option>
+                        <option value={'topEvent'}>Թոփ</option>
+                        <option value={''}>Բոլորը</option>
+                    </CFormSelect>
+                </CCol>
+                <CCol md={4}>
+                    {/* {event?.category?.length > 0 &&
                         event?.category?.map((e, i) => (
                             <CFormCheck id="flexCheckDefault" label={e} key={i} />
                         ))
-                    }
+                    } */}
+                    <MultiSelect
+                        options={allCategories}
+                        value={selectedCategories}
+                        onChange={setSelectedCategories}
+                        labelledBy="Select"
+                        overrideStrings={{
+                            allItemsAreSelected: 'Все города выбраны.',
+                            clearSearch: 'Очистить поиск',
+                            clearSelected: 'Очистить выбранное',
+                            noOptions: 'Нет выбора',
+                            search: 'Поиск',
+                            selectAll: 'Выбрать все',
+                            selectAllFiltered: 'Выбрать все (отфильтровано)',
+                            selectSomeItems: 'Выбирать...',
+                        }}
+                    />
                 </CCol>
                 <CCol md={4}>
                     {event?.genre?.length > 0 &&
@@ -128,19 +204,6 @@ const EditEvent = () => {
                             <CFormCheck id="flexCheckDefault" label={e} key={i} />
                         ))
                     }
-                </CCol>
-                <CCol md={4}>
-                    <CFormSelect
-                        type="text"
-                        defaultValue={event?.hall}
-                        feedbackInvalid='Պարտադիր դաշտ'
-                        label="Առավելություն"
-                        required
-                    >
-                        <option value={'generalEvent'}>Գլխավոր</option>
-                        <option value={'topEvent'}>Թոփ</option>
-                        <option value={''}>Բոլորը</option>
-                    </CFormSelect>
                 </CCol>
                 <CCol md={12}>
                     <CFormTextarea

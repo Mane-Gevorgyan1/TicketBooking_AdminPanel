@@ -2,9 +2,11 @@ import './style.css'
 import CIcon from '@coreui/icons-react'
 import ReactImg from 'src/assets/images/react.jpg'
 import { CloseIcon } from 'src/assets/svg'
+import { useNavigate } from 'react-router-dom'
 import { cilApplicationsSettings, cilApps, cilBook, cilCalendar, cilCasino, cilLibraryBuilding, cilLocationPin, cilMoney, cilPencil, cilPeople, cilSortAscending, cilWallet } from '@coreui/icons'
 
 export const EachEventPopup = ({ open, setOpen, event }) => {
+    const navigate = useNavigate()
     return (
         <div className={open ? 'activePopup' : 'inactive'}>
             <div className='pop' style={{ width: '570px' }}>
@@ -15,7 +17,7 @@ export const EachEventPopup = ({ open, setOpen, event }) => {
                 <div className='eventPopupDetails'>
                     <div className='eventEdit'>
                         <h1>{event?.title}</h1>
-                        <div className='eventEditBg' onClick={() => window.location = `/edit-event/${event?._id}`}>
+                        <div className='eventEditBg' onClick={() => navigate(`/edit-event/${event?._id}`)}>
                             <span><CIcon icon={cilPencil} /> Փոփոխել</span>
                         </div>
                     </div>

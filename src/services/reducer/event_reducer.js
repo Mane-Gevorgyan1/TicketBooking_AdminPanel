@@ -9,8 +9,18 @@ export const Event_reducer = (state = store, action) => {
             }
             break;
         case 'singleEvent':
-            if(action.payload.success) {
+            if (action.payload.success) {
                 temp.event = action.payload.event
+            }
+            break;
+        case 'getAllCategories':
+            console.log(action.payload.categories)
+            if (action.payload.success) {
+                let categories = []
+                action.payload.categories.forEach(element => {
+                    categories.push({ label: element?.name, value: element?._id })
+                })
+                temp.categories = categories
             }
             break;
         default:

@@ -39,6 +39,28 @@ const _nav = [
       },
     ],
   },
+  {
+    component: CNavTitle,
+    name: 'Միջոցառումներ',
+  },
+  {
+    component: CNavGroup,
+    name: 'Միջոցառումներ',
+    to: '/',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Տեսնել բոլորը',
+        to: '/all-events',
+      },
+      {
+        component: CNavItem,
+        name: 'Ստեղծել նորը',
+        to: '/create-event',
+      },
+    ],
+  },
 ]
 
 export default _nav
