@@ -18,10 +18,6 @@ const _nav = [
     },
   },
   {
-    component: CNavTitle,
-    name: 'Միջոցառումներ',
-  },
-  {
     component: CNavGroup,
     name: 'Միջոցառումներ',
     to: '/',
@@ -40,24 +36,20 @@ const _nav = [
     ],
   },
   {
-    component: CNavTitle,
-    name: 'Միջոցառումներ',
-  },
-  {
     component: CNavGroup,
-    name: 'Միջոցառումներ',
+    name: 'Բաժիններ',
     to: '/',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: 'Տեսնել բոլորը',
-        to: '/all-events',
+        to: '/all-categories',
       },
       {
         component: CNavItem,
         name: 'Ստեղծել նորը',
-        to: '/create-event',
+        to: '/create-category',
       },
     ],
   },

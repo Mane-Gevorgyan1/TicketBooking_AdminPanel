@@ -18,7 +18,7 @@ export const Event_reducer = (state = store, action) => {
             if (action.payload.success) {
                 let categories = []
                 action.payload.categories.forEach(element => {
-                    categories.push({ label: element?.name, value: element?._id })
+                    categories.push({ label: element?.name, value: element?.name })
                 })
                 temp.categories = categories
             }

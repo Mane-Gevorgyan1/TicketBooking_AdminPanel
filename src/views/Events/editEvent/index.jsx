@@ -14,7 +14,7 @@ const EditEvent = () => {
     const [file, setFile] = useState()
     const [selectedCategories, setSelectedCategories] = useState([])
 
-    console.log('event?.category', event?.category)
+    console.log('selectedCategories', selectedCategories)
 
     useEffect(() => {
         dispatch(GetSingleEvent(eventId))
@@ -26,7 +26,7 @@ const EditEvent = () => {
             setFile(`${process.env.REACT_APP_IMAGE}/${event?.image}`)
             let categories = []
             event?.category?.forEach(element => {
-                categories.push({ label: element , value: 1})
+                categories.push({ label: element , value: element})
             })
             setSelectedCategories(categories)
         }
@@ -169,25 +169,20 @@ const EditEvent = () => {
                     </CFormSelect>
                 </CCol>
                 <CCol md={4}>
-                    {/* {event?.category?.length > 0 &&
-                        event?.category?.map((e, i) => (
-                            <CFormCheck id="flexCheckDefault" label={e} key={i} />
-                        ))
-                    } */}
                     <MultiSelect
                         options={allCategories}
                         value={selectedCategories}
                         onChange={setSelectedCategories}
                         labelledBy="Select"
                         overrideStrings={{
-                            allItemsAreSelected: 'Все города выбраны.',
-                            clearSearch: 'Очистить поиск',
-                            clearSelected: 'Очистить выбранное',
-                            noOptions: 'Нет выбора',
-                            search: 'Поиск',
-                            selectAll: 'Выбрать все',
-                            selectAllFiltered: 'Выбрать все (отфильтровано)',
-                            selectSomeItems: 'Выбирать...',
+                            allItemsAreSelected: 'Բոլոր բաժիններ ընտրված են',
+                            clearSearch: 'Մաքրել որոնումը',
+                            clearSelected: 'Մաքրել ընտրվածները',
+                            noOptions: 'Բաժիններ չկան',
+                            search: 'Որոնել',
+                            selectAll: 'Ընտրել բոլորը',
+                            selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
+                            selectSomeItems: 'Ընտրել...',
                         }}
                     />
                 </CCol>
