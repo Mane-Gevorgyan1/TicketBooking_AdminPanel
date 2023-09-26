@@ -55,6 +55,24 @@ const _nav = [
   },
   {
     component: CNavGroup,
+    name: 'Ենթաբաժիններ',
+    to: '/',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Տեսնել բոլորը',
+        to: '/all-subcategories',
+      },
+      {
+        component: CNavItem,
+        name: 'Ստեղծել նորը',
+        to: '/create-subcategory',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
     name: 'Հովանավորներ',
     to: '/',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,

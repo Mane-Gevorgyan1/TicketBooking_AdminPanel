@@ -4,42 +4,38 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MultiSelect } from 'react-multi-select-component'
 import { GetAllGenres } from 'src/services/action/genre_action'
 import { GetAllSponsors } from 'src/services/action/sponsor_action'
-import { GetAllCategories, GetSingleEvent } from 'src/services/action/event_action'
-import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextarea } from '@coreui/react'
+import { GetAllCategories } from 'src/services/action/event_action'
+import { CButton, CCol, CForm, CFormControlValidation, CFormInput, CFormLabel, CFormSelect, CFormTextarea } from '@coreui/react'
 
-const EditEvent = () => {
+const CreateEvent = () => {
     const dispatch = useDispatch()
-    const event = useSelector(st => st.Event_reducer.event)
     const allCategories = useSelector(st => st.Event_reducer.categories)
     const allGenres = useSelector(st => st.Genre_reducer.allGenres)
     const allSponsors = useSelector(st => st.Sponsor_reducer.allSponsors)
     const [selectAllGenres, setSelectAllGenres] = useState([])
     const [selectAllCategories, setSelectAllCategories] = useState([])
     const [selectAllSponsors, setSelectAllSponsors] = useState([])
-    const [eventId] = useState(window.location.hash.split('/')[2])
-    const [validated, setValidated] = useState(false)
-    const [file, setFile] = useState()
-    const [blob, setBlob] = useState()
     const [selectedCategories, setSelectedCategories] = useState([])
     const [selectedGenres, setSelectedGenres] = useState([])
     const [selectedSponsors, setSelectedSponsors] = useState([])
+    const [validated, setValidated] = useState(false)
+    const [file, setFile] = useState()
+    const [blob, setBlob] = useState()
     const [eventDetails, setEventDetails] = useState({
         title: '',
-        topEvent: '',
-        generalEvent: '',
-        subcategory: '',
+        topEvent: false,
+        generalEvent: false,
+        category: [],
+        genres: [],
+        sponsors: [],
         description: ''
     })
 
-    console.log(event);
-    console.log(selectedGenres);
-
     useEffect(() => {
-        dispatch(GetSingleEvent(eventId))
         dispatch(GetAllCategories())
         dispatch(GetAllGenres())
         dispatch(GetAllSponsors())
-    }, [eventId, dispatch])
+    }, [dispatch])
 
     useEffect(() => {
         let genres = []
@@ -71,38 +67,12 @@ const EditEvent = () => {
         setSelectAllSponsors(sponsors)
     }, [allSponsors])
 
-    useEffect(() => {
-        if (event) {
-            setBlob(`${process.env.REACT_APP_IMAGE}/${event?.image}`)
-            
-            setEventDetails({
-                title: event?.title,
-                topEvent: event?.topEvent,
-                generalEvent: event?.generalEvent,
-                subcategory: '',
-                description: event?.description
-            })
-
-            let categories = []
-            event?.category?.forEach(element => {
-                categories.push({ label: element?.name, value: element?._id })
-            })
-            setSelectedCategories(categories)
-
-            let genres = []
-            event?.genres?.forEach(element => {
-                genres.push({ label: element?.name, value: element._id })
-            })
-            setSelectedGenres(genres)
-
-            let sponsors = []
-            event?.sponsors?.forEach(element => {
-                sponsors.push({ label: element?.name, value: element._id })
-            })
-            setSelectedSponsors(sponsors)
+    function handleImageChange(e) {
+        if (e.target.files.length) {
+            setBlob(URL.createObjectURL(e.target.files[0]))
+            setFile(e.target.files[0])
         }
-    }, [event])
-
+    }
     const handleSubmit = (event) => {
         const form = event.currentTarget
         if (form.checkValidity() === false) {
@@ -111,7 +81,6 @@ const EditEvent = () => {
         } else {
             const formdata = new FormData()
             formdata.append("image", file)
-            formdata.append("id", eventId)
             formdata.append("title", eventDetails?.title)
             formdata.append("topEvent", eventDetails?.topEvent)
             formdata.append("generalEvent", eventDetails?.generalEvent)
@@ -137,28 +106,21 @@ const EditEvent = () => {
                 })
                 formdata.append("sponsors", sponsors)
             }
-            fetch(`${process.env.REACT_APP_HOSTNAME}/editEvent`, {
-                method: 'PATCH',
+            fetch(`${process.env.REACT_APP_HOSTNAME}/createEvent`, {
+                method: 'POST',
                 body: formdata,
                 redirect: 'follow'
             })
                 .then(response => response.json())
                 .then(result => {
                     console.log(result);
-                    if (result.success) {
-                        alert('Միջոցառումը թարմացված է')
+                    if(result.success) {
+                        alert('Միջոցառումը ստեղծված է')
                     }
                 })
                 .catch(error => console.log('error', error));
         }
         setValidated(true)
-    }
-
-    function uploadSingleFile(e) {
-        if (e.target.files.length) {
-            setBlob(URL.createObjectURL(e.target.files[0]))
-            setFile(e.target.files[0])
-        }
     }
 
     return (
@@ -173,16 +135,18 @@ const EditEvent = () => {
                     <img alt='' src={blob} className='eventImage' />
                     <CFormInput
                         type="file"
-                        defaultValue={blob}
+                        defaultValue=''
+                        onChange={handleImageChange}
                         feedbackInvalid='Պարտադիր դաշտ'
-                        required={!file?.length}
+                        required
                     />
                 </CCol>
+                
                 <CCol md={4} /><CCol md={4} />
                 <CCol md={4}>
                     <CFormInput
                         type="text"
-                        defaultValue={event?.title}
+                        defaultValue=''
                         onChange={(e) => setEventDetails({ ...eventDetails, title: e.target.value })}
                         feedbackInvalid='Պարտադիր դաշտ'
                         label="Վերնագիր"
@@ -192,14 +156,23 @@ const EditEvent = () => {
                 <CCol md={4}>
                     <CFormSelect
                         type="text"
-                        defaultValue={event?.hall}
+                        defaultValue='all'
                         feedbackInvalid='Պարտադիր դաշտ'
                         label="Առավելություն"
                         required
+                        onChange={(e) => {
+                            if (e.target.value === 'generalEvent') {
+                                setEventDetails({ ...eventDetails, generalEvent: true, topEvent: false })
+                            } else if (e.target.value === 'topEvent') {
+                                setEventDetails({ ...eventDetails, generalEvent: false, topEvent: true })
+                            } else {
+                                setEventDetails({ ...eventDetails, generalEvent: false, topEvent: false })
+                            }
+                        }}
                     >
                         <option value={'generalEvent'}>Գլխավոր</option>
                         <option value={'topEvent'}>Թոփ</option>
-                        <option value={''}>Բոլորը</option>
+                        <option value={'all'}>Բոլորը</option>
                     </CFormSelect>
                 </CCol>
                 <CCol md={4}>
@@ -266,16 +239,17 @@ const EditEvent = () => {
                         label="Նկարագրություն"
                         placeholder="..."
                         required
-                        defaultValue={event?.description}
+                        defaultValue=''
+                        onChange={(e) => setEventDetails({ ...eventDetails, description: e.target.value })}
                         rows={5}
                     />
                 </CCol>
                 <CCol xs={12}>
-                    <CButton color="primary" type="submit">Փոփոխել</CButton>
+                    <CButton color="primary" type="submit">Ստեղծել</CButton>
                 </CCol>
             </CForm>
         </div>
     )
 }
 
-export default EditEvent
+export default CreateEvent

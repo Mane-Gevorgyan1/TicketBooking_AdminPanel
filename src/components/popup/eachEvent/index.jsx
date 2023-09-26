@@ -2,10 +2,11 @@ import './style.css'
 import CIcon from '@coreui/icons-react'
 import { CloseIcon } from 'src/assets/svg'
 import { useNavigate } from 'react-router-dom'
-import { cilApplicationsSettings, cilApps, cilBook, cilCalendar, cilCasino, cilLibraryBuilding, cilLocationPin, cilMoney, cilPencil, cilPeople, cilSortAscending, cilWallet } from '@coreui/icons'
+import { cilApplicationsSettings, cilApps, cilBook, cilCasino, cilPencil, cilPeople, cilSortAscending } from '@coreui/icons'
 
 export const EachEventPopup = ({ open, setOpen, event }) => {
     const navigate = useNavigate()
+
     return (
         <div className={open ? 'activePopup' : 'inactive'}>
             <div className='pop' style={{ width: '570px' }}>
@@ -20,10 +21,6 @@ export const EachEventPopup = ({ open, setOpen, event }) => {
                             <span><CIcon icon={cilPencil} /> Փոփոխել</span>
                         </div>
                     </div>
-                    <span><CIcon icon={cilCalendar} /> {event?.date?.split('T')[0]}</span>
-                    <span><CIcon icon={cilLocationPin} /> {event?.location}</span>
-                    <span><CIcon icon={cilLibraryBuilding} size='lg' /> {event?.place}</span>
-                    <span><CIcon icon={cilMoney} /> {event?.priceStart} - {event?.priceEnd}</span>
                     {event?.category?.length > 0 &&
                         <div className='eventGenres'>
                             <CIcon icon={cilApps} size='lg' />
@@ -31,8 +28,8 @@ export const EachEventPopup = ({ open, setOpen, event }) => {
                                 {event?.category?.map((e, i) => (
                                     <div className='eachGenre' key={i}>
                                         {(i === event?.genre?.length + 1 || event?.genre?.length === 1)
-                                            ? <span>{e}</span>
-                                            : <span>{e},</span>
+                                            ? <span>{e?.name}</span>
+                                            : <span>{e?.name},</span>
                                         }
                                     </div>
                                 ))}

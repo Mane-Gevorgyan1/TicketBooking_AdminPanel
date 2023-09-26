@@ -15,11 +15,7 @@ export const Event_reducer = (state = store, action) => {
             break;
         case 'getAllCategories':
             if (action.payload.success) {
-                let categories = []
-                action.payload.categories.forEach(element => {
-                    categories.push({ label: element?.name, value: element?.name })
-                })
-                temp.categories = categories
+                temp.categories = action.payload.categories
             }
             break;
         default:

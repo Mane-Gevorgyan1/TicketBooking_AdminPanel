@@ -1,11 +1,9 @@
 import './style.css'
-import CIcon from '@coreui/icons-react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { EachEventPopup } from 'src/components/popup/eachEvent'
 import { GetAllEvents } from 'src/services/action/event_action'
-import { CCard, CCardBody, CCardImage, CCardText, CCardTitle } from '@coreui/react'
-import { cilCalendar, cilLibraryBuilding, cilLocationPin, cilMoney } from '@coreui/icons'
+import { CCard, CCardBody, CCardImage, CCardTitle } from '@coreui/react'
 
 const AllEvents = () => {
     const dispatch = useDispatch()
@@ -13,7 +11,7 @@ const AllEvents = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [openEvent, setOpenEvent] = useState(false)
     const [selectedEvent, setSelectedEvent] = useState()
-
+    
     useEffect(() => {
         dispatch(GetAllEvents(currentPage))
     }, [dispatch, currentPage])
@@ -36,10 +34,6 @@ const AllEvents = () => {
                         <CCardImage orientation='top' src={`${process.env.REACT_APP_IMAGE}/${e?.image}`} />
                         <CCardBody>
                             <CCardTitle>{e?.title}</CCardTitle>
-                            <CCardText><CIcon icon={cilCalendar} /> {e?.date?.split('T')[0]}</CCardText>
-                            <CCardText><CIcon icon={cilLocationPin} /> {e?.location}</CCardText>
-                            <CCardText><CIcon icon={cilLibraryBuilding} size='lg' /> {e?.place}</CCardText>
-                            <CCardText><CIcon icon={cilMoney} size='lg' />  {e?.priceStart} - {e?.priceEnd}</CCardText>
                         </CCardBody>
                     </CCard>
                 ))
