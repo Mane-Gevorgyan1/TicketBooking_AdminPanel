@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { CButton, CCol, CForm, CFormInput } from '@coreui/react'
-import { CreateNewGenre } from 'src/services/action/genre_action'
+import { CreateNewCategory } from 'src/services/action/category_action'
 
-const CreateGenre = () => {
+const CreateCategory = () => {
+    const dispatch = useDispatch()
     const [validated, setValidated] = useState(false)
     const [name, setName] = useState('')
-    const dispatch = useDispatch()
 
     const handleSubmit = (event) => {
         const form = event.currentTarget
@@ -14,7 +14,7 @@ const CreateGenre = () => {
             event.preventDefault()
             event.stopPropagation()
         } else {
-            dispatch(CreateNewGenre(name))
+            dispatch(CreateNewCategory(name))
         }
         setValidated(true)
     }
@@ -34,7 +34,7 @@ const CreateGenre = () => {
                         onChange={(e) => setName(e.target.value)}
                         feedbackInvalid='Պարտադիր դաշտ'
                         placeholder='Անվանում'
-                        label="Ժանր"
+                        label="Բաժին"
                         required
                     />
                 </CCol>
@@ -48,4 +48,4 @@ const CreateGenre = () => {
     )
 }
 
-export default CreateGenre
+export default CreateCategory

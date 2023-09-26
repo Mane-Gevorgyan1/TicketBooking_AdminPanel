@@ -1,10 +1,17 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
+  cilNewspaper,
+  cilPeople,
+  cilPin,
   cilPuzzle,
+  cilSitemap,
+  cilSofa,
   cilSpeedometer,
+  cilTag,
+  cilTags,
 } from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { CNavGroup, CNavItem } from '@coreui/react'
 
 const _nav = [
   {
@@ -21,7 +28,7 @@ const _nav = [
     component: CNavGroup,
     name: 'Միջոցառումներ',
     to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilNewspaper} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -39,7 +46,7 @@ const _nav = [
     component: CNavGroup,
     name: 'Բաժիններ',
     to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilTag} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -55,27 +62,9 @@ const _nav = [
   },
   {
     component: CNavGroup,
-    name: 'Ենթաբաժիններ',
-    to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Տեսնել բոլորը',
-        to: '/all-subcategories',
-      },
-      {
-        component: CNavItem,
-        name: 'Ստեղծել նորը',
-        to: '/create-subcategory',
-      },
-    ],
-  },
-  {
-    component: CNavGroup,
     name: 'Հովանավորներ',
     to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -111,7 +100,7 @@ const _nav = [
     component: CNavGroup,
     name: 'Դահլիճներ',
     to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilSofa} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,

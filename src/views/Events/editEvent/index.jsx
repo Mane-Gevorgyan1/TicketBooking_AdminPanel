@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MultiSelect } from 'react-multi-select-component'
 import { GetAllGenres } from 'src/services/action/genre_action'
+import { GetSingleEvent } from 'src/services/action/event_action'
 import { GetAllSponsors } from 'src/services/action/sponsor_action'
-import { GetAllCategories, GetSingleEvent } from 'src/services/action/event_action'
+import { GetAllCategories } from 'src/services/action/category_action'
 import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextarea } from '@coreui/react'
 
 const EditEvent = () => {
@@ -30,9 +31,6 @@ const EditEvent = () => {
         subcategory: '',
         description: ''
     })
-
-    console.log(event);
-    console.log(selectedGenres);
 
     useEffect(() => {
         dispatch(GetSingleEvent(eventId))
