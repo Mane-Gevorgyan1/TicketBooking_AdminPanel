@@ -12,13 +12,15 @@ const EditEvent = () => {
     const event = useSelector(st => st.Event_reducer.event)
     const allCategories = useSelector(st => st.Category_reducer.allCategories)
     const allSponsors = useSelector(st => st.Sponsor_reducer.allSponsors)
+    const [eventId] = useState(window.location.hash.split('/')[2])
     const [selectAllCategories, setSelectAllCategories] = useState([])
     const [selectAllSponsors, setSelectAllSponsors] = useState([])
-    const [eventId] = useState(window.location.hash.split('/')[2])
+    const [selectedSponsors, setSelectedSponsors] = useState([])
+    const [allSubcategories, setAllSubcategories] = useState([])
+    const [selectedSubcategories, setSelectedSubcategories] = useState([])
     const [validated, setValidated] = useState(false)
     const [file, setFile] = useState()
     const [blob, setBlob] = useState()
-    const [selectedSponsors, setSelectedSponsors] = useState([])
     const [eventDetails, setEventDetails] = useState({
         title: '',
         topEvent: '',
@@ -26,8 +28,6 @@ const EditEvent = () => {
         subcategory: [],
         description: ''
     })
-    const [allSubcategories, setAllSubcategories] = useState([])
-    const [selectedSubcategories, setSelectedSubcategories] = useState([])
 
     useEffect(() => {
         dispatch(GetSingleEvent(eventId))
@@ -85,15 +85,14 @@ const EditEvent = () => {
             setSelectedSponsors(sponsors)
 
             let subcategories = []
-            event?.subcategories?.forEach(subcategoryId => {
+            event?.subcategories?.forEach(eventSubcategories => {
                 event?.category?.subcategories?.forEach(subcategory => {
-                    if (subcategoryId === subcategory._id) {
+                    if (eventSubcategories._id === subcategory._id) {
                         subcategories.push({ label: subcategory.name, value: subcategory._id })
                     }
                 })
             })
             setSelectedSubcategories(subcategories)
-
         }
     }, [event])
 
@@ -180,10 +179,19 @@ const EditEvent = () => {
                 <CCol md={4}>
                     <CFormSelect
                         type="text"
-                        defaultValue={event?.hall}
                         feedbackInvalid='Պարտադիր դաշտ'
                         label="Առավելություն"
+                        value={eventDetails?.generalEvent ? 'generalEvent' : eventDetails?.topEvent ? 'topEvent' : ''}
                         required
+                        onChange={(e) => {
+                            if (e.target.value === 'generalEvent') {
+                                setEventDetails({ ...eventDetails, generalEvent: true, topEvent: false })
+                            } else if (e.target.value === 'topEvent') {
+                                setEventDetails({ ...eventDetails, generalEvent: false, topEvent: true })
+                            } else {
+                                setEventDetails({ ...eventDetails, generalEvent: false, topEvent: false })
+                            }
+                        }}
                     >
                         <option value={'generalEvent'}>Գլխավոր</option>
                         <option value={'topEvent'}>Թոփ</option>

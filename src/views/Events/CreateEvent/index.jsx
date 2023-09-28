@@ -2,7 +2,6 @@ import './style.css'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MultiSelect } from 'react-multi-select-component'
-import { GetAllGenres } from 'src/services/action/genre_action'
 import { GetAllSponsors } from 'src/services/action/sponsor_action'
 import { GetAllCategories } from 'src/services/action/category_action'
 import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextarea } from '@coreui/react'
@@ -10,9 +9,6 @@ import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextare
 const CreateEvent = () => {
     const dispatch = useDispatch()
     const allCategories = useSelector(st => st.Category_reducer.allCategories)
-    // const allGenres = useSelector(st => st.Genre_reducer.allGenres)
-    // const [selectAllGenres, setSelectAllGenres] = useState([])
-    // const [selectedGenres, setSelectedGenres] = useState([])
     const allSponsors = useSelector(st => st.Sponsor_reducer.allSponsors)
     const [selectAllCategories, setSelectAllCategories] = useState([])
     const [selectAllSponsors, setSelectAllSponsors] = useState([])
@@ -35,19 +31,8 @@ const CreateEvent = () => {
 
     useEffect(() => {
         dispatch(GetAllCategories())
-        dispatch(GetAllGenres())
         dispatch(GetAllSponsors())
     }, [dispatch])
-
-    // useEffect(() => {
-    //     let genres = []
-    //     if (allGenres?.length) {
-    //         allGenres?.forEach(element => {
-    //             genres.push({ label: element?.name, value: element?._id })
-    //         })
-    //         setSelectAllGenres(genres)
-    //     }
-    // }, [allGenres])
 
     useEffect(() => {
         let categories = []
@@ -97,22 +82,12 @@ const CreateEvent = () => {
             formdata.append("generalEvent", eventDetails?.generalEvent)
             formdata.append("description", eventDetails?.description)
             formdata.append("category", eventDetails?.category)
-            // if (selectedCategories?.length) {
-            //     selectedCategories?.forEach(element => {
-            //         formdata.append("category[]", element.value)
-            //     })
-            // }
 
             if (selectedSubcategories?.length) {
                 selectedSubcategories?.forEach(element => {
                     formdata.append("subcategories[]", element.value)
                 })
             }
-            // if (selectedGenres?.length) {
-            //     selectedGenres?.forEach(element => {
-            //         formdata.append("genres[]", element.value)
-            //     })
-            // }
             if (selectedSponsors?.length) {
                 selectedSponsors?.forEach(element => {
                     formdata.append("sponsors[]", element.value)
@@ -214,25 +189,6 @@ const CreateEvent = () => {
                         }}
                     />
                 </CCol>
-                {/* <CCol md={4}>
-                    <CFormLabel>Ժանրեր</CFormLabel>
-                    <MultiSelect
-                        options={selectAllGenres}
-                        value={selectedGenres}
-                        onChange={setSelectedGenres}
-                        labelledBy="Select"
-                        overrideStrings={{
-                            allItemsAreSelected: 'Բոլորն ընտրված են',
-                            clearSearch: 'Մաքրել որոնումը',
-                            clearSelected: 'Մաքրել ընտրվածները',
-                            noOptions: 'Ժանրեր չկան',
-                            search: 'Որոնել',
-                            selectAll: 'Ընտրել բոլորը',
-                            selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
-                            selectSomeItems: 'Ընտրել...',
-                        }}
-                    />
-                </CCol> */}
                 <CCol md={4}>
                     <CFormLabel>Հովանավորներ</CFormLabel>
                     <MultiSelect
