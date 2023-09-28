@@ -13,6 +13,11 @@ export const Event_reducer = (state = store, action) => {
                 temp.event = action.payload.event
             }
             break;
+        case 'update':
+            if (action.payload.success) {
+                temp.update = new Date()
+            }
+            break;
         default:
             return temp;
     }

@@ -8,6 +8,11 @@ export const Sponsor_reducer = (state = store, action) => {
                 temp.allSponsors = action.payload.sponsors
             }
             break;
+        case 'update':
+            if(action.payload.success) {
+                temp.update = new Date()
+            }
+            break;
         default:
             return temp;
     }

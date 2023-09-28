@@ -1,5 +1,5 @@
 .list-group-item {
-    gap: 20px !important;
+    gap: 20px;
 }
 
 .allCategories {
@@ -24,6 +24,6 @@
 }
 
 .card {
-    width: 32% !important;
+    width: 32%;
     min-width: 300px;
 }

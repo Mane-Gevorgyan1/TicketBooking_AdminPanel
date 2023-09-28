@@ -3,8 +3,8 @@ import CIcon from '@coreui/icons-react'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { cilDelete, cilPencil, cilPlus, cilSave } from '@coreui/icons'
-import { CreateSubcategory, DeleteCategory, DeleteSubcategory, EditCategory, EditSubcategory, GetAllCategories } from 'src/services/action/category_action'
 import { CButton, CCard, CCardBody, CCardTitle, CFormInput, CListGroup, CListGroupItem } from '@coreui/react'
+import { CreateSubcategory, DeleteCategory, DeleteSubcategory, EditCategory, EditSubcategory, GetAllCategories } from 'src/services/action/category_action'
 
 const AllCategories = () => {
     const dispatch = useDispatch()

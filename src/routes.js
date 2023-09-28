@@ -9,6 +9,10 @@ const CreateEvent = React.lazy(() => import('./views/Events/CreateEvent'))
 const AllCategories = React.lazy(() => import('./views/Categories/AllCategories'))
 const CreateCategory = React.lazy(() => import('./views/Categories/CreateCategory'))
 
+// Sponsors
+const AllSponsors = React.lazy(() => import('./views/Sponsors/AllSposors'))
+const CreateSponsor = React.lazy(() => import('./views/Sponsors/CreateSponsor'))
+
 const routes = [
   { path: '/', exact: true, name: 'Գլխավոր' },
 
@@ -17,7 +21,10 @@ const routes = [
   { path: '/edit-event/:id', name: 'Փոփոխել միջոցառումը', element: EditEvent },
 
   { path: '/all-categories', name: 'Բոլոր բաժինները', element: AllCategories },
-  { path: '/create-category', name: 'Ստեղծել բաժին', element: CreateCategory }
+  { path: '/create-category', name: 'Ստեղծել բաժին', element: CreateCategory },
+
+  { path: '/all-sponsors', name: 'Բոլոր հովանավորները', element: AllSponsors },
+  { path: '/create-sponsor', name: 'Ստեղծել հովանավոր', element: CreateSponsor },
 ]
 
 export default routes 

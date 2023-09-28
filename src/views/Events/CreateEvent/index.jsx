@@ -128,7 +128,6 @@ const CreateEvent = () => {
                         required
                     />
                 </CCol>
-
                 <CCol md={4} /><CCol md={4} />
                 <CCol md={4}>
                     <CFormInput

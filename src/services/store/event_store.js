@@ -2,4 +2,5 @@
 export default {
     events: [],
     event: {},
+    update: new Date(),
 }

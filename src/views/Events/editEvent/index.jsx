@@ -1,5 +1,6 @@
 import './style.css'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { MultiSelect } from 'react-multi-select-component'
 import { GetSingleEvent } from 'src/services/action/event_action'
@@ -9,6 +10,7 @@ import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextare
 
 const EditEvent = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const event = useSelector(st => st.Event_reducer.event)
     const allCategories = useSelector(st => st.Category_reducer.allCategories)
     const allSponsors = useSelector(st => st.Sponsor_reducer.allSponsors)
@@ -140,6 +142,7 @@ const EditEvent = () => {
                     console.log(result);
                     if (result.success) {
                         alert('Միջոցառումը թարմացված է')
+                        navigate('/all-events')
                     }
                 })
                 .catch(error => console.log('error', error));

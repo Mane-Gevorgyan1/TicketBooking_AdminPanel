@@ -6,9 +6,17 @@
 
 .eachEventCard {
     width: 30%;
-    cursor: pointer;
 }
 
 .card-img-top {
-    height: 350px !important;
+    height: 350px;
+    cursor: pointer;
+}
+
+.eventDetails {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    width: 100%;
 }
