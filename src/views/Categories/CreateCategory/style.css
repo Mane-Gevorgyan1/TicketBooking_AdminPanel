@@ -1,0 +1,9 @@
+.createCategory {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.card {
+    width: 400px !important;
+}

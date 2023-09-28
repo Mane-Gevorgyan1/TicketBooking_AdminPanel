@@ -4,19 +4,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MultiSelect } from 'react-multi-select-component'
 import { GetAllGenres } from 'src/services/action/genre_action'
 import { GetAllSponsors } from 'src/services/action/sponsor_action'
-import { GetAllCategories } from 'src/services/action/event_action'
-import { CButton, CCol, CForm, CFormControlValidation, CFormInput, CFormLabel, CFormSelect, CFormTextarea } from '@coreui/react'
+import { GetAllCategories } from 'src/services/action/category_action'
+import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextarea } from '@coreui/react'
 
 const CreateEvent = () => {
     const dispatch = useDispatch()
     const allCategories = useSelector(st => st.Event_reducer.categories)
-    const allGenres = useSelector(st => st.Genre_reducer.allGenres)
+    // const allGenres = useSelector(st => st.Genre_reducer.allGenres)
+    // const [selectAllGenres, setSelectAllGenres] = useState([])
+    // const [selectedGenres, setSelectedGenres] = useState([])
     const allSponsors = useSelector(st => st.Sponsor_reducer.allSponsors)
-    const [selectAllGenres, setSelectAllGenres] = useState([])
     const [selectAllCategories, setSelectAllCategories] = useState([])
     const [selectAllSponsors, setSelectAllSponsors] = useState([])
     const [selectedCategories, setSelectedCategories] = useState([])
-    const [selectedGenres, setSelectedGenres] = useState([])
     const [selectedSponsors, setSelectedSponsors] = useState([])
     const [validated, setValidated] = useState(false)
     const [file, setFile] = useState()
@@ -25,11 +25,13 @@ const CreateEvent = () => {
         title: '',
         topEvent: false,
         generalEvent: false,
-        category: [],
+        category: selectAllCategories[0],
         genres: [],
         sponsors: [],
         description: ''
     })
+    const [allSubcategories, setAllSubcategories] = useState([])
+    const [selectedSubcategories, setSelectedSubcategories] = useState([])
 
     useEffect(() => {
         dispatch(GetAllCategories())
@@ -37,15 +39,15 @@ const CreateEvent = () => {
         dispatch(GetAllSponsors())
     }, [dispatch])
 
-    useEffect(() => {
-        let genres = []
-        if (allGenres?.length) {
-            allGenres?.forEach(element => {
-                genres.push({ label: element?.name, value: element?._id })
-            })
-            setSelectAllGenres(genres)
-        }
-    }, [allGenres])
+    // useEffect(() => {
+    //     let genres = []
+    //     if (allGenres?.length) {
+    //         allGenres?.forEach(element => {
+    //             genres.push({ label: element?.name, value: element?._id })
+    //         })
+    //         setSelectAllGenres(genres)
+    //     }
+    // }, [allGenres])
 
     useEffect(() => {
         let categories = []
@@ -53,9 +55,19 @@ const CreateEvent = () => {
             allCategories?.forEach(element => {
                 categories.push({ label: element?.name, value: element?._id })
             })
+            setSelectAllCategories(categories)
         }
-        setSelectAllCategories(categories)
-    }, [allCategories])
+
+        if (selectedCategories) {
+            let myAllSubcategories = []
+            const category = allCategories.filter(e => e._id === eventDetails?.category)[0]
+            console.log(category);
+            category?.subcategories.forEach(subcategory => {
+                myAllSubcategories.push({ label: subcategory.name, value: subcategory._id })
+            })
+            setAllSubcategories(myAllSubcategories)
+        }
+    }, [allCategories, selectedCategories, eventDetails])
 
     useEffect(() => {
         let sponsors = []
@@ -85,26 +97,27 @@ const CreateEvent = () => {
             formdata.append("topEvent", eventDetails?.topEvent)
             formdata.append("generalEvent", eventDetails?.generalEvent)
             formdata.append("description", eventDetails?.description)
-            if (selectedCategories.length) {
-                let categories = []
-                selectedCategories.forEach(element => {
-                    categories.push(element.value)
+            formdata.append("category", eventDetails?.category)
+            // if (selectedCategories?.length) {
+            //     selectedCategories?.forEach(element => {
+            //         formdata.append("category[]", element.value)
+            //     })
+            // }
+
+            if (selectedSubcategories?.length) {
+                selectedSubcategories?.forEach(element => {
+                    formdata.append("subcategories[]", element.value)
                 })
-                formdata.append("category", categories)
             }
-            if (selectedGenres.length) {
-                let genres = []
-                selectedCategories.forEach(element => {
-                    genres.push(element.value)
+            // if (selectedGenres?.length) {
+            //     selectedGenres?.forEach(element => {
+            //         formdata.append("genres[]", element.value)
+            //     })
+            // }
+            if (selectedSponsors?.length) {
+                selectedSponsors?.forEach(element => {
+                    formdata.append("sponsors[]", element.value)
                 })
-                formdata.append("genres", genres)
-            }
-            if (selectedSponsors.length) {
-                let sponsors = []
-                selectedCategories.forEach(element => {
-                    sponsors.push(element.value)
-                })
-                formdata.append("sponsors", sponsors)
             }
             fetch(`${process.env.REACT_APP_HOSTNAME}/createEvent`, {
                 method: 'POST',
@@ -114,7 +127,7 @@ const CreateEvent = () => {
                 .then(response => response.json())
                 .then(result => {
                     console.log(result);
-                    if(result.success) {
+                    if (result.success) {
                         alert('Միջոցառումը ստեղծված է')
                     }
                 })
@@ -141,7 +154,7 @@ const CreateEvent = () => {
                         required
                     />
                 </CCol>
-                
+
                 <CCol md={4} /><CCol md={4} />
                 <CCol md={4}>
                     <CFormInput
@@ -155,7 +168,6 @@ const CreateEvent = () => {
                 </CCol>
                 <CCol md={4}>
                     <CFormSelect
-                        type="text"
                         defaultValue='all'
                         feedbackInvalid='Պարտադիր դաշտ'
                         label="Առավելություն"
@@ -176,8 +188,8 @@ const CreateEvent = () => {
                     </CFormSelect>
                 </CCol>
                 <CCol md={4}>
-                    <CFormLabel>Բաժիններ</CFormLabel>
-                    <MultiSelect
+                    {/* <CFormLabel>Բաժիններ</CFormLabel> */}
+                    {/* <MultiSelect
                         options={selectAllCategories}
                         value={selectedCategories}
                         onChange={setSelectedCategories}
@@ -192,9 +204,35 @@ const CreateEvent = () => {
                             selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
                             selectSomeItems: 'Ընտրել...',
                         }}
+                    /> */}
+                    <CFormSelect
+                        options={selectAllCategories}
+                        feedbackInvalid='Պարտադիր դաշտ'
+                        label="Բաժիններ"
+                        required
+                        onChange={(e) => setEventDetails({ ...eventDetails, category: e.target.value })}
                     />
                 </CCol>
                 <CCol md={4}>
+                    <CFormLabel>Ենթաբաժիններ</CFormLabel>
+                    <MultiSelect
+                        options={allSubcategories}
+                        value={selectedSubcategories}
+                        onChange={setSelectedSubcategories}
+                        labelledBy="Select"
+                        overrideStrings={{
+                            allItemsAreSelected: 'Բոլորն ընտրված են',
+                            clearSearch: 'Մաքրել որոնումը',
+                            clearSelected: 'Մաքրել ընտրվածները',
+                            noOptions: 'Բաժիններ չկան',
+                            search: 'Որոնել',
+                            selectAll: 'Ընտրել բոլորը',
+                            selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
+                            selectSomeItems: 'Ընտրել...',
+                        }}
+                    />
+                </CCol>
+                {/* <CCol md={4}>
                     <CFormLabel>Ժանրեր</CFormLabel>
                     <MultiSelect
                         options={selectAllGenres}
@@ -212,7 +250,7 @@ const CreateEvent = () => {
                             selectSomeItems: 'Ընտրել...',
                         }}
                     />
-                </CCol>
+                </CCol> */}
                 <CCol md={4}>
                     <CFormLabel>Հովանավորներ</CFormLabel>
                     <MultiSelect

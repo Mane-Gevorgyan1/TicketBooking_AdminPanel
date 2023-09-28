@@ -1,10 +1,14 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
+  cilApplications,
+  cilPeople,
   cilPuzzle,
+  cilScreenDesktop,
+  cilSofa,
   cilSpeedometer,
 } from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { CNavGroup, CNavItem } from '@coreui/react'
 
 const _nav = [
   {
@@ -39,7 +43,7 @@ const _nav = [
     component: CNavGroup,
     name: 'Բաժիններ',
     to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilApplications} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -55,27 +59,9 @@ const _nav = [
   },
   {
     component: CNavGroup,
-    name: 'Ենթաբաժիններ',
-    to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Տեսնել բոլորը',
-        to: '/all-subcategories',
-      },
-      {
-        component: CNavItem,
-        name: 'Ստեղծել նորը',
-        to: '/create-subcategory',
-      },
-    ],
-  },
-  {
-    component: CNavGroup,
     name: 'Հովանավորներ',
     to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -91,27 +77,9 @@ const _nav = [
   },
   {
     component: CNavGroup,
-    name: 'Ժանրեր',
-    to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Տեսնել բոլորը',
-        to: '/all-genres',
-      },
-      {
-        component: CNavItem,
-        name: 'Ստեղծել նորը',
-        to: '/create-genre',
-      },
-    ],
-  },
-  {
-    component: CNavGroup,
     name: 'Դահլիճներ',
     to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilScreenDesktop} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -122,6 +90,24 @@ const _nav = [
         component: CNavItem,
         name: 'Ստեղծել նորը',
         to: '/create-hall',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Սեանսներ',
+    to: '/',
+    icon: <CIcon icon={cilSofa} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Տեսնել բոլորը',
+        to: '/all-sessions',
+      },
+      {
+        component: CNavItem,
+        name: 'Ստեղծել նորը',
+        to: '/create-session',
       },
     ],
   },

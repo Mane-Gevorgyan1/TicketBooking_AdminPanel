@@ -1,0 +1,29 @@
+.list-group-item {
+    gap: 20px !important;
+}
+
+.allCategories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.categoryIcons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.categoryTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.card {
+    width: 32% !important;
+    min-width: 300px;
+}
