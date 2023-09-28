@@ -2,8 +2,8 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilApplications,
+  cilNewspaper,
   cilPeople,
-  cilPuzzle,
   cilScreenDesktop,
   cilSofa,
   cilSpeedometer,
@@ -25,7 +25,7 @@ const _nav = [
     component: CNavGroup,
     name: 'Միջոցառումներ',
     to: '/',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilNewspaper} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,

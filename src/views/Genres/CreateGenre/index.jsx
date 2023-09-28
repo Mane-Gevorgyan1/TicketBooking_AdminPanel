@@ -1,4 +1,3 @@
-import './style.css'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { CButton, CCol, CForm, CFormInput } from '@coreui/react'
@@ -15,7 +14,6 @@ const CreateGenre = () => {
             event.preventDefault()
             event.stopPropagation()
         } else {
-            console.log(name)
             dispatch(CreateNewGenre(name))
         }
         setValidated(true)

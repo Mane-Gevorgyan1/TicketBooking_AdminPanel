@@ -9,7 +9,7 @@ import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextare
 
 const CreateEvent = () => {
     const dispatch = useDispatch()
-    const allCategories = useSelector(st => st.Event_reducer.categories)
+    const allCategories = useSelector(st => st.Category_reducer.allCategories)
     // const allGenres = useSelector(st => st.Genre_reducer.allGenres)
     // const [selectAllGenres, setSelectAllGenres] = useState([])
     // const [selectedGenres, setSelectedGenres] = useState([])
@@ -25,7 +25,7 @@ const CreateEvent = () => {
         title: '',
         topEvent: false,
         generalEvent: false,
-        category: selectAllCategories[0],
+        category: '',
         genres: [],
         sponsors: [],
         description: ''
@@ -60,8 +60,7 @@ const CreateEvent = () => {
 
         if (selectedCategories) {
             let myAllSubcategories = []
-            const category = allCategories.filter(e => e._id === eventDetails?.category)[0]
-            console.log(category);
+            const category = allCategories?.filter(e => e._id === eventDetails?.category)[0]
             category?.subcategories.forEach(subcategory => {
                 myAllSubcategories.push({ label: subcategory.name, value: subcategory._id })
             })
@@ -188,23 +187,6 @@ const CreateEvent = () => {
                     </CFormSelect>
                 </CCol>
                 <CCol md={4}>
-                    {/* <CFormLabel>Բաժիններ</CFormLabel> */}
-                    {/* <MultiSelect
-                        options={selectAllCategories}
-                        value={selectedCategories}
-                        onChange={setSelectedCategories}
-                        labelledBy="Select"
-                        overrideStrings={{
-                            allItemsAreSelected: 'Բոլորն ընտրված են',
-                            clearSearch: 'Մաքրել որոնումը',
-                            clearSelected: 'Մաքրել ընտրվածները',
-                            noOptions: 'Բաժիններ չկան',
-                            search: 'Որոնել',
-                            selectAll: 'Ընտրել բոլորը',
-                            selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
-                            selectSomeItems: 'Ընտրել...',
-                        }}
-                    /> */}
                     <CFormSelect
                         options={selectAllCategories}
                         feedbackInvalid='Պարտադիր դաշտ'

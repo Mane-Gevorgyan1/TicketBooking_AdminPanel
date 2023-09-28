@@ -13,11 +13,6 @@ export const Event_reducer = (state = store, action) => {
                 temp.event = action.payload.event
             }
             break;
-        case 'getAllCategories':
-            if (action.payload.success) {
-                temp.categories = action.payload.categories
-            }
-            break;
         default:
             return temp;
     }

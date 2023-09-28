@@ -27,4 +27,4 @@ const routes = [
   { path: '/create-category', name: 'Ստեղծել բաժին', element: CreateCategory }
 ]
 
-export default routes
+export default routes 

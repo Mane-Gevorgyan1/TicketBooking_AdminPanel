@@ -2,33 +2,28 @@ import './style.css'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MultiSelect } from 'react-multi-select-component'
-import { GetAllGenres } from 'src/services/action/genre_action'
-import { GetAllSponsors } from 'src/services/action/sponsor_action'
 import { GetSingleEvent } from 'src/services/action/event_action'
+import { GetAllSponsors } from 'src/services/action/sponsor_action'
 import { GetAllCategories } from 'src/services/action/category_action'
 import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextarea } from '@coreui/react'
 
 const EditEvent = () => {
     const dispatch = useDispatch()
     const event = useSelector(st => st.Event_reducer.event)
-    const allCategories = useSelector(st => st.Event_reducer.categories)
-    // const allGenres = useSelector(st => st.Genre_reducer.allGenres)
+    const allCategories = useSelector(st => st.Category_reducer.allCategories)
     const allSponsors = useSelector(st => st.Sponsor_reducer.allSponsors)
-    // const [selectAllGenres, setSelectAllGenres] = useState([])
     const [selectAllCategories, setSelectAllCategories] = useState([])
     const [selectAllSponsors, setSelectAllSponsors] = useState([])
     const [eventId] = useState(window.location.hash.split('/')[2])
     const [validated, setValidated] = useState(false)
     const [file, setFile] = useState()
     const [blob, setBlob] = useState()
-    const [selectedCategories, setSelectedCategories] = useState([])
-    // const [selectedGenres, setSelectedGenres] = useState([])
     const [selectedSponsors, setSelectedSponsors] = useState([])
     const [eventDetails, setEventDetails] = useState({
         title: '',
         topEvent: '',
         generalEvent: '',
-        subcategory: '',
+        subcategory: [],
         description: ''
     })
     const [allSubcategories, setAllSubcategories] = useState([])
@@ -37,43 +32,28 @@ const EditEvent = () => {
     useEffect(() => {
         dispatch(GetSingleEvent(eventId))
         dispatch(GetAllCategories())
-        dispatch(GetAllGenres())
         dispatch(GetAllSponsors())
     }, [eventId, dispatch])
 
-    // useEffect(() => {
-    //     let genres = []
-    //     if (allGenres?.length) {
-    //         allGenres?.forEach(element => {
-    //             genres.push({ label: element?.name, value: element?._id })
-    //         })
-    //         setSelectAllGenres(genres)
-    //     }
-    // }, [allGenres])
-
     useEffect(() => {
+        let categories = []
         if (allCategories?.length) {
-            let categories = []
             allCategories?.forEach(element => {
                 categories.push({ label: element?.name, value: element?._id })
             })
             setSelectAllCategories(categories)
         }
-        if (selectedCategories) {
-            let mySelectedCategories = []
-            selectedCategories.forEach(category => {
-                const allSelectedCategories = allCategories.filter(e => e.name === category.label)[0]
-                mySelectedCategories.push(allSelectedCategories)
-            })
-            let myAllSubcategories = []
-            mySelectedCategories?.forEach(category => {
-                category.subcategories.forEach(subcategory => {
-                    myAllSubcategories.push({ label: subcategory.name, value: subcategory._id })
+
+        let subcategories = []
+        allCategories?.forEach(category => {
+            if (category?._id === eventDetails?.category) {
+                category.subcategories?.forEach(element => {
+                    subcategories.push({ label: element?.name, value: element?._id })
                 })
-            })
-            setAllSubcategories(myAllSubcategories)
-        }
-    }, [allCategories, selectedCategories])
+            }
+        })
+        setAllSubcategories(subcategories)
+    }, [allCategories, eventDetails])
 
     useEffect(() => {
         let sponsors = []
@@ -93,27 +73,27 @@ const EditEvent = () => {
                 title: event?.title,
                 topEvent: event?.topEvent,
                 generalEvent: event?.generalEvent,
+                category: event?.category?._id,
                 subcategory: '',
                 description: event?.description
             })
-
-            let categories = []
-            event?.category?.forEach(element => {
-                categories.push({ label: element?.name, value: element?._id })
-            })
-            setSelectedCategories(categories)
-
-            // let genres = []
-            // event?.genres?.forEach(element => {
-            //     genres.push({ label: element?.name, value: element._id })
-            // })
-            // setSelectedGenres(genres)
 
             let sponsors = []
             event?.sponsors?.forEach(element => {
                 sponsors.push({ label: element?.name, value: element._id })
             })
             setSelectedSponsors(sponsors)
+
+            let subcategories = []
+            event?.subcategories?.forEach(subcategoryId => {
+                event?.category?.subcategories?.forEach(subcategory => {
+                    if (subcategoryId === subcategory._id) {
+                        subcategories.push({ label: subcategory.name, value: subcategory._id })
+                    }
+                })
+            })
+            setSelectedSubcategories(subcategories)
+
         }
     }, [event])
 
@@ -137,26 +117,20 @@ const EditEvent = () => {
             formdata.append("topEvent", eventDetails?.topEvent)
             formdata.append("generalEvent", eventDetails?.generalEvent)
             formdata.append("description", eventDetails?.description)
-            if (selectedCategories?.length) {
-                selectedCategories?.forEach(element => {
-                    formdata.append("category[]", element.value)
-                })
-            }
+            formdata.append("category", eventDetails.category)
+
             if (selectedSubcategories?.length) {
                 selectedSubcategories?.forEach(element => {
                     formdata.append("subcategories[]", element.value)
                 })
             }
-            // if (selectedGenres?.length) {
-            //     selectedGenres?.forEach(element => {
-            //         formdata.append("genres[]", element.value)
-            //     })
-            // }
+
             if (selectedSponsors?.length) {
                 selectedSponsors?.forEach(element => {
                     formdata.append("sponsors[]", element.value)
                 })
             }
+
             fetch(`${process.env.REACT_APP_HOSTNAME}/editEvent`, {
                 method: 'PATCH',
                 body: formdata,
@@ -217,22 +191,13 @@ const EditEvent = () => {
                     </CFormSelect>
                 </CCol>
                 <CCol md={4}>
-                    <CFormLabel>Բաժիններ</CFormLabel>
-                    <MultiSelect
+                    <CFormSelect
                         options={selectAllCategories}
-                        value={selectedCategories}
-                        onChange={setSelectedCategories}
-                        labelledBy="Select"
-                        overrideStrings={{
-                            allItemsAreSelected: 'Բոլորն ընտրված են',
-                            clearSearch: 'Մաքրել որոնումը',
-                            clearSelected: 'Մաքրել ընտրվածները',
-                            noOptions: 'Բաժիններ չկան',
-                            search: 'Որոնել',
-                            selectAll: 'Ընտրել բոլորը',
-                            selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
-                            selectSomeItems: 'Ընտրել...',
-                        }}
+                        feedbackInvalid='Պարտադիր դաշտ'
+                        label="Բաժիններ"
+                        value={eventDetails?.category}
+                        onChange={(e) => setEventDetails({ ...eventDetails, category: e.target.value })}
+                        required
                     />
                 </CCol>
                 <CCol md={4}>
@@ -254,25 +219,6 @@ const EditEvent = () => {
                         }}
                     />
                 </CCol>
-                {/* <CCol md={4}>
-                    <CFormLabel>Ժանրեր</CFormLabel>
-                    <MultiSelect
-                        options={selectAllGenres}
-                        value={selectedGenres}
-                        onChange={setSelectedGenres}
-                        labelledBy="Select"
-                        overrideStrings={{
-                            allItemsAreSelected: 'Բոլորն ընտրված են',
-                            clearSearch: 'Մաքրել որոնումը',
-                            clearSelected: 'Մաքրել ընտրվածները',
-                            noOptions: 'Ժանրեր չկան',
-                            search: 'Որոնել',
-                            selectAll: 'Ընտրել բոլորը',
-                            selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
-                            selectSomeItems: 'Ընտրել...',
-                        }}
-                    />
-                </CCol> */}
                 <CCol md={4}>
                     <CFormLabel>Հովանավորներ</CFormLabel>
                     <MultiSelect

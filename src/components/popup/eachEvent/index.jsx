@@ -6,7 +6,6 @@ import { cilApplicationsSettings, cilApps, cilBook, cilCasino, cilPencil, cilPeo
 
 export const EachEventPopup = ({ open, setOpen, event }) => {
     const navigate = useNavigate()
-
     return (
         <div className={open ? 'activePopup' : 'inactive'}>
             <div className='pop' style={{ width: '570px' }}>
@@ -36,15 +35,15 @@ export const EachEventPopup = ({ open, setOpen, event }) => {
                             </div>
                         </div>
                     }
-                    {event?.category?.length > 0 &&
+                    {/* {event?.category?.length > 0 &&
                         <div className='eventGenres'>
                             <CIcon icon={cilApplicationsSettings} size='lg' />
                             <div className='eventGenresRight'>
                                 <span>{event?.subcategory}</span>
                             </div>
                         </div>
-                    }
-                    {event?.genre?.length > 0 &&
+                    } */}
+                    {/* {event?.genre?.length > 0 &&
                         <div className='eventGenres'>
                             <CIcon icon={cilCasino} size='lg' />
                             <div className='eventGenresRight'>
@@ -58,7 +57,7 @@ export const EachEventPopup = ({ open, setOpen, event }) => {
                                 ))}
                             </div>
                         </div>
-                    }
+                    } */}
                     {event?.sponsors?.length > 0 &&
                         <div className='eventGenres'>
                             <CIcon icon={cilPeople} size='lg' />
@@ -66,8 +65,8 @@ export const EachEventPopup = ({ open, setOpen, event }) => {
                                 {event?.sponsors?.map((e, i) => (
                                     <div className='eachGenre' key={i}>
                                         {(i === event?.genre?.length + 1 || event?.genre?.length === 1)
-                                            ? <span>{e}</span>
-                                            : <span>{e},</span>
+                                            ? <span>{e?.name}</span>
+                                            : <span>{e?.name},</span>
                                         }
                                     </div>
                                 ))}
