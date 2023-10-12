@@ -2,7 +2,7 @@ import React from 'react'
 
 // Events
 const AllEvents = React.lazy(() => import('./views/Events/AllEvents'))
-const EditEvent = React.lazy(() => import('./views/Events/editEvent/index.jsx'))
+const EditEvent = React.lazy(() => import('./views/Events/EditEvent/index.jsx'))
 const CreateEvent = React.lazy(() => import('./views/Events/CreateEvent'))
 
 // Categories

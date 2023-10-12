@@ -11,6 +11,8 @@ const CreateCategory = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [categoryName, setCategoryName] = useState('')
+    const [categoryName_en, setCategoryName_en] = useState('')
+    const [categoryName_ru, setCategoryName_ru] = useState('')
     const navigation = useSelector(st => st.Category_reducer.navigate)
 
     useEffect(() => {
@@ -32,11 +34,31 @@ const CreateCategory = () => {
                         value={categoryName}
                         onChange={(e) => setCategoryName(e.target.value)}
                     />
-                    <CButton disabled={!categoryName.length} onClick={() => dispatch(CreateNewCategory(categoryName))}>
-                        <CIcon icon={cilSave} />
-                    </CButton>
                 </div>
             </CCardBody>
+            <CCardBody>
+                <div className='createCategory'>
+                    <CFormInput
+                        placeholder='Title'
+                        value={categoryName_en}
+                        onChange={(e) => setCategoryName_en(e.target.value)}
+                    />
+                </div>
+            </CCardBody>
+            <CCardBody>
+                <div className='createCategory'>
+                    <CFormInput
+                        placeholder='Название'
+                        value={categoryName_ru}
+                        onChange={(e) => setCategoryName_ru(e.target.value)}
+                    />
+                </div>
+            </CCardBody>
+
+            <CButton disabled={!categoryName.length || !categoryName_en.length || !categoryName_ru.length} onClick={() => dispatch(CreateNewCategory(categoryName, categoryName_en, categoryName_ru))}>
+                <CIcon icon={cilSave} /> &nbsp;
+                Ստեղծել
+            </CButton>
         </CCard>
     )
 }

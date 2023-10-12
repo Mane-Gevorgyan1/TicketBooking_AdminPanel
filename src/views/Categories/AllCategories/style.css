@@ -27,3 +27,15 @@
     width: 32%;
     min-width: 300px;
 }
+
+.categoryNameChange {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.eachCategory {
+    display: flex;
+    gap: 10px;
+}
