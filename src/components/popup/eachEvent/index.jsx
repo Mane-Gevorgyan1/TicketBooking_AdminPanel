@@ -2,7 +2,7 @@ import './style.css'
 import CIcon from '@coreui/icons-react'
 import { CloseIcon } from 'src/assets/svg'
 import { useNavigate } from 'react-router-dom'
-import { cilApplicationsSettings, cilApps, cilBook, cilCasino, cilPencil, cilPeople, cilSortAscending } from '@coreui/icons'
+import { cilApplicationsSettings, cilApps, cilBook, cilPencil, cilPeople, cilSortAscending } from '@coreui/icons'
 
 export const EachEventPopup = ({ open, setOpen, event }) => {
     const navigate = useNavigate()
@@ -20,57 +20,25 @@ export const EachEventPopup = ({ open, setOpen, event }) => {
                             <span><CIcon icon={cilPencil} /> Փոփոխել</span>
                         </div>
                     </div>
-                    {event?.category?.length > 0 &&
-                        <div className='eventGenres'>
-                            <CIcon icon={cilApps} size='lg' />
-                            <div className='eventGenresRight'>
-                                {event?.category?.map((e, i) => (
-                                    <div className='eachGenre' key={i}>
-                                        {(i === event?.genre?.length + 1 || event?.genre?.length === 1)
-                                            ? <span>{e?.name}</span>
-                                            : <span>{e?.name},</span>
-                                        }
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    }
-                    {/* {event?.category?.length > 0 &&
-                        <div className='eventGenres'>
-                            <CIcon icon={cilApplicationsSettings} size='lg' />
-                            <div className='eventGenresRight'>
-                                <span>{event?.subcategory}</span>
-                            </div>
-                        </div>
-                    } */}
-                    {/* {event?.genre?.length > 0 &&
-                        <div className='eventGenres'>
-                            <CIcon icon={cilCasino} size='lg' />
-                            <div className='eventGenresRight'>
-                                {event?.genre?.map((e, i) => (
-                                    <div className='eachGenre' key={i}>
-                                        {(i === event?.genre?.length + 1 || event?.genre?.length === 1)
-                                            ? <span>{e}</span>
-                                            : <span>{e},</span>
-                                        }
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    } */}
+                    <div className='eventGenres'>
+                        <CIcon icon={cilApps} size='lg' />
+                        <span>{event?.category?.name}</span>
+                    </div>
+                    <div className='eventGenres'>
+                        <CIcon icon={cilApplicationsSettings} size='lg' />
+                        <span>{event?.subcategories?.name}</span>
+                    </div>
                     {event?.sponsors?.length > 0 &&
                         <div className='eventGenres'>
                             <CIcon icon={cilPeople} size='lg' />
-                            <div className='eventGenresRight'>
-                                {event?.sponsors?.map((e, i) => (
-                                    <div className='eachGenre' key={i}>
-                                        {(i === event?.genre?.length + 1 || event?.genre?.length === 1)
-                                            ? <span>{e?.name}</span>
-                                            : <span>{e?.name},</span>
-                                        }
-                                    </div>
-                                ))}
-                            </div>
+                            {event?.sponsors?.map((e, i) => (
+                                <div className='eachGenre' key={i}>
+                                    {(i === event?.genre?.length + 1 || event?.genre?.length === 1)
+                                        ? <span>{e?.name},</span>
+                                        : <span>{e?.name}</span>
+                                    }
+                                </div>
+                            ))}
                         </div>
                     }
                     <div className='eventGenres'>

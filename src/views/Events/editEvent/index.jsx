@@ -6,7 +6,7 @@ import { MultiSelect } from 'react-multi-select-component'
 import { GetSingleEvent } from 'src/services/action/event_action'
 import { GetAllSponsors } from 'src/services/action/sponsor_action'
 import { GetAllCategories } from 'src/services/action/category_action'
-import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextarea } from '@coreui/react'
+import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextarea, CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react'
 
 const EditEvent = () => {
     const dispatch = useDispatch()
@@ -16,20 +16,24 @@ const EditEvent = () => {
     const allSponsors = useSelector(st => st.Sponsor_reducer.allSponsors)
     const [eventId] = useState(window.location.hash.split('/')[2])
     const [selectAllCategories, setSelectAllCategories] = useState([])
+    const [selectAllSubcategories, setSelectAllSubcategories] = useState([])
     const [selectAllSponsors, setSelectAllSponsors] = useState([])
     const [selectedSponsors, setSelectedSponsors] = useState([])
-    const [allSubcategories, setAllSubcategories] = useState([])
-    const [selectedSubcategories, setSelectedSubcategories] = useState([])
     const [validated, setValidated] = useState(false)
     const [file, setFile] = useState()
     const [blob, setBlob] = useState()
     const [eventDetails, setEventDetails] = useState({
         title: '',
+        title_en: '',
+        title_ru: '',
         topEvent: '',
         generalEvent: '',
-        subcategory: [],
-        description: ''
+        subcategory: '',
+        description: '',
+        description_en: '',
+        description_ru: '',
     })
+    const [activeKey, setActiveKey] = useState(1)
 
     useEffect(() => {
         dispatch(GetSingleEvent(eventId))
@@ -39,22 +43,18 @@ const EditEvent = () => {
 
     useEffect(() => {
         let categories = []
+        let subcategories = []
         if (allCategories?.length) {
             allCategories?.forEach(element => {
                 categories.push({ label: element?.name, value: element?._id })
             })
             setSelectAllCategories(categories)
+            const selectedCategory = allCategories?.filter(category => category._id === eventDetails?.category)[0]
+            selectedCategory?.subcategories?.forEach(subcategory => {
+                subcategories.push({ label: subcategory?.name, value: subcategory?._id })
+            })
+            setSelectAllSubcategories(subcategories)
         }
-
-        let subcategories = []
-        allCategories?.forEach(category => {
-            if (category?._id === eventDetails?.category) {
-                category.subcategories?.forEach(element => {
-                    subcategories.push({ label: element?.name, value: element?._id })
-                })
-            }
-        })
-        setAllSubcategories(subcategories)
     }, [allCategories, eventDetails])
 
     useEffect(() => {
@@ -85,16 +85,6 @@ const EditEvent = () => {
                 sponsors.push({ label: element?.name, value: element._id })
             })
             setSelectedSponsors(sponsors)
-
-            let subcategories = []
-            event?.subcategories?.forEach(eventSubcategories => {
-                event?.category?.subcategories?.forEach(subcategory => {
-                    if (eventSubcategories._id === subcategory._id) {
-                        subcategories.push({ label: subcategory.name, value: subcategory._id })
-                    }
-                })
-            })
-            setSelectedSubcategories(subcategories)
         }
     }, [event])
 
@@ -115,16 +105,15 @@ const EditEvent = () => {
             formdata.append("image", file)
             formdata.append("id", eventId)
             formdata.append("title", eventDetails?.title)
+            formdata.append("title_en", eventDetails?.title_en)
+            formdata.append("title_ru", eventDetails?.title_ru)
             formdata.append("topEvent", eventDetails?.topEvent)
             formdata.append("generalEvent", eventDetails?.generalEvent)
             formdata.append("description", eventDetails?.description)
+            formdata.append("description_en", eventDetails?.description_en)
+            formdata.append("description_ru", eventDetails?.description_ru)
             formdata.append("category", eventDetails.category)
-
-            if (selectedSubcategories?.length) {
-                selectedSubcategories?.forEach(element => {
-                    formdata.append("subcategories[]", element.value)
-                })
-            }
+            formdata.append("subcategories", eventDetails.subcategory)
 
             if (selectedSponsors?.length) {
                 selectedSponsors?.forEach(element => {
@@ -152,119 +141,199 @@ const EditEvent = () => {
 
     return (
         <div>
-            <CForm
-                className="row g-3 needs-validation"
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmit}
-            >
-                <CCol md={4}>
-                    <img alt='' src={blob} className='eventImage' />
-                    <CFormInput
-                        type="file"
-                        defaultValue={blob}
-                        onChange={handleImageChange}
-                        feedbackInvalid='Պարտադիր դաշտ'
-                        required={!file?.length && !blob?.length}
-                    />
-                </CCol>
-                <CCol md={4} /><CCol md={4} />
-                <CCol md={4}>
-                    <CFormInput
-                        type="text"
-                        defaultValue={event?.title}
-                        onChange={(e) => setEventDetails({ ...eventDetails, title: e.target.value })}
-                        feedbackInvalid='Պարտադիր դաշտ'
-                        label="Վերնագիր"
-                        required
-                    />
-                </CCol>
-                <CCol md={4}>
-                    <CFormSelect
-                        type="text"
-                        feedbackInvalid='Պարտադիր դաշտ'
-                        label="Առավելություն"
-                        value={eventDetails?.generalEvent ? 'generalEvent' : eventDetails?.topEvent ? 'topEvent' : ''}
-                        required
-                        onChange={(e) => {
-                            if (e.target.value === 'generalEvent') {
-                                setEventDetails({ ...eventDetails, generalEvent: true, topEvent: false })
-                            } else if (e.target.value === 'topEvent') {
-                                setEventDetails({ ...eventDetails, generalEvent: false, topEvent: true })
-                            } else {
-                                setEventDetails({ ...eventDetails, generalEvent: false, topEvent: false })
-                            }
-                        }}
+            <CNav variant="tabs" role="tablist">
+                <CNavItem role="presentation">
+                    <CNavLink
+                        active={activeKey === 1}
+                        component="button"
+                        role="tab"
+                        aria-controls="home-tab-pane"
+                        aria-selected={activeKey === 1}
+                        onClick={() => setActiveKey(1)}
                     >
-                        <option value={'generalEvent'}>Գլխավոր</option>
-                        <option value={'topEvent'}>Թոփ</option>
-                        <option value={''}>Բոլորը</option>
-                    </CFormSelect>
-                </CCol>
-                <CCol md={4}>
-                    <CFormSelect
-                        options={selectAllCategories}
-                        feedbackInvalid='Պարտադիր դաշտ'
-                        label="Բաժիններ"
-                        value={eventDetails?.category}
-                        onChange={(e) => setEventDetails({ ...eventDetails, category: e.target.value })}
-                        required
-                    />
-                </CCol>
-                <CCol md={4}>
-                    <CFormLabel>Ենթաբաժիններ</CFormLabel>
-                    <MultiSelect
-                        options={allSubcategories}
-                        value={selectedSubcategories}
-                        onChange={setSelectedSubcategories}
-                        labelledBy="Select"
-                        overrideStrings={{
-                            allItemsAreSelected: 'Բոլորն ընտրված են',
-                            clearSearch: 'Մաքրել որոնումը',
-                            clearSelected: 'Մաքրել ընտրվածները',
-                            noOptions: 'Բաժիններ չկան',
-                            search: 'Որոնել',
-                            selectAll: 'Ընտրել բոլորը',
-                            selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
-                            selectSomeItems: 'Ընտրել...',
-                        }}
-                    />
-                </CCol>
-                <CCol md={4}>
-                    <CFormLabel>Հովանավորներ</CFormLabel>
-                    <MultiSelect
-                        options={selectAllSponsors}
-                        value={selectedSponsors}
-                        onChange={setSelectedSponsors}
-                        labelledBy="Select"
-                        overrideStrings={{
-                            allItemsAreSelected: 'Բոլորն ընտրված են',
-                            clearSearch: 'Մաքրել որոնումը',
-                            clearSelected: 'Մաքրել ընտրվածները',
-                            noOptions: 'Հովանավորներ չկան',
-                            search: 'Որոնել',
-                            selectAll: 'Ընտրել բոլորը',
-                            selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
-                            selectSomeItems: 'Ընտրել...',
-                        }}
-                    />
-                </CCol>
-                <CCol md={12}>
-                    <CFormTextarea
-                        feedbackInvalid='Պարտադիր դաշտ'
-                        id="validationTextarea"
-                        label="Նկարագրություն"
-                        placeholder="..."
-                        required
-                        defaultValue={event?.description}
-                        onChange={(e) => setEventDetails({ ...eventDetails, description: e.target.value })}
-                        rows={5}
-                    />
-                </CCol>
-                <CCol xs={12}>
-                    <CButton color="primary" type="submit">Փոփոխել</CButton>
-                </CCol>
-            </CForm>
+                        Հայերեն
+                    </CNavLink>
+                </CNavItem>
+                <CNavItem role="presentation">
+                    <CNavLink
+                        active={activeKey === 2}
+                        component="button"
+                        role="tab"
+                        aria-controls="profile-tab-pane"
+                        aria-selected={activeKey === 2}
+                        onClick={() => setActiveKey(2)}
+                    >
+                        English
+                    </CNavLink>
+                </CNavItem>
+                <CNavItem role="presentation">
+                    <CNavLink
+                        active={activeKey === 3}
+                        component="button"
+                        role="tab"
+                        aria-controls="contact-tab-pane"
+                        aria-selected={activeKey === 3}
+                        onClick={() => setActiveKey(3)}
+                    >
+                        Русский
+                    </CNavLink>
+                </CNavItem>
+            </CNav>
+            <CTabContent>
+                <CTabPane role="tabpanel" aria-labelledby="home-tab-pane" visible={activeKey === 1} style={{ marginTop: '20px' }}>
+                    <CForm
+                        className="row g-3 needs-validation"
+                        noValidate
+                        validated={validated}
+                        onSubmit={handleSubmit}
+                    >
+                        <CCol md={4}>
+                            <img alt='' src={blob} className='eventImage' />
+                            <CFormInput
+                                type="file"
+                                defaultValue={blob}
+                                onChange={handleImageChange}
+                                feedbackInvalid='Պարտադիր դաշտ'
+                                required={!file?.length && !blob?.length}
+                            />
+                        </CCol>
+                        <CCol md={4} /><CCol md={4} />
+                        <CCol md={4}>
+                            <CFormInput
+                                type="text"
+                                defaultValue={event?.title}
+                                onChange={(e) => setEventDetails({ ...eventDetails, title: e.target.value })}
+                                feedbackInvalid='Պարտադիր դաշտ'
+                                label="Վերնագիր"
+                                required
+                            />
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormSelect
+                                type="text"
+                                feedbackInvalid='Պարտադիր դաշտ'
+                                label="Առավելություն"
+                                value={eventDetails?.generalEvent ? 'generalEvent' : eventDetails?.topEvent ? 'topEvent' : ''}
+                                required
+                                onChange={(e) => {
+                                    if (e.target.value === 'generalEvent') {
+                                        setEventDetails({ ...eventDetails, generalEvent: true, topEvent: false })
+                                    } else if (e.target.value === 'topEvent') {
+                                        setEventDetails({ ...eventDetails, generalEvent: false, topEvent: true })
+                                    } else {
+                                        setEventDetails({ ...eventDetails, generalEvent: false, topEvent: false })
+                                    }
+                                }}
+                            >
+                                <option value={'generalEvent'}>Գլխավոր</option>
+                                <option value={'topEvent'}>Թոփ</option>
+                                <option value={''}>Բոլորը</option>
+                            </CFormSelect>
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormSelect
+                                options={selectAllCategories}
+                                feedbackInvalid='Պարտադիր դաշտ'
+                                label="Բաժիններ"
+                                value={eventDetails?.category}
+                                onChange={(e) => setEventDetails({ ...eventDetails, category: e.target.value })}
+                                required
+                            />
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormSelect
+                                options={selectAllSubcategories}
+                                feedbackInvalid='Պարտադիր դաշտ'
+                                label="Ենթաբաժիններ"
+                                required
+                                onChange={(e) => setEventDetails({ ...eventDetails, subcategory: e.target.value })}
+                            />
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormLabel>Հովանավորներ</CFormLabel>
+                            <MultiSelect
+                                options={selectAllSponsors}
+                                value={selectedSponsors}
+                                onChange={setSelectedSponsors}
+                                labelledBy="Select"
+                                overrideStrings={{
+                                    allItemsAreSelected: 'Բոլորն ընտրված են',
+                                    clearSearch: 'Մաքրել որոնումը',
+                                    clearSelected: 'Մաքրել ընտրվածները',
+                                    noOptions: 'Հովանավորներ չկան',
+                                    search: 'Որոնել',
+                                    selectAll: 'Ընտրել բոլորը',
+                                    selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
+                                    selectSomeItems: 'Ընտրել...',
+                                }}
+                            />
+                        </CCol>
+                        <CCol md={12}>
+                            <CFormTextarea
+                                feedbackInvalid='Պարտադիր դաշտ'
+                                id="validationTextarea"
+                                label="Նկարագրություն"
+                                placeholder="..."
+                                required
+                                defaultValue={event?.description}
+                                onChange={(e) => setEventDetails({ ...eventDetails, description: e.target.value })}
+                                rows={5}
+                            />
+                        </CCol>
+                        <CCol xs={12}>
+                            <CButton color="primary" type="submit">Փոփոխել</CButton>
+                        </CCol>
+                    </CForm>
+                </CTabPane>
+                <CTabPane role="tabpanel" aria-labelledby="profile-tab-pane" visible={activeKey === 2} style={{ marginTop: '20px' }}>
+                    <CCol md={4}>
+                        <CFormInput
+                            type="text"
+                            defaultValue={event?.title_en}
+                            onChange={(e) => setEventDetails({ ...eventDetails, title_en: e.target.value })}
+                            feedbackInvalid='Required field'
+                            label="Title"
+                            required
+                        />
+                    </CCol>
+                    <CCol md={12}>
+                        <CFormTextarea
+                            feedbackInvalid='Required field'
+                            id="validationTextarea"
+                            label="Description"
+                            placeholder="..."
+                            required
+                            defaultValue={event?.description_en}
+                            onChange={(e) => setEventDetails({ ...eventDetails, description_en: e.target.value })}
+                            rows={5}
+                        />
+                    </CCol>
+                </CTabPane>
+                <CTabPane role="tabpanel" aria-labelledby="contact-tab-pane" visible={activeKey === 3} style={{ marginTop: '20px' }}>
+                    <CCol md={4}>
+                        <CFormInput
+                            type="text"
+                            defaultValue={event?.title_ru}
+                            onChange={(e) => setEventDetails({ ...eventDetails, title_ru: e.target.value })}
+                            feedbackInvalid='Обязательное поле'
+                            label="Название"
+                            required
+                        />
+                    </CCol>
+                    <CCol md={12}>
+                        <CFormTextarea
+                            feedbackInvalid='Обязательное поле'
+                            id="validationTextarea"
+                            label="Описание"
+                            placeholder="..."
+                            required
+                            defaultValue={event?.description_ru}
+                            onChange={(e) => setEventDetails({ ...eventDetails, description_ru: e.target.value })}
+                            rows={5}
+                        />
+                    </CCol>
+                </CTabPane>
+            </CTabContent>
         </div>
     )
 }
