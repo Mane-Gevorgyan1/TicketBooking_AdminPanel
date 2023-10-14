@@ -46,7 +46,7 @@ const CreateEvent = () => {
 
     useEffect(() => {
         let categories = []
-        let subcategories = []
+        let subcategories = [{ label: '', value: '' }]
         if (allCategories?.length) {
             allCategories?.forEach(element => {
                 categories.push({ label: element?.name, value: element?._id })
@@ -267,14 +267,14 @@ const CreateEvent = () => {
                                 feedbackInvalid='Պարտադիր դաշտ'
                                 id="validationTextarea"
                                 label="Նկարագրություն"
-                                placeholder="..."
+                                placeholder=""
                                 required
                                 defaultValue=''
                                 onChange={(e) => setEventDetails({ ...eventDetails, description: e.target.value })}
                                 rows={5}
                             />
                         </CCol>
-                        {(errors?.title_en?.length || errors?.description_en?.length || errors?.title_ru?.length || errors?.description_ru?.length) && <span style={{ color: 'red' }}>Error</span>}
+                        {(errors?.title_en?.length > 0 || errors?.description_en?.length > 0 || errors?.title_ru?.length > 0 || errors?.description_ru?.length > 0) && <span style={{ color: 'red' }}>Error</span>}
                         <CCol xs={12}>
                             <CButton color="primary" type="submit">Ստեղծել</CButton>
                         </CCol>
@@ -296,7 +296,7 @@ const CreateEvent = () => {
                             feedbackInvalid='Required field'
                             id="validationTextarea"
                             label="Description"
-                            placeholder="..."
+                            placeholder=""
                             required
                             defaultValue=''
                             onChange={(e) => setEventDetails({ ...eventDetails, description_en: e.target.value })}
@@ -320,7 +320,7 @@ const CreateEvent = () => {
                             feedbackInvalid='Обязательное поле'
                             id="validationTextarea"
                             label="Описание"
-                            placeholder="..."
+                            placeholder=""
                             required
                             defaultValue=''
                             onChange={(e) => setEventDetails({ ...eventDetails, description_ru: e.target.value })}

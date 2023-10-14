@@ -1,0 +1,13 @@
+.allHalls {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.editHall {
+    margin: 0px 20px 10px 0px !important;
+    text-align: end;
+    cursor: pointer;
+    text-decoration: underline;
+}

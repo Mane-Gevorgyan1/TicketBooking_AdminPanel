@@ -1,0 +1,38 @@
+.allSessions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.sessionImage {
+    width: 50%;
+    height: 400px;
+    margin-bottom: 10px;
+}
+
+.sessionButtons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.sessionButtons>span {
+    color: grey;
+    cursor: pointer;
+
+}
+.sessionButtons>span:last-of-type {
+    color: rgb(250, 91, 91);
+    cursor: pointer;
+}
+
+.sessionCard {
+    width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+    .sessionImage {
+        height: 300px;
+    }
+}

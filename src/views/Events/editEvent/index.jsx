@@ -128,7 +128,6 @@ const EditEvent = () => {
             })
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result);
                     if (result.success) {
                         alert('Միջոցառումը թարմացված է')
                         navigate('/all-events')
@@ -273,7 +272,7 @@ const EditEvent = () => {
                                 feedbackInvalid='Պարտադիր դաշտ'
                                 id="validationTextarea"
                                 label="Նկարագրություն"
-                                placeholder="..."
+                                placeholder=""
                                 required
                                 defaultValue={event?.description}
                                 onChange={(e) => setEventDetails({ ...eventDetails, description: e.target.value })}
@@ -301,7 +300,7 @@ const EditEvent = () => {
                             feedbackInvalid='Required field'
                             id="validationTextarea"
                             label="Description"
-                            placeholder="..."
+                            placeholder=""
                             required
                             defaultValue={event?.description_en}
                             onChange={(e) => setEventDetails({ ...eventDetails, description_en: e.target.value })}
@@ -325,7 +324,7 @@ const EditEvent = () => {
                             feedbackInvalid='Обязательное поле'
                             id="validationTextarea"
                             label="Описание"
-                            placeholder="..."
+                            placeholder=""
                             required
                             defaultValue={event?.description_ru}
                             onChange={(e) => setEventDetails({ ...eventDetails, description_ru: e.target.value })}

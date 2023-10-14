@@ -86,11 +86,6 @@ const _nav = [
         name: 'Տեսնել բոլորը',
         to: '/all-halls',
       },
-      {
-        component: CNavItem,
-        name: 'Ստեղծել նորը',
-        to: '/create-hall',
-      },
     ],
   },
   {
