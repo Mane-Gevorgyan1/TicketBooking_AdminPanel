@@ -11,3 +11,13 @@
     cursor: pointer;
     text-decoration: underline;
 }
+
+.hallCards {
+    width: 31%;
+}
+
+@media screen and (max-width: 768px) {
+  .hallCards {
+    width: 100%;
+  }   
+}

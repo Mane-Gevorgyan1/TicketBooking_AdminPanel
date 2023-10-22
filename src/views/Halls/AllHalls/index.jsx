@@ -16,7 +16,7 @@ const AllHalls = () => {
         <div className='allHalls'>
             {halls?.length > 0
                 ? halls?.map((e, i) => (
-                    <CCard key={i} style={{ width: '30%' }}>
+                    <CCard key={i} className='hallCards'>
                         <CCardImage orientation='top' src={`${process.env.REACT_APP_IMAGE}/${e?.image}`} />
                         <CCardBody>
                             <CCardTitle>{e?.place}, {e?.hall}</CCardTitle>

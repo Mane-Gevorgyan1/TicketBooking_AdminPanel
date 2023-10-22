@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetAllHalls } from 'src/services/action/hall_action'
-import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CButton, CCol, CForm, CFormInput } from '@coreui/react'
 import { GetAllSessionEvents } from 'src/services/action/session_action'
+import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CButton, CCol, CForm, CFormInput } from '@coreui/react'
 
 const CreateSession = () => {
     const dispatch = useDispatch()
@@ -158,13 +158,21 @@ const CreateSession = () => {
                     </div>
                 </div>
 
+                {details?.hall && <img alt='' src={`${process.env.REACT_APP_IMAGE}/${details?.hall?.sectionImage}`} />}
+
                 <CAccordion flush className='sessionAccordion'>
                     {details?.hall?.price?.length > 0 && details?.hall?.price?.map((e, i) => (
                         <CAccordionItem itemKey={i + 1} key={i}>
-                            <CAccordionHeader>Մաս {i + 1}</CAccordionHeader>
+                            {e?.price?.length > 0 && e?.price[0]?.type
+                                ? <CAccordionHeader>Գինը</CAccordionHeader>
+                                : <CAccordionHeader>Մաս {i + 1}</CAccordionHeader>
+                            }
                             {e?.price?.length > 0 && e?.price?.map((e, j) => (
                                 <CAccordionBody key={j}>
-                                    <label>Շարք {e.row} &nbsp;</label>
+                                    {e?.type
+                                        ? <label> {e.type} &nbsp;</label>
+                                        : <label>Շարք {e.row} &nbsp;</label>
+                                    }
                                     <input value={e?.price} onChange={(event) => handleRowPriceChange(event.target.value, i, j)} />
                                 </CAccordionBody>
                             ))}
