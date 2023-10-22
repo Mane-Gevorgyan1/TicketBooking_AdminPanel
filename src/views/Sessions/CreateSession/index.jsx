@@ -69,8 +69,6 @@ const CreateSession = () => {
                     date: '',
                     time: ''
                 })
-                const myHeaders = new Headers()
-                myHeaders.append('Content-Type', 'application/json')
                 await fetch(`${process.env.REACT_APP_HOSTNAME}/createSession`, {
                     method: 'POST',
                     body: JSON.stringify({
@@ -83,7 +81,9 @@ const CreateSession = () => {
                         price: details?.hall?.price
                     }),
                     redirect: 'follow',
-                    headers: myHeaders
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 })
                     .then(response => response.json())
                     .then(result => {
@@ -164,7 +164,7 @@ const CreateSession = () => {
                             <CAccordionHeader>Մաս {i + 1}</CAccordionHeader>
                             {e?.price?.length > 0 && e?.price?.map((e, j) => (
                                 <CAccordionBody key={j}>
-                                    <label>Շարք {j + 1} &nbsp;</label>
+                                    <label>Շարք {e.row} &nbsp;</label>
                                     <input value={e?.price} onChange={(event) => handleRowPriceChange(event.target.value, i, j)} />
                                 </CAccordionBody>
                             ))}

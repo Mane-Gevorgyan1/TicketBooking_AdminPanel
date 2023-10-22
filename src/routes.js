@@ -1,5 +1,8 @@
 import React from 'react'
 
+// Dashboard
+const Dashboard = React.lazy(() => import('./views/Dashboard'))
+
 // Events
 const AllEvents = React.lazy(() => import('./views/Events/AllEvents'))
 const EditEvent = React.lazy(() => import('./views/Events/EditEvent/index.jsx'))
@@ -24,6 +27,7 @@ const EditSession = React.lazy(() => import('./views/Sessions/EditSession'))
 
 const routes = [
   { path: '/', exact: true, name: 'Գլխավոր' },
+  { path: '/dashboard', exact: true, name: 'Dashboard', element: Dashboard },
 
   { path: '/all-events', name: 'Բոլոր միջոցառումները', element: AllEvents },
   { path: '/create-event', name: 'Ստեղծել միջոցառում', element: CreateEvent },

@@ -2,10 +2,9 @@ import './style.css'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { GetAllSessionEvents, GetSingleSession } from 'src/services/action/session_action'
-import { CButton, CCol, CForm, CFormInput } from '@coreui/react'
 import { GetAllHalls } from 'src/services/action/hall_action'
-import dayjs from 'dayjs';
+import { GetAllSessionEvents, GetSingleSession } from 'src/services/action/session_action'
+import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CButton, CCol, CForm, CFormInput } from '@coreui/react'
 
 const EditSession = () => {
     const dispatch = useDispatch()
@@ -17,6 +16,10 @@ const EditSession = () => {
     const [validated, setValidated] = useState(false)
     const [openHalls, setOpenHalls] = useState(false)
     const [openEvents, setOpenEvents] = useState(false)
+    const [price, setPrice] = useState([])
+
+    const [hallId, setHallId] = useState({})
+    const [initialPrice, setInitialPrice] = useState([])
     const [details, setDetails] = useState({
         event: '',
         hall: '',
@@ -48,10 +51,20 @@ const EditSession = () => {
                 priceStart: session?.priceStart,
                 priceEnd: session?.priceEnd,
                 date: session?.date?.split('T')[0],
-                time: dayjs(`1970-01-01T${session?.time}:00`)?.format('A'),
+                time: session?.time,
+                price: session?.price
             })
+            setPrice(session?.price)
+            setHallId(session?.hallId?._id)
+            setInitialPrice(session?.price)
         }
     }, [session])
+
+    function handleRowPriceChange(value, section, row) {
+        let item = [...price]
+        item[section].price[row].price = value
+        setPrice(item)
+    }
 
     const handleSubmit = (event) => {
         const form = event.currentTarget
@@ -69,8 +82,8 @@ const EditSession = () => {
                 setErrors({ ...errors, hall: '', event: '', priceStart: '', priceEnd: ' ' })
             } else if (!details?.date) {
                 setErrors({ ...errors, hall: '', event: '', priceStart: '', priceEnd: '', date: ' ' })
-            } else if (!details?.hour) {
-                setErrors({ ...errors, hall: '', event: '', priceStart: '', priceEnd: '', date: '', hour: ' ' })
+            } else if (!details?.time) {
+                setErrors({ ...errors, hall: '', event: '', priceStart: '', priceEnd: '', date: '', time: ' ' })
             } else {
                 setErrors({
                     event: '',
@@ -80,24 +93,27 @@ const EditSession = () => {
                     date: '',
                     time: ''
                 })
-                const formdata = new FormData()
-                formdata.append("hallId", details?.hall?._id)
-                formdata.append("eventId", details?.event?._id)
-                formdata.append("priceStart", details?.priceStart)
-                formdata.append("priceEnd", details?.priceEnd)
-                formdata.append("date", details?.date)
-                formdata.append("time", details?.hour)
-                // formdata.append("price",)
-
-                fetch(`${process.env.REACT_APP_HOSTNAME}/createSession`, {
+                fetch(`${process.env.REACT_APP_HOSTNAME}/editSession`, {
                     method: 'POST',
-                    body: formdata,
-                    redirect: 'follow'
+                    body: JSON.stringify({
+                        id: sessionId,
+                        hallId: details?.hall?._id,
+                        eventId: details?.event?._id,
+                        priceStart: details?.priceStart,
+                        priceEnd: details?.priceEnd,
+                        date: details?.date,
+                        time: details?.time,
+                        price
+                    }),
+                    redirect: 'follow',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 })
                     .then(response => response.json())
                     .then(result => {
                         if (result.success) {
-                            navigate('/all-events')
+                            navigate('/all-sessions')
                         }
                     })
                     .catch(error => console.log('error', error));
@@ -155,6 +171,11 @@ const EditSession = () => {
                                     onClick={() => {
                                         setDetails({ ...details, hall: e })
                                         setOpenHalls(false)
+                                        if (e._id === hallId) {
+                                            setPrice(initialPrice)
+                                        } else {
+                                            setPrice(e?.price)
+                                        }
                                     }}
                                     style={details?.hall === e ? { background: 'rgb(128 128 128 / 21%)' } : {}}
                                 >
@@ -166,6 +187,22 @@ const EditSession = () => {
                         }
                     </div>
                 </div>
+
+                <CAccordion flush className='sessionAccordion'>
+                    {price?.length > 0 && price?.map((e, i) => (
+                        <CAccordionItem itemKey={i + 1} key={i}>
+                            <CAccordionHeader>Մաս {i + 1}</CAccordionHeader>
+                            {e?.price?.length > 0 && e?.price?.map((e, j) => (
+                                <CAccordionBody key={j}>
+                                    <label>Շարք {e.row} &nbsp;</label>
+                                    <input value={e?.price} onChange={(event) => handleRowPriceChange(event.target.value, i, j)} />
+                                    <label>&nbsp; դրամ</label>
+                                </CAccordionBody>
+                            ))}
+                        </CAccordionItem>
+                    ))}
+                </CAccordion>
+
                 <div className='select'>
                     <span>Օր</span>
                     <input
@@ -180,7 +217,7 @@ const EditSession = () => {
                     <input
                         className='datetime'
                         type='time'
-                        value={details?.hour}
+                        value={details?.time}
                         onChange={(e) => setDetails({ ...details, time: e.target.value })}
                     />
                 </div>
