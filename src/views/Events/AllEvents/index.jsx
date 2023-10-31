@@ -32,7 +32,7 @@ const AllEvents = () => {
                 ? events?.map((e, i) => (
                     <CCard className='eachEventCard' key={i}>
                         <CCardImage orientation='top' src={`${process.env.REACT_APP_IMAGE}/${e?.image}`} onClick={() => {
-                            (setSelectedEvent(e))
+                            setSelectedEvent(e)
                             setOpenEvent(true)
                         }} />
                         <CCardBody>

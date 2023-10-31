@@ -2,11 +2,13 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilApplications,
+  cilGlobeAlt,
   cilNewspaper,
   cilPeople,
   cilScreenDesktop,
   cilSofa,
   cilSpeedometer,
+  cilTags,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
 
@@ -105,6 +107,30 @@ const _nav = [
         to: '/create-session',
       },
     ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Գովազդ',
+    to: '/',
+    icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Տեսնել բոլորը',
+        to: '/all-ads',
+      },
+      {
+        component: CNavItem,
+        name: 'Ստեղծել նորը',
+        to: '/create-ad',
+      },
+    ],
+  },
+  {
+    component: CNavItem,
+    name: 'Հետադարձ կապ',
+    to: '/feedback',
+    icon: <CIcon icon={cilGlobeAlt} customClassName="nav-icon" />,
   },
 ]
 

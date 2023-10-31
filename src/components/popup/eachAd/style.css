@@ -1,0 +1,83 @@
+.activePopup {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+        0px 8px 18px rgba(24, 39, 75, 0.12);
+    backdrop-filter: blur(20px);
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    z-index: 10000;
+}
+
+.inactive {
+    display: none;
+}
+
+.pop {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25),
+        0px 8px 18px rgba(24, 39, 75, 0.12);
+    padding: 30px;
+    background: #fff;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    margin: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-height: calc(100vh - 40px);
+    gap: 10px;
+    overflow: auto;
+}
+
+.close {
+    width: 40px;
+    height: 40px;
+    background: #ffffff;
+    box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.15);
+    border-radius: 35px;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.close:hover {
+    background: #f5f5f5;
+}
+
+.eventPopupImage {
+    width: 100%;
+    height: 400px;
+}
+
+.eventPopupDetails {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+}
+
+.eventEdit {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.eventEditBg {
+    width: fit-content;
+    height: fit-content;
+    padding: 5px 8px;
+    background: rgb(191 189 189);
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}

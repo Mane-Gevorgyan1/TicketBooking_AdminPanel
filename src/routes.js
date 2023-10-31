@@ -5,8 +5,8 @@ const Dashboard = React.lazy(() => import('./views/Dashboard'))
 
 // Events
 const AllEvents = React.lazy(() => import('./views/Events/AllEvents'))
-const EditEvent = React.lazy(() => import('./views/Events/EditEvent/index.jsx'))
 const CreateEvent = React.lazy(() => import('./views/Events/CreateEvent'))
+const EditEvent = React.lazy(() => import('./views/Events/EditEvent/index.jsx'))
 
 // Categories
 const AllCategories = React.lazy(() => import('./views/Categories/AllCategories'))
@@ -21,9 +21,17 @@ const AllHalls = React.lazy(() => import('./views/Halls/AllHalls'))
 // const CreateHall = React.lazy(() => import('./views/Halls/CreateHall'))
 
 // Sessions
-const CreateSession = React.lazy(() => import('./views/Sessions/CreateSession'))
 const AllSessions = React.lazy(() => import('./views/Sessions/AllSessions'))
+const CreateSession = React.lazy(() => import('./views/Sessions/CreateSession'))
 const EditSession = React.lazy(() => import('./views/Sessions/EditSession'))
+
+// Ads
+const AllAds = React.lazy(() => import('./views/Ads/AllAds'))
+const CreateAd = React.lazy(() => import('./views/Ads/CreateAd'))
+const EditAd = React.lazy(() => import('./views/Ads/EditAd'))
+
+// Feedback
+const Feedback = React.lazy(() => import('./views/Feedback'))
 
 const routes = [
   { path: '/', exact: true, name: 'Գլխավոր' },
@@ -45,6 +53,12 @@ const routes = [
   { path: '/all-sessions', name: 'Բոլոր սեանսները', element: AllSessions },
   { path: '/create-session', name: 'Ստեղծել սեանս', element: CreateSession },
   { path: '/edit-session/:id', name: 'Փոփոխել սեանսը', element: EditSession },
+
+  { path: '/all-ads', name: 'Բոլոր գովազդները', element: AllAds },
+  { path: '/create-ad', name: 'Ստեղծել գովազդ', element: CreateAd },
+  { path: '/edit-ad/:id', name: 'Փոփոխել գովազդը', element: EditAd },
+
+  {path: '/feedback', name: 'Հետադարձ կապ', element: Feedback},
 ]
 
 export default routes 

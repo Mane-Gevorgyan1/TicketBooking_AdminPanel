@@ -5,6 +5,8 @@ import { Sponsor_reducer } from './sponsor_reducer'
 import { Category_reducer } from './category_reducer'
 import { Hall_reducer } from './hall_reducer'
 import { Session_reducer } from './session_reducer'
+import { Ad_reducer } from './ad_reducer'
+import { Feedback_reducer } from './feedback_reducer'
 
 export default combineReducers({
     Ticket_reducer,
@@ -13,4 +15,6 @@ export default combineReducers({
     Category_reducer,
     Hall_reducer,
     Session_reducer,
+    Ad_reducer,
+    Feedback_reducer,
 })
