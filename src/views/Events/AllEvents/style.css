@@ -5,7 +5,7 @@
 }
 
 .eachEventCard {
-    width: 30%;
+    width: 30% !important;
 }
 
 .card-img-top {

@@ -2,6 +2,7 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilApplications,
+  cilBadge,
   cilGlobeAlt,
   cilNewspaper,
   cilPeople,
@@ -16,7 +17,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Գլխավոր',
-    to: '/dashboard',
+    to: '/',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
     badge: {
       color: 'info',
@@ -123,6 +124,24 @@ const _nav = [
         component: CNavItem,
         name: 'Ստեղծել նորը',
         to: '/create-ad',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Մոդերատորներ',
+    to: '/',
+    icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Տեսնել բոլորը',
+        to: '/all-moderators',
+      },
+      {
+        component: CNavItem,
+        name: 'Ստեղծել նորը',
+        to: '/create-moderator',
       },
     ],
   },

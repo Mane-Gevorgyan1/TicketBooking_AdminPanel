@@ -44,10 +44,9 @@ const CreateSession = () => {
 
     const handleSubmit = async (event) => {
         const form = event.currentTarget
-        if (form.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        } else {
+        event.preventDefault()
+        event.stopPropagation()
+        if (form.checkValidity() !== false) {
             if (!Object.keys(details?.hall).length > 0) {
                 setErrors({ ...errors, hall: ' ' })
             } else if (!Object.keys(details?.event).length > 0) {

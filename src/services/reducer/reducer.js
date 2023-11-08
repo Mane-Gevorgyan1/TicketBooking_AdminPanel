@@ -7,6 +7,8 @@ import { Hall_reducer } from './hall_reducer'
 import { Session_reducer } from './session_reducer'
 import { Ad_reducer } from './ad_reducer'
 import { Feedback_reducer } from './feedback_reducer'
+import { Auth_reducer } from './auth_reducer'
+import { User_reducer } from './user_reducer'
 
 export default combineReducers({
     Ticket_reducer,
@@ -17,4 +19,6 @@ export default combineReducers({
     Session_reducer,
     Ad_reducer,
     Feedback_reducer,
+    Auth_reducer,
+    User_reducer,
 })

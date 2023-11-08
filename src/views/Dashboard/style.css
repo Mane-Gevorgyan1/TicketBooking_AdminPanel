@@ -1,0 +1,48 @@
+.ticketNotes {
+    min-width: 400px;
+}
+
+.ticketWidth {
+    min-width: 200px;
+}
+
+.ticketRowWidth {
+    min-width: 100px;
+}
+
+.chartWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.chart {
+    width: 50%;
+}
+
+.buyerInfoWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.searchWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.searchDiv {
+    width: 100%;
+    border: 1px solid #818181;
+    border-radius: 5px;
+    padding: 5px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.searchDiv:hover {
+    background: #d2d2d221;
+}

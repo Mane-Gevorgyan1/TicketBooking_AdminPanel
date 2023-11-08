@@ -1,5 +1,8 @@
 import React from 'react'
 
+// Login
+const Login = React.lazy(() => import('./views/pages/page404/Page404.js'))
+
 // Dashboard
 const Dashboard = React.lazy(() => import('./views/Dashboard'))
 
@@ -33,9 +36,18 @@ const EditAd = React.lazy(() => import('./views/Ads/EditAd'))
 // Feedback
 const Feedback = React.lazy(() => import('./views/Feedback'))
 
+// Moderators
+const AllModerators = React.lazy(() => import('./views/Moderators/AllModerators'))
+const CreateModerator = React.lazy(() => import('./views/Moderators/CreateModerator'))
+
+// Tickets
+const SingleTicket = React.lazy(() => import('./views/SingleTicket'))
+
 const routes = [
-  { path: '/', exact: true, name: 'Գլխավոր' },
-  { path: '/dashboard', exact: true, name: 'Dashboard', element: Dashboard },
+  { path: '/login', exact: true, name: 'Login', element: Login },
+
+  // { path: '/', exact: true, name: 'Գլխավոր' },
+  { path: '/', exact: true, name: 'Dashboard', element: Dashboard },
 
   { path: '/all-events', name: 'Բոլոր միջոցառումները', element: AllEvents },
   { path: '/create-event', name: 'Ստեղծել միջոցառում', element: CreateEvent },
@@ -48,7 +60,6 @@ const routes = [
   { path: '/create-sponsor', name: 'Ստեղծել հովանավոր', element: CreateSponsor },
 
   { path: '/all-halls', name: 'Բոլոր դահլիճները', element: AllHalls },
-  // { path: '/create-hall', name: 'Ստեղծել դահլիճ', element: CreateHall },
 
   { path: '/all-sessions', name: 'Բոլոր սեանսները', element: AllSessions },
   { path: '/create-session', name: 'Ստեղծել սեանս', element: CreateSession },
@@ -58,7 +69,12 @@ const routes = [
   { path: '/create-ad', name: 'Ստեղծել գովազդ', element: CreateAd },
   { path: '/edit-ad/:id', name: 'Փոփոխել գովազդը', element: EditAd },
 
-  {path: '/feedback', name: 'Հետադարձ կապ', element: Feedback},
+  { path: '/all-moderators', name: 'Մոդերատորներ', element: AllModerators },
+  { path: '/create-moderator', name: 'Ստեղծել Մոդերատոր', element: CreateModerator },
+
+  { path: '/feedback', name: 'Հետադարձ կապ', element: Feedback },
+
+  { path: '/ticket/:id', name: 'Տոմս', element: SingleTicket },
 ]
 
 export default routes 

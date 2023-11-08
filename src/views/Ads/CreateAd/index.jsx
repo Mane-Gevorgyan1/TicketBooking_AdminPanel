@@ -23,10 +23,9 @@ const CreateAd = () => {
 
     const handleSubmit = (event) => {
         const form = event.currentTarget
-        if (form.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        } else {
+        event.preventDefault()
+        event.stopPropagation()
+        if (form.checkValidity() !== false) {
             const formdata = new FormData()
             formdata.append("image", file)
             formdata.append("text", text.text_hy)

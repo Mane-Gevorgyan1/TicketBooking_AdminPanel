@@ -43,10 +43,9 @@ const CreateHall = () => {
 
     const handleSubmit = (event) => {
         const form = event.currentTarget
-        if (form.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        } else {
+        event.preventDefault()
+        event.stopPropagation()
+        if (form.checkValidity() !== false) {
             if (!details?.country_en?.length) {
                 setErrors({ ...errors, country_en: 'Required field' })
             } else if (!details?.location_en?.length) {

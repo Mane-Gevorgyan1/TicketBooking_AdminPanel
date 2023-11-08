@@ -33,10 +33,9 @@ const Feedback = () => {
 
     const handleSubmit = (event) => {
         const form = event.currentTarget
-        if (form.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        } else {
+        event.preventDefault()
+        event.stopPropagation()
+        if (form.checkValidity() !== false) {
             fetch(`${process.env.REACT_APP_HOSTNAME}/editFeedback/${feedbackId}`, {
                 method: 'PATCH',
                 body: JSON.stringify({

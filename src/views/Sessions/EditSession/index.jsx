@@ -68,10 +68,9 @@ const EditSession = () => {
 
     const handleSubmit = (event) => {
         const form = event.currentTarget
-        if (form.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        } else {
+        event.preventDefault()
+        event.stopPropagation()
+        if (form.checkValidity() !== false) {
             if (!details?.hall) {
                 setErrors({ ...errors, hall: ' ' })
             } else if (!details?.event) {

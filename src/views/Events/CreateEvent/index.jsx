@@ -79,10 +79,9 @@ const CreateEvent = () => {
 
     const handleSubmit = (event) => {
         const form = event.currentTarget
-        if (form.checkValidity() === false) {
-            event.preventDefault()
-            event.stopPropagation()
-        } else {
+        event.preventDefault()
+        event.stopPropagation()
+        if (form.checkValidity() !== false) {
             if (!eventDetails?.title_en?.length) {
                 setErrors({ ...errors, title_en: 'English title is required' })
             } else if (!eventDetails?.description_en?.length) {

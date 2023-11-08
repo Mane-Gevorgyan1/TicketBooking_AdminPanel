@@ -1,0 +1,29 @@
+.moderatorSettings {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.moderatorSettings>p {
+    margin: 0;
+}
+
+.moderatorName {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.moderatorNameChange {
+    margin-bottom: 10px;
+}
+
+.allModerators {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.moderatorName {
+    word-break: break-all;
+}

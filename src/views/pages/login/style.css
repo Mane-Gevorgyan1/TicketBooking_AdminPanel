@@ -1,0 +1,34 @@
+.errorMessage {
+    margin-top: -10px;
+    margin-bottom: 10px;
+    color: red;
+}
+
+.loginBg {
+    width: 100%;
+    height: 100vh;
+    background: #a9a9a943;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardik {
+    width: 600px;
+}
+
+.col {
+    padding: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .cardik {
+        width: 500px;
+    }
+}
+
+@media screen and (max-width: 555px) {
+    .cardik {
+        width: 300px;
+    }
+}

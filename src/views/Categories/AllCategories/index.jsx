@@ -66,7 +66,7 @@ const AllCategories = () => {
         <div className='allCategories'>
             {allCategories?.length > 0
                 ? allCategories?.map((category, index) => (
-                    <CCard key={index}>
+                    <CCard key={index} className='eachEventCard'>
                         <CCardBody>
                             {editCategory === category?._id
                                 ? <div className='categoryTitle'>
