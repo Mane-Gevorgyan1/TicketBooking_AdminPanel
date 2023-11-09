@@ -330,7 +330,18 @@ const Dashboard = () => {
             </div>
           </div>
           <br />
-          <CTable responsive striped columns={tableColumns} items={tableData} />
+
+          <CTable responsive striped columns={tableColumns}>
+            <tbody>
+              {tableData?.map((item, index) => (
+                <tr key={index} onClick={() => window.location = `/ticket/${item?.ticketNumber}`} style={{ cursor: 'pointer' }}>
+                  {tableColumns?.map(column => (
+                    <td key={column.key}>{item[column.key]}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </CTable>
         </div>
         : <h1>Welcome to Shine Ticket Dashboard</h1>
       }

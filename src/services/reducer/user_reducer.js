@@ -4,7 +4,7 @@ export const User_reducer = (state = store, action) => {
     let temp = { ...state }
     switch (action.type) {
         case 'createUser':
-            if(action.payload.success) {
+            if (action.payload.success) {
                 alert('Մոդերատորը ստեղծված է')
                 window.location = '/all-moderators'
             }
@@ -23,6 +23,10 @@ export const User_reducer = (state = store, action) => {
             if (action.payload.success) {
                 temp.update = new Date()
             }
+            break;
+        case 'logout':
+            window.localStorage.clear()
+            window.location.reload()
             break;
         default:
             return temp;

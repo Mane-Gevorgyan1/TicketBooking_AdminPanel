@@ -1,6 +1,6 @@
 import './scss/style.scss'
-import React, { Suspense, useEffect, useState } from 'react'
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AllEvents from './views/Events/AllEvents'
 import CreateEvent from './views/Events/CreateEvent'
 import EditEvent from './views/Events/EditEvent'
@@ -17,26 +17,11 @@ import AllSessions from './views/Sessions/AllSessions'
 import CreateSession from './views/Sessions/CreateSession'
 import EditSession from './views/Sessions/EditSession'
 import Feedback from './views/Feedback'
-import Dashboard from './views/Dashboard'
 import Login from './views/pages/login/Login'
 import DefaultLayout from './layout/DefaultLayout'
 import Moderators from './views/Moderators/AllModerators'
 import CreateModerator from './views/Moderators/CreateModerator'
-import { useSelector } from 'react-redux'
 import SingleTicket from './views/SingleTicket'
-
-const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
-  </div>
-)
-
-// Containers
-
-// Pages
-const Register = React.lazy(() => import('./views/pages/register/Register'))
-const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
-const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
   const [valid, setValid] = useState(false)

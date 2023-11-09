@@ -66,6 +66,7 @@ export const AppSidebarNav = ({ items }) => {
   useEffect(() => {
     let navItems = []
     if (items?.length && Object.keys(user)?.length) {
+      navItems.push(items.filter(e => e.name === 'Գլխավոր')[0])
       if (user?.accessToCategories) {
         navItems.push(items.filter(e => e.name === 'Բաժիններ')[0])
       }
