@@ -1,4 +1,6 @@
 /* eslint-disable */
 export default {
-    ticket: {}
+    tickets: [],
+    search: [],
+    singleTicket: {},
 }

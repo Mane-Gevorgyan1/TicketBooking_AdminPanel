@@ -4,6 +4,7 @@ import {
   cilApplications,
   cilBadge,
   cilGlobeAlt,
+  cilMoney,
   cilNewspaper,
   cilPeople,
   cilScreenDesktop,
@@ -131,7 +132,7 @@ const _nav = [
     component: CNavGroup,
     name: 'Մոդերատորներ',
     to: '/',
-    icon: <CIcon icon={cilTags} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilBadge} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -150,6 +151,12 @@ const _nav = [
     name: 'Հետադարձ կապ',
     to: '/feedback',
     icon: <CIcon icon={cilGlobeAlt} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Տոմսեր',
+    to: '/all-tickets',
+    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
   },
 ]
 

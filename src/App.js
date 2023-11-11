@@ -21,7 +21,8 @@ import Login from './views/pages/login/Login'
 import DefaultLayout from './layout/DefaultLayout'
 import Moderators from './views/Moderators/AllModerators'
 import CreateModerator from './views/Moderators/CreateModerator'
-import SingleTicket from './views/SingleTicket'
+import SingleTicket from './views/Tickets/SingleTicket'
+import AllTickets from './views/Tickets/AllTickets'
 
 const App = () => {
   const [valid, setValid] = useState(false)
@@ -84,6 +85,7 @@ const App = () => {
               <Route path='/all-moderators' element={<PrivateRoute auth={auth}><Moderators /></PrivateRoute>} />
               <Route path='/create-moderator' element={<PrivateRoute auth={auth}><CreateModerator /></PrivateRoute>} />
 
+              <Route path='/all-tickets' element={<PrivateRoute auth={auth}><AllTickets /></PrivateRoute>} />
               <Route path='/ticket/:id' element={<PrivateRoute auth={auth}><SingleTicket /></PrivateRoute>} />
             </Route>
           </Routes>

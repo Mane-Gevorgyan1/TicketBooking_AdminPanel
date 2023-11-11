@@ -1,11 +1,24 @@
 import './style.css'
-import { CCol, CFormInput, CFormTextarea, CRow } from '@coreui/react'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { getSingleTicket } from 'src/services/action/ticket_action'
+import { CButton, CCol, CFormInput, CFormTextarea, CRow } from '@coreui/react'
 
 const SingleTicket = () => {
+    const dispatch = useDispatch()
+    const params = useParams()
+    const ticket = useSelector(st => st.Ticket_reducer.singleTicket)
+
+    useEffect(() => {
+        dispatch(getSingleTicket(params.id))
+    }, [dispatch, params])
+
     return (
         <div>
             <div className='ticketHeader'>
-                <h1>Տոմսի համար 123456</h1>
+                <h1>Տոմսի համար {ticket?.ticketNumber}</h1>
+                <span>orderId: {ticket?.orderId}</span>
             </div><br /><br />
 
             <h4>Գնորդի տվյալներ</h4><br />
@@ -15,7 +28,7 @@ const SingleTicket = () => {
                     <CFormInput
                         readOnly
                         label='Անուն'
-                        value='Mane Gevorgyan'
+                        value={ticket?.buyerName || ''}
                     />
                 </CCol><br />
 
@@ -23,7 +36,7 @@ const SingleTicket = () => {
                     <CFormInput
                         readOnly
                         label='Էլ. հասցե'
-                        value='manegevorgyan1@gmail.com'
+                        value={ticket?.buyerEmail || ''}
                     />
                 </CCol>
 
@@ -31,36 +44,38 @@ const SingleTicket = () => {
                     <CFormInput
                         readOnly
                         label='Հեռախոս'
-                        value='+374987654'
+                        value={ticket?.buyerPhone || ''}
                     />
                 </CCol>
             </CRow> <br />
 
             <CRow>
-                <CCol md={2}>
+                <CCol md={4}>
                     <CFormInput
                         readOnly
                         label='Առաքում'
-                        value='Այո'
+                        value={ticket?.delivery ? 'Այո' : 'Ոչ'}
                     />
                 </CCol>
 
-                <CCol md={2}>
+                <CCol md={4}>
                     <CFormInput
                         readOnly
                         label='Ամսաթիվ'
-                        value='2023-11-09, 14:48'
+                        value={`${ticket?.createdAt?.split('.')[0]?.split('T')[0]}, ${ticket?.createdAt?.split('.')[0]?.split('T')[1]}` || ''}
                     />
                 </CCol>
+            </CRow><br />
 
+            <CRow>
                 <CCol md={8}>
                     <CFormTextarea
                         readOnly
                         label='Նշումներ'
-                        value='Խնդրում եմ առաքումն իրականացնել ժամը 14:00 - 18:00 սահմաններում'
+                        value={ticket?.buyerNotes || ''}
                     />
                 </CCol>
-            </CRow><br />
+            </CRow><br /><br />
 
             <h4>Տոմսի տվյալներ</h4><br />
             <CRow>
@@ -74,59 +89,60 @@ const SingleTicket = () => {
             </CRow><br />
 
             <CRow>
-                <CCol md={2}>
+                <CCol md={3}>
                     <CFormInput
                         readOnly
                         label='Գինը'
-                        value='20000'
+                        value={ticket?.price || ''}
                     />
                 </CCol>
 
             </CRow><br />
 
-
             <CRow>
-                <CCol md={2}>
+                <CCol md={3}>
                     <CFormInput
                         readOnly
                         label='Վայր'
-                        value='Ամֆիթատրոն'
+                        value={ticket?.amphitheater ? 'Ամֆիթատրոն' : ticket?.lodge ? 'Օթյակ' : ticket?.parterre ? 'Պարտեր' : ''}
                     />
                 </CCol>
 
-                <CCol md={2}>
+                <CCol md={3}>
                     <CFormInput
                         readOnly
                         label='Շարք'
-                        value='1'
+                        value={ticket?.row || ''}
                     />
                 </CCol>
 
-                <CCol md={2}>
+                <CCol md={3}>
                     <CFormInput
                         readOnly
                         label='Տեղ'
-                        value='7'
+                        value={ticket?.seat || ''}
                     />
                 </CCol>
             </CRow><br />
 
             <CRow>
-                <CCol md={2}>
+                <CCol md={3}>
                     <CFormInput
                         readOnly
                         label='Վճարման մեթոդ'
-                        value='MasterCard'
+                        value={ticket?.paymentMethod || ''}
                     />
                 </CCol>
-                <CCol md={2}>
+                <CCol md={3}>
                     <CFormInput
                         readOnly
                         label='Վճ. կարգավիճակ'
-                        value='Հաստատված'
+                        value={ticket?.paymentVerified ? 'Հաստատված' : 'Չհաստատված'}
                     />
                 </CCol>
             </CRow><br />
+
+            <CButton color='danger'>Հետ վերադարձ</CButton>
 
         </div >
     )

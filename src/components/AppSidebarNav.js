@@ -91,6 +91,9 @@ export const AppSidebarNav = ({ items }) => {
       if (user?.accessToFeedback) {
         navItems.push(items.filter(e => e.name === 'Հետադարձ կապ')[0])
       }
+      if (user?.accessToTickets) {
+        navItems.push(items.filter(e => e.name === 'Տոմսեր')[0])
+      }
       setNav(navItems)
     }
   }, [items, user])

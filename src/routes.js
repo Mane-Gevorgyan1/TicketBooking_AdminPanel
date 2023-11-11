@@ -41,7 +41,8 @@ const AllModerators = React.lazy(() => import('./views/Moderators/AllModerators'
 const CreateModerator = React.lazy(() => import('./views/Moderators/CreateModerator'))
 
 // Tickets
-const SingleTicket = React.lazy(() => import('./views/SingleTicket'))
+const AllTickets = React.lazy(() => import('./views/Tickets/AllTickets'))
+const SingleTicket = React.lazy(() => import('./views/Tickets/SingleTicket/index.jsx'))
 
 const routes = [
   { path: '/login', exact: true, name: 'Login', element: Login },
@@ -74,6 +75,7 @@ const routes = [
 
   { path: '/feedback', name: 'Հետադարձ կապ', element: Feedback },
 
+  { path: '/all-tickets', name: 'Բոլոր Տոմսերը', element: AllTickets },
   { path: '/ticket/:id', name: 'Տոմս', element: SingleTicket },
 ]
 

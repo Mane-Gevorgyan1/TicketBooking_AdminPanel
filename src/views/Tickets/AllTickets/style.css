@@ -1,0 +1,74 @@
+.ticketNotes {
+    min-width: 400px;
+}
+
+.ticketWidth {
+    min-width: 200px;
+}
+
+.ticketRowWidth {
+    min-width: 100px;
+}
+
+.buyerInfoWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.searchWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+
+.searchDiv {
+    width: 100%;
+    border: 1px solid #818181;
+    border-radius: 5px;
+    background: #fff;
+    cursor: pointer;
+    position: absolute;
+    top: 40px;
+    z-index: 2;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.paginationBigButtons {
+    border: 1px solid rgb(0 0 0 / 26%);
+    border-radius: 5px 0 0 5px;
+    padding: 5px 10px;
+}
+
+.pgLeft {
+    border-radius: 5px 0 0 5px;
+}
+
+.pgRight {
+    border-radius: 0 5px 5px 0;
+}
+
+.myPagination {
+    padding: 5px 10px;
+    min-width: 10px;
+    border-top: 1px solid rgb(0 0 0 / 26%);
+    border-bottom: 1px solid rgb(0 0 0 / 26%);
+    border-right: .5px solid rgb(0 0 0 / 26%);
+    border-left: .5px solid rgb(0 0 0 / 26%);
+}
+
+.activePagination {
+    background: #321fdb;
+    color: #fff;
+}
+
+.eachSearchItem {
+    padding: 5px;
+}
+
+.eachSearchItem:hover {
+    background: #d2d2d29a;
+}
