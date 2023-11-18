@@ -23,6 +23,7 @@ import Moderators from './views/Moderators/AllModerators'
 import CreateModerator from './views/Moderators/CreateModerator'
 import SingleTicket from './views/Tickets/SingleTicket'
 import AllTickets from './views/Tickets/AllTickets'
+import ReturnedTickets from './views/Tickets/ReturnedTickets'
 
 const App = () => {
   const [valid, setValid] = useState(false)
@@ -61,7 +62,7 @@ const App = () => {
               <Route path='/' element={<PrivateRoute auth={auth}><DefaultLayout /></PrivateRoute>} />
               <Route path='/all-events' element={<PrivateRoute auth={auth}><AllEvents /></PrivateRoute>} />
               <Route path='/create-event' element={<PrivateRoute auth={auth}><CreateEvent /></PrivateRoute>} />
-              <Route path='/edit-event' element={<PrivateRoute auth={auth}><EditEvent /></PrivateRoute>} />
+              <Route path='/edit-event/:eventId' element={<PrivateRoute auth={auth}><EditEvent /></PrivateRoute>} />
 
               <Route path='/all-categories' element={<PrivateRoute auth={auth}><AllCategories /></PrivateRoute>} />
               <Route path='/create-category' element={<PrivateRoute auth={auth}><CreateCategory /></PrivateRoute>} />
@@ -86,7 +87,8 @@ const App = () => {
               <Route path='/create-moderator' element={<PrivateRoute auth={auth}><CreateModerator /></PrivateRoute>} />
 
               <Route path='/all-tickets' element={<PrivateRoute auth={auth}><AllTickets /></PrivateRoute>} />
-              <Route path='/ticket/:id' element={<PrivateRoute auth={auth}><SingleTicket /></PrivateRoute>} />
+              <Route path='/ticket/:ticketId' element={<PrivateRoute auth={auth}><SingleTicket /></PrivateRoute>} />
+              <Route path='/returned-tickets' element={<PrivateRoute auth={auth}><ReturnedTickets /></PrivateRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -13,6 +13,11 @@ export const Ad_reducer = (state = store, action) => {
                 temp.ad = action.payload.ad
             }
             break;
+        case 'deleteAd':
+            if (action.payload.success) {
+                temp.update = new Date()
+            }
+            break;
         default:
             return temp
     }

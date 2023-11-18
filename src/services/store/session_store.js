@@ -4,4 +4,5 @@ export default {
     sessions: [],
     update: new Date(),
     session: {},
+    pageInfo: {},
 }

@@ -1,10 +1,15 @@
 import './style.css'
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
-import { CButton, CCol, CForm, CFormInput, CNav, CNavItem, CNavLink, CTabContent, CTabPane } from "@coreui/react"
+import { Loading } from 'src/components/loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { StopLoading, StartLoading } from 'src/services/action/loading_action'
+import { CButton, CCol, CForm, CFormInput, CNav, CNavItem, CNavLink, CSpinner, CTabContent, CTabPane } from "@coreui/react"
 
 const CreateHall = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const loading = useSelector(st => st.Loading_reducer.loading)
     const [activeKey, setActiveKey] = useState(1)
     const [validated, setValidated] = useState(false)
     const [file, setFile] = useState()
@@ -46,6 +51,7 @@ const CreateHall = () => {
         event.preventDefault()
         event.stopPropagation()
         if (form.checkValidity() !== false) {
+            dispatch(StartLoading())
             if (!details?.country_en?.length) {
                 setErrors({ ...errors, country_en: 'Required field' })
             } else if (!details?.location_en?.length) {
@@ -96,6 +102,7 @@ const CreateHall = () => {
                     .then(response => response.json())
                     .then(result => {
                         if (result.success) {
+                            dispatch(StopLoading())
                             alert('Դահլիճը ստեղծված է')
                             navigate('/all-halls')
                         }
@@ -103,203 +110,210 @@ const CreateHall = () => {
                     .catch(error => console.log('error', error));
             }
         }
-
         setValidated(true)
     }
 
-    return <div>
-        <CNav variant="tabs" role="tablist">
-            <CNavItem role="presentation" >
-                <CNavLink
-                    active={activeKey === 1}
-                    component="button"
-                    role="tab"
-                    aria-controls="home-tab-pane"
-                    aria-selected={activeKey === 1}
-                    onClick={() => setActiveKey(1)}
-                >
-                    Հայերեն
-                </CNavLink>
-            </CNavItem>
-            <CNavItem role="presentation">
-                <CNavLink
-                    style={errors?.country_en?.length > 0 || errors?.location_en?.length > 0 || errors?.place_en?.length > 0 || errors?.hall_en?.length > 0 ? { border: '1px solid red' } : {}}
-                    active={activeKey === 2}
-                    component="button"
-                    role="tab"
-                    aria-controls="profile-tab-pane"
-                    aria-selected={activeKey === 2}
-                    onClick={() => setActiveKey(2)}
-                >
-                    English
-                </CNavLink>
-            </CNavItem>
-            <CNavItem role="presentation">
-                <CNavLink
-                    style={errors?.country_ru?.length > 0 || errors?.location_ru?.length > 0 || errors?.place_ru?.length > 0 || errors?.hall_ru?.length > 0 ? { border: '1px solid red' } : {}}
-                    active={activeKey === 3}
-                    component="button"
-                    role="tab"
-                    aria-controls="contact-tab-pane"
-                    aria-selected={activeKey === 3}
-                    onClick={() => setActiveKey(3)}
-                >
-                    Русский
-                </CNavLink>
-            </CNavItem>
-        </CNav>
-        <CTabContent>
-            <CTabPane role="tabpanel" aria-labelledby="home-tab-pane" visible={activeKey === 1} style={{ marginTop: '20px' }}>
-                <CForm
-                    className="row g-3 needs-validation"
-                    noValidate
-                    validated={validated}
-                    onSubmit={handleSubmit}
-                >
-                    <CCol md={4}>
-                        <div className='createHallImage'>
-                            <img alt='' src={blob} className='eventImage' />
-                        </div>
-                        <CFormInput
-                            type="file"
-                            defaultValue=''
-                            onChange={handleImageChange}
-                            feedbackInvalid='Պարտադիր դաշտ'
-                            required
-                        />
-                    </CCol>
-                    <CCol md={4} /><CCol md={4} />
-                    <CCol md={4}>
-                        <CFormInput
-                            type="text"
-                            defaultValue=''
-                            onChange={(e) => setDetails({ ...details, country: e.target.value })}
-                            feedbackInvalid='Պարտադիր դաշտ'
-                            label='Երկիր'
-                            required
-                        />
-                    </CCol>
-                    <CCol md={4}>
-                        <CFormInput
-                            type="text"
-                            defaultValue=''
-                            onChange={(e) => setDetails({ ...details, location: e.target.value })}
-                            feedbackInvalid='Պարտադիր դաշտ'
-                            label='Քաղաք'
-                            required
-                        />
-                    </CCol>
-                    <CCol md={4}>
-                        <CFormInput
-                            type="text"
-                            defaultValue=''
-                            onChange={(e) => setDetails({ ...details, place: e.target.value })}
-                            feedbackInvalid='Պարտադիր դաշտ'
-                            label='Վայր'
-                            required
-                        />
-                    </CCol>
-                    <CCol md={4}>
-                        <CFormInput
-                            type="text"
-                            defaultValue=''
-                            onChange={(e) => setDetails({ ...details, hall: e.target.value })}
-                            feedbackInvalid='Պարտադիր դաշտ'
-                            label='Դահլիճ'
-                            required
-                        />
-                    </CCol>
-                    {(errors?.country_en?.length > 0 || errors?.location_en?.length > 0 || errors?.place_en?.length > 0 || errors?.hall_en?.length > 0 || errors?.country_ru?.length > 0 || errors?.country_ru?.length > 0 || errors?.location_ru?.length > 0 || errors?.place_ru?.length > 0 || errors?.hall_ru?.length > 0) && <span style={{ color: 'red' }}>Error</span>}
-                    <CCol xs={12}>
-                        <CButton color="primary" type="submit">Ստեղծել</CButton>
-                    </CCol>
-                </CForm>
-            </CTabPane>
-            <CTabPane role="tabpanel" aria-labelledby="profile-tab-pane" visible={activeKey === 2} style={{ marginTop: '20px' }}>
-                <CCol md={4}>
-                    <CFormInput
-                        type="text"
-                        defaultValue=''
-                        onChange={(e) => setDetails({ ...details, country_en: e.target.value })}
-                        feedbackInvalid='Required field'
-                        label='Country'
-                        required
-                    />
-                </CCol>
-                <CCol md={4}>
-                    <CFormInput
-                        type="text"
-                        defaultValue=''
-                        onChange={(e) => setDetails({ ...details, location_en: e.target.value })}
-                        feedbackInvalid='Required field'
-                        label='City'
-                        required
-                    />
-                </CCol>
-                <CCol md={4}>
-                    <CFormInput
-                        type="text"
-                        defaultValue=''
-                        onChange={(e) => setDetails({ ...details, place_en: e.target.value })}
-                        feedbackInvalid='Required field'
-                        label='Place'
-                        required
-                    />
-                </CCol>
-                <CCol md={4}>
-                    <CFormInput
-                        type="text"
-                        defaultValue=''
-                        onChange={(e) => setDetails({ ...details, hall_en: e.target.value })}
-                        feedbackInvalid='Required field'
-                        label='Hall'
-                        required
-                    />
-                </CCol>
-            </CTabPane>
-            <CTabPane role="tabpanel" aria-labelledby="contact-tab-pane" visible={activeKey === 3} style={{ marginTop: '20px' }}>
-                <CCol md={4}>
-                    <CFormInput
-                        type="text"
-                        defaultValue=''
-                        onChange={(e) => setDetails({ ...details, country_ru: e.target.value })}
-                        feedbackInvalid='Обязательное поле:'
-                        label='Страна'
-                        required
-                    />
-                </CCol>
-                <CCol md={4}>
-                    <CFormInput
-                        type="text"
-                        defaultValue=''
-                        onChange={(e) => setDetails({ ...details, location_ru: e.target.value })}
-                        feedbackInvalid='Обязательное поле:'
-                        label='Город'
-                        required
-                    />
-                </CCol>
-                <CCol md={4}>
-                    <CFormInput
-                        type="text"
-                        defaultValue=''
-                        onChange={(e) => setDetails({ ...details, place_ru: e.target.value })}
-                        feedbackInvalid='Обязательное поле:'
-                        label='Место'
-                        required
-                    />
-                </CCol>
-                <CCol md={4}>
-                    <CFormInput
-                        type="text"
-                        defaultValue=''
-                        onChange={(e) => setDetails({ ...details, hall_ru: e.target.value })}
-                        feedbackInvalid='Обязательное поле:'
-                        label='Зал'
-                        required
-                    />
-                </CCol>
-            </CTabPane>
-        </CTabContent>
-    </div>
+    return (<>
+        {loading
+            ? <Loading />
+            : <div>
+                <CNav variant="tabs" role="tablist">
+                    <CNavItem role="presentation" >
+                        <CNavLink
+                            active={activeKey === 1}
+                            component="button"
+                            role="tab"
+                            aria-controls="home-tab-pane"
+                            aria-selected={activeKey === 1}
+                            onClick={() => setActiveKey(1)}
+                        >
+                            Հայերեն
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem role="presentation">
+                        <CNavLink
+                            style={errors?.country_en?.length > 0 || errors?.location_en?.length > 0 || errors?.place_en?.length > 0 || errors?.hall_en?.length > 0 ? { border: '1px solid red' } : {}}
+                            active={activeKey === 2}
+                            component="button"
+                            role="tab"
+                            aria-controls="profile-tab-pane"
+                            aria-selected={activeKey === 2}
+                            onClick={() => setActiveKey(2)}
+                        >
+                            English
+                        </CNavLink>
+                    </CNavItem>
+                    <CNavItem role="presentation">
+                        <CNavLink
+                            style={errors?.country_ru?.length > 0 || errors?.location_ru?.length > 0 || errors?.place_ru?.length > 0 || errors?.hall_ru?.length > 0 ? { border: '1px solid red' } : {}}
+                            active={activeKey === 3}
+                            component="button"
+                            role="tab"
+                            aria-controls="contact-tab-pane"
+                            aria-selected={activeKey === 3}
+                            onClick={() => setActiveKey(3)}
+                        >
+                            Русский
+                        </CNavLink>
+                    </CNavItem>
+                </CNav>
+                <CTabContent>
+                    <CTabPane role="tabpanel" aria-labelledby="home-tab-pane" visible={activeKey === 1} style={{ marginTop: '20px' }}>
+                        <CForm
+                            className="row g-3 needs-validation"
+                            noValidate
+                            validated={validated}
+                            onSubmit={handleSubmit}
+                        >
+                            <CCol md={4}>
+                                <div className='createHallImage'>
+                                    <img alt='' src={blob} className='eventImage' />
+                                </div>
+                                <CFormInput
+                                    type="file"
+                                    defaultValue=''
+                                    onChange={handleImageChange}
+                                    feedbackInvalid='Պարտադիր դաշտ'
+                                    required
+                                />
+                            </CCol>
+                            <CCol md={4} /><CCol md={4} />
+                            <CCol md={4}>
+                                <CFormInput
+                                    type="text"
+                                    defaultValue=''
+                                    onChange={(e) => setDetails({ ...details, country: e.target.value })}
+                                    feedbackInvalid='Պարտադիր դաշտ'
+                                    label='Երկիր'
+                                    required
+                                />
+                            </CCol>
+                            <CCol md={4}>
+                                <CFormInput
+                                    type="text"
+                                    defaultValue=''
+                                    onChange={(e) => setDetails({ ...details, location: e.target.value })}
+                                    feedbackInvalid='Պարտադիր դաշտ'
+                                    label='Քաղաք'
+                                    required
+                                />
+                            </CCol>
+                            <CCol md={4}>
+                                <CFormInput
+                                    type="text"
+                                    defaultValue=''
+                                    onChange={(e) => setDetails({ ...details, place: e.target.value })}
+                                    feedbackInvalid='Պարտադիր դաշտ'
+                                    label='Վայր'
+                                    required
+                                />
+                            </CCol>
+                            <CCol md={4}>
+                                <CFormInput
+                                    type="text"
+                                    defaultValue=''
+                                    onChange={(e) => setDetails({ ...details, hall: e.target.value })}
+                                    feedbackInvalid='Պարտադիր դաշտ'
+                                    label='Դահլիճ'
+                                    required
+                                />
+                            </CCol>
+                            {(errors?.country_en?.length > 0 || errors?.location_en?.length > 0 || errors?.place_en?.length > 0 || errors?.hall_en?.length > 0 || errors?.country_ru?.length > 0 || errors?.country_ru?.length > 0 || errors?.location_ru?.length > 0 || errors?.place_ru?.length > 0 || errors?.hall_ru?.length > 0) && <span style={{ color: 'red' }}>Error</span>}
+                            <CCol xs={12}>
+                                <CButton disabled={loading} type="submit">
+                                    {loading && <CSpinner component="span" size="sm" aria-hidden="true" />}
+                                    Ստեղծել
+                                </CButton>
+                            </CCol>
+                        </CForm>
+                    </CTabPane>
+                    <CTabPane role="tabpanel" aria-labelledby="profile-tab-pane" visible={activeKey === 2} style={{ marginTop: '20px' }}>
+                        <CCol md={4}>
+                            <CFormInput
+                                type="text"
+                                defaultValue=''
+                                onChange={(e) => setDetails({ ...details, country_en: e.target.value })}
+                                feedbackInvalid='Required field'
+                                label='Country'
+                                required
+                            />
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormInput
+                                type="text"
+                                defaultValue=''
+                                onChange={(e) => setDetails({ ...details, location_en: e.target.value })}
+                                feedbackInvalid='Required field'
+                                label='City'
+                                required
+                            />
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormInput
+                                type="text"
+                                defaultValue=''
+                                onChange={(e) => setDetails({ ...details, place_en: e.target.value })}
+                                feedbackInvalid='Required field'
+                                label='Place'
+                                required
+                            />
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormInput
+                                type="text"
+                                defaultValue=''
+                                onChange={(e) => setDetails({ ...details, hall_en: e.target.value })}
+                                feedbackInvalid='Required field'
+                                label='Hall'
+                                required
+                            />
+                        </CCol>
+                    </CTabPane>
+                    <CTabPane role="tabpanel" aria-labelledby="contact-tab-pane" visible={activeKey === 3} style={{ marginTop: '20px' }}>
+                        <CCol md={4}>
+                            <CFormInput
+                                type="text"
+                                defaultValue=''
+                                onChange={(e) => setDetails({ ...details, country_ru: e.target.value })}
+                                feedbackInvalid='Обязательное поле:'
+                                label='Страна'
+                                required
+                            />
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormInput
+                                type="text"
+                                defaultValue=''
+                                onChange={(e) => setDetails({ ...details, location_ru: e.target.value })}
+                                feedbackInvalid='Обязательное поле:'
+                                label='Город'
+                                required
+                            />
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormInput
+                                type="text"
+                                defaultValue=''
+                                onChange={(e) => setDetails({ ...details, place_ru: e.target.value })}
+                                feedbackInvalid='Обязательное поле:'
+                                label='Место'
+                                required
+                            />
+                        </CCol>
+                        <CCol md={4}>
+                            <CFormInput
+                                type="text"
+                                defaultValue=''
+                                onChange={(e) => setDetails({ ...details, hall_ru: e.target.value })}
+                                feedbackInvalid='Обязательное поле:'
+                                label='Зал'
+                                required
+                            />
+                        </CCol>
+                    </CTabPane>
+                </CTabContent>
+            </div>
+        }
+    </>)
 }
 export default CreateHall

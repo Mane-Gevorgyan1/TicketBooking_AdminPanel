@@ -1,10 +1,15 @@
 import './style.css'
 import { useState } from 'react'
-import { CButton, CCol, CForm, CFormInput } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
+import { Loading } from 'src/components/loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { CButton, CCol, CForm, CFormInput } from '@coreui/react'
+import { StopLoading, StartLoading } from 'src/services/action/loading_action'
 
 const CreateSponsor = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const loading = useSelector(st => st.Loading_reducer.loading)
     const [file, setFile] = useState()
     const [blob, setBlob] = useState()
     const [name, setName] = useState('')
@@ -22,6 +27,7 @@ const CreateSponsor = () => {
         event.preventDefault()
         event.stopPropagation()
         if (form.checkValidity() !== false) {
+            dispatch(StartLoading())
             const formdata = new FormData()
             formdata.append("image", file)
             formdata.append("name", name)
@@ -34,6 +40,7 @@ const CreateSponsor = () => {
                 .then(response => response.json())
                 .then(result => {
                     if (result.success) {
+                        dispatch(StopLoading())
                         alert('Հովանավորը ստեղծված է')
                         navigate('/all-sponsors')
                     }
@@ -43,39 +50,42 @@ const CreateSponsor = () => {
         setValidated(true)
     }
 
-    return (
-        <CForm
-            className="row g-3 needs-validation"
-            noValidate
-            validated={validated}
-            onSubmit={handleSubmit}
-        >
-            <CCol md={4}>
-                <img alt='' src={blob} className='sponsorImage' />
-                <CFormInput
-                    type="file"
-                    defaultValue=''
-                    onChange={handleImageChange}
-                    feedbackInvalid='Պարտադիր դաշտ'
-                    required
-                />
-            </CCol>
-            <CCol md={4} /><CCol md={4} />
-            <CCol md={4}>
-                <CFormInput
-                    type="text"
-                    defaultValue=''
-                    onChange={(e) => setName(e.target.value)}
-                    feedbackInvalid='Պարտադիր դաշտ'
-                    label="Անուն"
-                    required
-                />
-            </CCol>
-            <CCol xs={12}>
-                <CButton color="primary" type="submit">Ստեղծել</CButton>
-            </CCol>
-        </CForm>
-    )
+    return (<>
+        {loading
+            ? <Loading />
+            : <CForm
+                className="row g-3 needs-validation"
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmit}
+            >
+                <CCol md={4}>
+                    <img alt='' src={blob} className='sponsorImage' />
+                    <CFormInput
+                        type="file"
+                        defaultValue=''
+                        onChange={handleImageChange}
+                        feedbackInvalid='Պարտադիր դաշտ'
+                        required
+                    />
+                </CCol>
+                <CCol md={4} /><CCol md={4} />
+                <CCol md={4}>
+                    <CFormInput
+                        type="text"
+                        defaultValue=''
+                        onChange={(e) => setName(e.target.value)}
+                        feedbackInvalid='Պարտադիր դաշտ'
+                        label="Անուն"
+                        required
+                    />
+                </CCol>
+                <CCol xs={12}>
+                    <CButton type="submit">Ստեղծել</CButton>
+                </CCol>
+            </CForm>
+        }
+    </>)
 }
 
 export default CreateSponsor

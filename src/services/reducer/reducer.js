@@ -9,6 +9,7 @@ import { Ad_reducer } from './ad_reducer'
 import { Feedback_reducer } from './feedback_reducer'
 import { Auth_reducer } from './auth_reducer'
 import { User_reducer } from './user_reducer'
+import { Loading_reducer } from './loading_reducer'
 
 export default combineReducers({
     Ticket_reducer,
@@ -21,4 +22,5 @@ export default combineReducers({
     Feedback_reducer,
     Auth_reducer,
     User_reducer,
+    Loading_reducer,
 })

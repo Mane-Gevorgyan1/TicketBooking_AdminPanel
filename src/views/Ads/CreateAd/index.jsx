@@ -1,10 +1,15 @@
 import './style.css'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Loading } from 'src/components/loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { StopLoading, StartLoading } from 'src/services/action/loading_action'
 import { CButton, CCol, CForm, CFormInput, CFormTextarea } from '@coreui/react'
 
 const CreateAd = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const loading = useSelector(st => st.Loading_reducer.loading)
     const [validated, setValidated] = useState(false)
     const [file, setFile] = useState()
     const [blob, setBlob] = useState()
@@ -26,6 +31,7 @@ const CreateAd = () => {
         event.preventDefault()
         event.stopPropagation()
         if (form.checkValidity() !== false) {
+            dispatch(StartLoading())
             const formdata = new FormData()
             formdata.append("image", file)
             formdata.append("text", text.text_hy)
@@ -43,6 +49,7 @@ const CreateAd = () => {
                 .then(response => response.json())
                 .then(result => {
                     if (result.success) {
+                        dispatch(StopLoading())
                         alert('Գովազդը ստեղծված է')
                         navigate('/all-ads')
                     }
@@ -52,56 +59,59 @@ const CreateAd = () => {
         setValidated(true)
     }
 
-    return (
-        <CForm
-            className="row g-3 needs-validation"
-            noValidate
-            validated={validated}
-            onSubmit={handleSubmit}
-        >
-            <CCol md={4}>
-                <img alt='' src={blob} className='sponsorImage' />
-                <CFormInput
-                    type="file"
-                    defaultValue=''
-                    onChange={handleImageChange}
-                    feedbackInvalid='Պարտադիր դաշտ'
-                    required
-                />
-            </CCol>
-            <CCol md={4} /><CCol md={4} />
-            <CCol md={4}>
-                <CFormTextarea
-                    defaultValue={text?.text_hy}
-                    onChange={(e) => setText({ ...text, text_hy: e.target.value })}
-                    label='Տեքստ'
-                    feedbackInvalid='Պարտադիր դաշտ'
-                    required
-                />
-            </CCol>
-            <CCol md={4}>
-                <CFormTextarea
-                    defaultValue={text?.text_en}
-                    onChange={(e) => setText({ ...text, text_en: e.target.value })}
-                    label='Text'
-                    feedbackInvalid='Required field'
-                    required
-                />
-            </CCol>
-            <CCol md={4}>
-                <CFormTextarea
-                    defaultValue={text?.text_ru}
-                    onChange={(e) => setText({ ...text, text_ru: e.target.value })}
-                    label='Текст'
-                    feedbackInvalid='Обязательное поле'
-                    required
-                />
-            </CCol>
-            <CCol xs={12}>
-                <CButton color="primary" type="submit">Ստեղծել</CButton>
-            </CCol>
-        </CForm>
-    )
+    return (<>
+        {loading
+            ? <Loading />
+            : <CForm
+                className="row g-3 needs-validation"
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmit}
+            >
+                <CCol md={4}>
+                    <img alt='' src={blob} className='sponsorImage' />
+                    <CFormInput
+                        type="file"
+                        defaultValue=''
+                        onChange={handleImageChange}
+                        feedbackInvalid='Պարտադիր դաշտ'
+                        required
+                    />
+                </CCol>
+                <CCol md={4} /><CCol md={4} />
+                <CCol md={4}>
+                    <CFormTextarea
+                        defaultValue={text?.text_hy}
+                        onChange={(e) => setText({ ...text, text_hy: e.target.value })}
+                        label='Տեքստ'
+                        feedbackInvalid='Պարտադիր դաշտ'
+                        required
+                    />
+                </CCol>
+                <CCol md={4}>
+                    <CFormTextarea
+                        defaultValue={text?.text_en}
+                        onChange={(e) => setText({ ...text, text_en: e.target.value })}
+                        label='Text'
+                        feedbackInvalid='Required field'
+                        required
+                    />
+                </CCol>
+                <CCol md={4}>
+                    <CFormTextarea
+                        defaultValue={text?.text_ru}
+                        onChange={(e) => setText({ ...text, text_ru: e.target.value })}
+                        label='Текст'
+                        feedbackInvalid='Обязательное поле'
+                        required
+                    />
+                </CCol>
+                <CCol xs={12}>
+                    <CButton type="submit">Ստեղծել</CButton>
+                </CCol>
+            </CForm>
+        }
+    </>)
 }
 
 export default CreateAd

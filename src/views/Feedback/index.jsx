@@ -1,14 +1,16 @@
 import './style.css'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { CButton, CCol, CForm, CFormInput } from '@coreui/react'
 import { GetFeedback } from 'src/services/action/feedback_action'
+import { CButton, CCol, CForm, CFormInput, CSpinner } from '@coreui/react'
+import { StopLoading, StartLoading } from 'src/services/action/loading_action'
 
 const Feedback = () => {
     const dispatch = useDispatch()
     const feedbackId = '6540eccee9189a1965adff0a'
-    const [validated, setValidated] = useState(false)
     const feedback = useSelector(st => st.Feedback_reducer.feedback)
+    const loading = useSelector(st => st.Loading_reducer.loading)
+    const [validated, setValidated] = useState(false)
     const [details, setDetails] = useState({
         facebook: '',
         instagram: '',
@@ -36,6 +38,7 @@ const Feedback = () => {
         event.preventDefault()
         event.stopPropagation()
         if (form.checkValidity() !== false) {
+            dispatch(StartLoading())
             fetch(`${process.env.REACT_APP_HOSTNAME}/editFeedback/${feedbackId}`, {
                 method: 'PATCH',
                 body: JSON.stringify({
@@ -47,7 +50,12 @@ const Feedback = () => {
                 headers: { "Content-Type": "application/json" }
             })
                 .then(response => response.json())
-                .then(res => res.success && alert('Տվյալները փոփոխվեցին'))
+                .then(res => {
+                    if (res.success) {
+                        dispatch(StopLoading())
+                        alert('Տվյալները փոփոխվեցին')
+                    }
+                })
                 .catch(() => alert('Server error'))
         }
         setValidated(true)
@@ -97,7 +105,10 @@ const Feedback = () => {
                 />
             </CCol>
             <CCol xs={12}>
-                <CButton color="primary" type="submit">Փոփոխել</CButton>
+                <CButton disabled={loading} type="submit">
+                    {loading && <CSpinner component="span" size="sm" aria-hidden="true" />}
+                    Փոփոխել
+                </CButton>
             </CCol>
         </CForm>
     )

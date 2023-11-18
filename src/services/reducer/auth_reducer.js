@@ -29,6 +29,11 @@ export const Auth_reducer = (state = store, action) => {
         case 'getUser':
             if (action.payload.success) {
                 temp.user = action.payload.user
+            } else {
+                if (action.payload.message.includes('No User Found')) {
+                    localStorage.clear()
+                    window.location.reload()
+                }
             }
             break;
         default:

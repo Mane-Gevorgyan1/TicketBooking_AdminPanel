@@ -11,6 +11,11 @@ export const Session_reducer = (state = store, action) => {
         case 'getAllSessions':
             if (action.payload.success) {
                 temp.sessions = action.payload.sessions
+                temp.pageInfo = {
+                    hasNextPage: action.payload.hasNextPage,
+                    totalPages: action.payload.totalPages,
+                    currentPage: action.payload.currentPage,
+                }
             }
             break;
         case 'deleteSession':

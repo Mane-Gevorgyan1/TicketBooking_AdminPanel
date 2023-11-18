@@ -153,10 +153,22 @@ const _nav = [
     icon: <CIcon icon={cilGlobeAlt} customClassName="nav-icon" />,
   },
   {
-    component: CNavItem,
+    component: CNavGroup,
     name: 'Տոմսեր',
-    to: '/all-tickets',
+    to: '/',
     icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Ակտիվ տոմսեր',
+        to: '/all-tickets',
+      },
+      {
+        component: CNavItem,
+        name: 'Հետ վերադարձ',
+        to: '/returned-tickets',
+      },
+    ],
   },
 ]
 

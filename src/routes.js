@@ -43,6 +43,7 @@ const CreateModerator = React.lazy(() => import('./views/Moderators/CreateModera
 // Tickets
 const AllTickets = React.lazy(() => import('./views/Tickets/AllTickets'))
 const SingleTicket = React.lazy(() => import('./views/Tickets/SingleTicket/index.jsx'))
+const ReturnedTickets = React.lazy(() => import('./views/Tickets/ReturnedTickets'))
 
 const routes = [
   { path: '/login', exact: true, name: 'Login', element: Login },
@@ -52,7 +53,7 @@ const routes = [
 
   { path: '/all-events', name: 'Բոլոր միջոցառումները', element: AllEvents },
   { path: '/create-event', name: 'Ստեղծել միջոցառում', element: CreateEvent },
-  { path: '/edit-event/:id', name: 'Փոփոխել միջոցառումը', element: EditEvent },
+  { path: '/edit-event/:eventId', name: 'Փոփոխել միջոցառումը', element: EditEvent },
 
   { path: '/all-categories', name: 'Բոլոր բաժինները', element: AllCategories },
   { path: '/create-category', name: 'Ստեղծել բաժին', element: CreateCategory },
@@ -75,8 +76,9 @@ const routes = [
 
   { path: '/feedback', name: 'Հետադարձ կապ', element: Feedback },
 
-  { path: '/all-tickets', name: 'Բոլոր Տոմսերը', element: AllTickets },
-  { path: '/ticket/:id', name: 'Տոմս', element: SingleTicket },
+  { path: '/all-tickets', name: 'Ակտիվ Տոմսեր', element: AllTickets },
+  { path: '/ticket/:ticketId', name: 'Տոմս', element: SingleTicket },
+  { path: '/returned-tickets', name: 'Հետ վերադարձ', element: ReturnedTickets },
 ]
 
 export default routes 

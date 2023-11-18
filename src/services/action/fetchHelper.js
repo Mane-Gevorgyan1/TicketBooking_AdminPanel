@@ -1,7 +1,10 @@
+import { StopLoading, StartLoading } from "./loading_action"
+
 const token = localStorage.getItem('accessToken')
 
 export const FetchPost = (api, data, success, error) => {
     return (dispatch) => {
+        dispatch(StartLoading())
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Authorization', `Bearer ${token}`)
@@ -11,11 +14,15 @@ export const FetchPost = (api, data, success, error) => {
             body: JSON.stringify(data)
         })
             .then(response => response.json())
-            .then(res => dispatch({
-                type: success,
-                payload: res
-            }))
+            .then(res => {
+                dispatch(StopLoading())
+                dispatch({
+                    type: success,
+                    payload: res
+                })
+            })
             .catch(err => {
+                dispatch(StopLoading())
                 dispatch({
                     type: error,
                     payload: err
@@ -26,6 +33,7 @@ export const FetchPost = (api, data, success, error) => {
 
 export const FetchPatch = (api, data, success, error) => {
     return (dispatch) => {
+        dispatch(StartLoading())
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Authorization', `Bearer ${token}`)
@@ -36,6 +44,7 @@ export const FetchPatch = (api, data, success, error) => {
         })
             .then(response => response.json())
             .then(res => {
+                dispatch(StopLoading())
                 if (res.err?.message?.includes('jwt expired')) {
                     localStorage.clear()
                     window.location.reload()
@@ -47,6 +56,7 @@ export const FetchPatch = (api, data, success, error) => {
                 }
             })
             .catch(err => {
+                dispatch(StopLoading())
                 dispatch({
                     type: error,
                     payload: err
@@ -57,6 +67,7 @@ export const FetchPatch = (api, data, success, error) => {
 
 export const FetchDelete = (api, data, success, error) => {
     return (dispatch) => {
+        dispatch(StartLoading())
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Authorization', `Bearer ${token}`)
@@ -67,6 +78,7 @@ export const FetchDelete = (api, data, success, error) => {
         })
             .then(response => response.json())
             .then(res => {
+                dispatch(StopLoading())
                 if (res.err?.message?.includes('jwt expired')) {
                     localStorage.clear()
                     window.location.reload()
@@ -78,6 +90,7 @@ export const FetchDelete = (api, data, success, error) => {
                 }
             })
             .catch(err => {
+                dispatch(StopLoading())
                 dispatch({
                     type: error,
                     payload: err
@@ -88,6 +101,7 @@ export const FetchDelete = (api, data, success, error) => {
 
 export const FetchGet = (api, success, error) => {
     return (dispatch) => {
+        dispatch(StartLoading())
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Authorization', `Bearer ${token}`)
@@ -97,6 +111,7 @@ export const FetchGet = (api, success, error) => {
         })
             .then(response => response.json())
             .then(res => {
+                dispatch(StopLoading())
                 if (res.err?.message?.includes('jwt expired')) {
                     localStorage.clear()
                     window.location.reload()
@@ -108,6 +123,7 @@ export const FetchGet = (api, success, error) => {
                 }
             })
             .catch(err => {
+                dispatch(StopLoading())
                 dispatch({
                     type: error,
                     payload: err

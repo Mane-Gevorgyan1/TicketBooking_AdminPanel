@@ -6,6 +6,11 @@ export const Event_reducer = (state = store, action) => {
         case 'allEvents':
             if (action.payload.success) {
                 temp.events = action.payload.events
+                temp.pageInfo = {
+                    hasNextPage: action.payload.hasNextPage,
+                    totalPages: action.payload.totalPages,
+                    currentPage: action.payload.currentPage,
+                }
             }
             break;
         case 'singleEvent':
