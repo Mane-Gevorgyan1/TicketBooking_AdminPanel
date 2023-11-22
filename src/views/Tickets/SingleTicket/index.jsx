@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Loading } from 'src/components/loading'
 import { useDispatch, useSelector } from 'react-redux'
-import { ReturnTicket, getSingleTicket } from 'src/services/action/ticket_action'
+import { ResetTickets, ReturnTicket, getSingleTicket } from 'src/services/action/ticket_action'
 import { CButton, CCard, CCardBody, CCardImage, CCardText, CCardTitle, CCol, CFormInput, CFormTextarea, CRow } from '@coreui/react'
 
 const SingleTicket = () => {
@@ -13,6 +13,7 @@ const SingleTicket = () => {
     const loading = useSelector(st => st.Loading_reducer.loading)
 
     useEffect(() => {
+        dispatch(ResetTickets())
         dispatch(getSingleTicket(ticketId))
     }, [dispatch, ticketId])
 

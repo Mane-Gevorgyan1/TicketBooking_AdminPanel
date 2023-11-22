@@ -1,141 +1,90 @@
+import { useEffect, useState } from 'react'
 import './style.css'
-import { useState } from 'react'
-import { useSelector } from "react-redux"
-import { CChart } from '@coreui/react-chartjs'
-import { CNav, CNavItem, CNavLink, CTabContent, CTabPane } from "@coreui/react"
+import { useDispatch, useSelector } from "react-redux"
+import { CPagination, CTable } from '@coreui/react'
+import { GetSoldTickets } from 'src/services/action/ticket_action'
 
 const Dashboard = () => {
+  const dispatch = useDispatch()
+  const tickets = useSelector(st => st.Ticket_reducer.soldTickets)
   const user = useSelector(st => st.Auth_reducer.user)
-  const [activeKey, setActiveKey] = useState(1)
-  const [chartLabels, setChartLabels] = useState(['Սևազգեստ կանայք', 'Մոխրոտը', 'No Makeup', 'Արա Մալիկյան'])
-  const [chartBgColor, setChartBgColor] = useState(['#41B883', '#E46651', '#00D8FF', '#DD1B16'])
-  const [chartData, setChartData] = useState([40, 20, 30, 10])
+  const tableColumns = [
+    {
+      key: 'id',
+      label: '#',
+      _props: { scope: 'col' },
+    },
+    {
+      key: 'ticketNumber',
+      label: 'Տոմսի համար',
+      _props: { scope: 'col', className: 'ticketWidth' },
+    },
+    {
+      key: 'orderId',
+      label: 'orderId',
+      _props: { scope: 'col', className: 'ticketWidth' },
+    },
+    {
+      key: 'title',
+      label: 'Վերնագիր',
+      _props: { scope: 'col', className: 'ticketWidth' },
+    },
+
+  ]
+  const [tableData, setTableData] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+
+  console.log(tickets);
+
+
+  useEffect(() => {
+    dispatch(GetSoldTickets(currentPage))
+  }, [dispatch, currentPage])
+
+
+  useEffect(() => {
+    if (tickets?.tickets?.length > 0) {
+      let soldTickets = []
+      tickets?.tickets?.forEach((element, index) => {
+        soldTickets.push({
+          id: index + 1,
+          ticketNumber: element?.ticketNumber,
+          orderId: element?.orderId,
+          title: element?.sessionId?.eventId?.title,
+        })
+      })
+      setTableData(soldTickets)
+    }
+  }, [tickets])
 
   return (
     <>
       {user?.roleId === 1
         ? <div>
-          <h1>Վաճառված տոմսերը</h1>
-          <CNav variant="tabs" role="tablist">
-            <CNavItem role="presentation">
-              <CNavLink
-                active={activeKey === 1}
-                component="button"
-                role="tab"
-                aria-controls="home-tab-pane"
-                aria-selected={activeKey === 1}
-                onClick={() => setActiveKey(1)}
-              >
-                Այսօր
-              </CNavLink>
-            </CNavItem>
-            <CNavItem role="presentation">
-              <CNavLink
-                active={activeKey === 2}
-                component="button"
-                role="tab"
-                aria-controls="profile-tab-pane"
-                aria-selected={activeKey === 2}
-                onClick={() => setActiveKey(2)}
-              >
-                Երեկ
-              </CNavLink>
-            </CNavItem>
-            <CNavItem role="presentation">
-              <CNavLink
-                active={activeKey === 3}
-                component="button"
-                role="tab"
-                aria-controls="contact-tab-pane"
-                aria-selected={activeKey === 3}
-                onClick={() => setActiveKey(3)}
-              >
-                2 օր առաջ
-              </CNavLink>
-            </CNavItem>
-            <CNavItem role="presentation">
-              <CNavLink
-                active={activeKey === 4}
-                component="button"
-                role="tab"
-                aria-controls="disabled-tab-pane"
-                aria-selected={activeKey === 4}
-                onClick={() => setActiveKey(4)}
-              >
-                Բոլորը
-              </CNavLink>
-            </CNavItem>
-          </CNav>
-          <CTabContent>
-            <CTabPane role="tabpanel" aria-labelledby="home-tab-pane" visible={activeKey === 1}>
-              <div className='chartWrapper'>
-                <CChart
-                  className='chart'
-                  type="doughnut"
-                  data={{
-                    labels: chartLabels,
-                    datasets: [
-                      {
-                        backgroundColor: chartBgColor,
-                        data: chartData,
-                      },
-                    ],
-                  }}
-                />
-              </div>
-            </CTabPane>
-            <CTabPane role="tabpanel" aria-labelledby="profile-tab-pane" visible={activeKey === 2}>
-              <div className='chartWrapper'>
-                <CChart
-                  className='chart'
-                  type="doughnut"
-                  data={{
-                    labels: chartLabels,
-                    datasets: [
-                      {
-                        backgroundColor: chartBgColor,
-                        data: chartData,
-                      },
-                    ],
-                  }}
-                />
-              </div>
-            </CTabPane>
-            <CTabPane role="tabpanel" aria-labelledby="contact-tab-pane" visible={activeKey === 3}>
-              <div className='chartWrapper'>
-                <CChart
-                  className='chart'
-                  type="doughnut"
-                  data={{
-                    labels: chartLabels,
-                    datasets: [
-                      {
-                        backgroundColor: chartBgColor,
-                        data: chartData,
-                      },
-                    ],
-                  }}
-                />
-              </div>
-            </CTabPane>
-            <CTabPane role="tabpanel" aria-labelledby="disabled-tab-pane" visible={activeKey === 4}>
-              <div className='chartWrapper'>
-                <CChart
-                  className='chart'
-                  type="doughnut"
-                  data={{
-                    labels: chartLabels,
-                    datasets: [
-                      {
-                        backgroundColor: chartBgColor,
-                        data: chartData,
-                      },
-                    ],
-                  }}
-                />
-              </div>
-            </CTabPane>
-          </CTabContent>
+          <h1>Վաճառված տոմսերը</h1><br />
+          <CTable responsive striped columns={tableColumns}>
+            <tbody>
+              {tableData?.map((item, index) => (
+                <tr key={index} style={{ cursor: 'pointer' }}>
+                  {tableColumns?.map(column => (
+                    <td key={column.key}>{item[column.key]}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </CTable>
+
+          {tickets?.totalPages > 1 &&
+            <CPagination align="center">
+              <button onClick={() => tickets.currentPage !== 1 && setCurrentPage(tickets.currentPage - 1)} className='paginationBigButtons pgLeft'>Նախորդ</button>
+              {Array.from({ length: tickets.totalPages }, (_, index) => index + 1).map((e, i) => (
+                <button key={i} onClick={() => setCurrentPage(e)} className={tickets.currentPage === e ? 'activePagination myPagination' : 'myPagination'}>
+                  {e}
+                </button>
+              ))}
+              <button onClick={() => tickets.currentPage !== tickets.totalPages && setCurrentPage(tickets.currentPage + 1)} className='paginationBigButtons pgRight'>Հաջորդ</button>
+            </CPagination>
+          }
         </div>
         : <h1>Welcome to Shine Ticket Dashboard</h1>
       }

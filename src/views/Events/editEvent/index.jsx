@@ -4,9 +4,9 @@ import { Loading } from 'src/components/loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { MultiSelect } from 'react-multi-select-component'
-import { GetSingleEvent } from 'src/services/action/event_action'
 import { GetAllSponsors } from 'src/services/action/sponsor_action'
 import { GetAllCategories } from 'src/services/action/category_action'
+import { GetSingleEvent, ResetEvent } from 'src/services/action/event_action'
 import { StopLoading, StartLoading } from 'src/services/action/loading_action'
 import { CButton, CCol, CForm, CFormInput, CFormLabel, CFormSelect, CFormTextarea, CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react'
 
@@ -38,7 +38,9 @@ const EditEvent = () => {
     })
     const [activeKey, setActiveKey] = useState(1)
 
+
     useEffect(() => {
+        dispatch(ResetEvent())
         dispatch(GetSingleEvent(eventId))
         dispatch(GetAllCategories())
         dispatch(GetAllSponsors())

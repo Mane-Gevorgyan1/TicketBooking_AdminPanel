@@ -147,12 +147,6 @@ const _nav = [
     ],
   },
   {
-    component: CNavItem,
-    name: 'Հետադարձ կապ',
-    to: '/feedback',
-    icon: <CIcon icon={cilGlobeAlt} customClassName="nav-icon" />,
-  },
-  {
     component: CNavGroup,
     name: 'Տոմսեր',
     to: '/',
@@ -169,6 +163,12 @@ const _nav = [
         to: '/returned-tickets',
       },
     ],
+  },
+  {
+    component: CNavItem,
+    name: 'Հետադարձ կապ',
+    to: '/feedback',
+    icon: <CIcon icon={cilGlobeAlt} customClassName="nav-icon" />,
   },
 ]
 

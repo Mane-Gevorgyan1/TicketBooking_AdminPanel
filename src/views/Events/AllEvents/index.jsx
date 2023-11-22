@@ -1,6 +1,7 @@
 import './style.css'
 import CIcon from '@coreui/icons-react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Loading } from 'src/components/loading'
 import { cilDelete, cilPencil } from '@coreui/icons'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +11,7 @@ import { CButton, CCard, CCardBody, CCardImage, CCardText, CCardTitle, CPaginati
 
 const AllEvents = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const events = useSelector(st => st.Event_reducer.events)
     const update = useSelector(st => st.Event_reducer.update)
     const loading = useSelector(st => st.Loading_reducer.loading)
@@ -47,7 +49,7 @@ const AllEvents = () => {
                                     <div className='eventDetails'>
                                         <CCardText>{e?.category?.name}</CCardText>
                                         <div className='event-btns'>
-                                            <CButton onClick={() => window.location = `/edit-event/${e?._id}`}><CIcon icon={cilPencil} /></CButton>
+                                            <CButton onClick={() => navigate(`/edit-event/${e?._id}`)}><CIcon icon={cilPencil} /></CButton>
                                             <CButton onClick={() => dispatch(DeleteEvent(e?._id))} color='danger'><CIcon icon={cilDelete} /></CButton>
                                         </div>
                                     </div>

@@ -23,6 +23,9 @@ export const Event_reducer = (state = store, action) => {
                 temp.update = new Date()
             }
             break;
+        case 'resetEvent':
+            temp.event = {}
+            break;
         default:
             return temp;
     }

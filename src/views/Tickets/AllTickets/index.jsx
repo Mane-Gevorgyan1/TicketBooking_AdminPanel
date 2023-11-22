@@ -1,11 +1,13 @@
 import './style.css'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Loading } from 'src/components/loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { CFormInput, CPagination, CTable } from '@coreui/react'
 import { GetAllTickets, SearchTicket } from 'src/services/action/ticket_action'
 
 const AllTickets = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const tickets = useSelector(st => st.Ticket_reducer.tickets.tickets)
     const pageInfo = useSelector(st => st.Ticket_reducer.tickets)
@@ -89,8 +91,8 @@ const AllTickets = () => {
                     email: element?.buyerEmail,
                     phone: element?.buyerPhone,
                     paymentMethod: element?.paymentMethod,
-                    paymentVerified: element?.paymentVerified ? 'Այո' : 'Ոչ',
-                    delivery: element?.delivery,
+                    paymentVerified: element?.paymentVerified === 'PAID' ? 'Այո' : 'Ոչ',
+                    delivery: element?.delivery ? 'Այո' : 'Ոչ',
                     notes: element?.buyerNotes,
                 })
             })
@@ -116,7 +118,7 @@ const AllTickets = () => {
                         {search?.length > 0 && searchData?.length > 0
                             ? <div className='searchDiv'>
                                 {searchData?.map((e, i) => (
-                                    <div className='eachSearchItem' onClick={() => window.location = `/ticket/${e?.ticketNumber}`} key={i}>
+                                    <div className='eachSearchItem' onClick={() => navigate(`/ticket/${e?.ticketNumber}`)} key={i}>
                                         <div>{e?.ticketNumber}</div>
                                     </div>
                                 ))}
@@ -134,7 +136,7 @@ const AllTickets = () => {
                 <CTable responsive striped columns={tableColumns}>
                     <tbody>
                         {tableData?.map((item, index) => (
-                            <tr key={index} onClick={() => window.location = `/ticket/${item?.ticketNumber}`} style={{ cursor: 'pointer' }}>
+                            <tr key={index} onClick={() => navigate(`/ticket/${item?.ticketNumber}`)} style={{ cursor: 'pointer' }}>
                                 {tableColumns?.map(column => (
                                     <td key={column.key}>{item[column.key]}</td>
                                 ))}

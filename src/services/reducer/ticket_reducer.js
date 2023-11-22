@@ -34,6 +34,14 @@ export const Ticket_reducer = (state = store, action) => {
                 temp.update = new Date()
             }
             break;
+        case 'resetTicket':
+            temp.singleTicket = {}
+            break;
+        case 'getSoldTickets':
+            if (action.payload.success) {
+                temp.soldTickets = action.payload
+            }
+            break;
         default:
             return temp;
     }
