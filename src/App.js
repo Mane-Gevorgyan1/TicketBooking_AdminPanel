@@ -30,10 +30,13 @@ const App = () => {
   const auth = localStorage.getItem('accessToken')
 
   useEffect(() => {
+    const myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'application/json')
+    myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
     fetch(`${process.env.REACT_APP_HOSTNAME}/eventValidity`, {
       method: 'GET',
       redirect: 'follow',
-      header: { "Content-Type": "application/json" }
+      headers: myHeaders,
     })
       .then(response => response.json())
       .then(result => result?.valid?.validity ? setValid(true) : setValid(false))

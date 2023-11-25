@@ -96,6 +96,9 @@ const EditSession = () => {
                     date: '',
                     time: ''
                 })
+                const myHeaders = new Headers()
+                myHeaders.append('Content-Type', 'application/json')
+                myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
                 fetch(`${process.env.REACT_APP_HOSTNAME}/editSession`, {
                     method: 'POST',
                     body: JSON.stringify({
@@ -109,9 +112,7 @@ const EditSession = () => {
                         price
                     }),
                     redirect: 'follow',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: myHeaders,
                 })
                     .then(response => response.json())
                     .then(result => {

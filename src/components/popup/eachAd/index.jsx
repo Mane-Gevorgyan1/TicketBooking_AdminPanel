@@ -17,9 +17,6 @@ export const EachAd = ({ open, setOpen, ad }) => {
                 <div className='eventPopupDetails'>
                     <div className='eventEdit'>
                         <h1>{ad?.title}</h1>
-                        <div className='eventEditBg' onClick={() => navigate(`/edit-ad/${ad?._id}`)}>
-                            <span><CIcon icon={cilPencil} /> Փոփոխել</span>
-                        </div>
                     </div>
                     <div>
                         <p>HY: {ad.text}</p>

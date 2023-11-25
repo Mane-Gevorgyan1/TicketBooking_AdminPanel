@@ -95,7 +95,7 @@ const SingleTicket = () => {
                 </CRow><br /><br />
 
                 <h4>Տոմսի տվյալներ</h4><br />
-                <CRow>
+                {ticket?.sessionId && <CRow>
                     <CCard className="mb-3 sessionCard">
                         <CRow className="g-0">
                             <CCol>
@@ -112,8 +112,7 @@ const SingleTicket = () => {
                             </CCardBody>
                         </CCol>
                     </CCard>
-                </CRow><br />
-
+                </CRow>}<br />
                 <CRow>
                     <CCol md={3}>
                         <CFormInput
@@ -122,7 +121,13 @@ const SingleTicket = () => {
                             value={ticket?.price || ''}
                         />
                     </CCol>
-
+                    <CCol md={6}>
+                        <CFormInput
+                            readOnly
+                            label='order id'
+                            value={ticket?.orderId}
+                        />
+                    </CCol>
                 </CRow><br />
 
                 <CRow>

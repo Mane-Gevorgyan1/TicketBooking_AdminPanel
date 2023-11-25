@@ -44,6 +44,8 @@ const EditAd = () => {
         }
     }
 
+    console.log(text.text_hy);
+
     const handleSubmit = (event) => {
         const form = event.currentTarget
         event.preventDefault()
@@ -51,26 +53,27 @@ const EditAd = () => {
         if (form.checkValidity() !== false) {
             dispatch(StartLoading())
             const formdata = new FormData()
+            const myHeaders = new Headers()
             formdata.append("image", file)
             formdata.append("text", text.text_hy)
             formdata.append("text_en", text.text_en)
             formdata.append("text_ru", text.text_ru)
-
+            myHeaders.append('Content-Type', 'application/json')
+            myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
             fetch(`${process.env.REACT_APP_HOSTNAME}/editAd/${params.id}`, {
                 method: 'PATCH',
                 body: formdata,
                 redirect: 'follow',
-                header: {
-                    "Content-Type": "application/json",
-                }
+                headers: myHeaders,
             })
                 .then(response => response.json())
                 .then(result => {
-                    if (result.success) {
-                        dispatch(StopLoading())
-                        alert('Գովազդը փոփոխված է')
-                        navigate('/all-ads')
-                    }
+                    console.log(result);
+                    // if (result.success) {
+                    //     dispatch(StopLoading())
+                    //     alert('Գովազդը փոփոխված է')
+                    //     navigate('/all-ads')
+                    // }
                 })
                 .catch(error => console.log('error', error));
         }
@@ -90,7 +93,6 @@ const EditAd = () => {
                     <img alt='' src={blob} className='sponsorImage' />
                     <CFormInput
                         type="file"
-                        defaultValue=''
                         onChange={handleImageChange}
                         feedbackInvalid='Պարտադիր դաշտ'
                     />
@@ -98,29 +100,23 @@ const EditAd = () => {
                 <CCol md={4} /><CCol md={4} />
                 <CCol md={4}>
                     <CFormTextarea
-                        defaultValue={text?.text_hy}
+                        value={text?.text_hy}
                         onChange={(e) => setText({ ...text, text_hy: e.target.value })}
                         label='Տեքստ'
-                        feedbackInvalid='Պարտադիր դաշտ'
-                        required
                     />
                 </CCol>
                 <CCol md={4}>
                     <CFormTextarea
-                        defaultValue={text?.text_en}
+                        value={text?.text_en}
                         onChange={(e) => setText({ ...text, text_en: e.target.value })}
                         label='Text'
-                        feedbackInvalid='Required field'
-                        required
                     />
                 </CCol>
                 <CCol md={4}>
                     <CFormTextarea
-                        defaultValue={text?.text_ru}
+                        value={text?.text_ru}
                         onChange={(e) => setText({ ...text, text_ru: e.target.value })}
                         label='Текст'
-                        feedbackInvalid='Обязательное поле'
-                        required
                     />
                 </CCol>
                 <CCol xs={12}>

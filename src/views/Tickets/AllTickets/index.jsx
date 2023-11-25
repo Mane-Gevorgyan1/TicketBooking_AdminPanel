@@ -25,11 +25,6 @@ const AllTickets = () => {
             _props: { scope: 'col', className: 'ticketWidth' },
         },
         {
-            key: 'orderId',
-            label: 'orderId',
-            _props: { scope: 'col', className: 'ticketWidth' },
-        },
-        {
             key: 'date',
             label: 'Ամսաթիվ',
             _props: { scope: 'col', className: 'ticketWidth' },
@@ -85,7 +80,6 @@ const AllTickets = () => {
                 soldTickets.push({
                     id: index + 1,
                     ticketNumber: element?.ticketNumber,
-                    orderId: element?.orderId,
                     date: `${tickets[0].createdAt.split('.')[0].split('T')[0]}, ${tickets[0].createdAt.split('.')[0].split('T')[1]}`,
                     name: element?.buyerName,
                     email: element?.buyerEmail,

@@ -1,7 +1,7 @@
-import { FetchDelete, FetchGet, FetchPatch, FetchPost } from "./fetchHelper"
+import { FetchDelete, FetchGet, FetchPatch, FetchPost, FetchSearch } from "./fetchHelper"
 
 export const GetAllTickets = (page) => { return FetchGet(`/getAllTickets?currentPage=${page}`, 'getAllTickets') }
-export const SearchTicket = (search) => { return FetchPost('/searchTicket', { search }, 'searchTicket') }
+export const SearchTicket = (search) => { return FetchSearch('/searchTicket', { search }, 'searchTicket') }
 export const getSingleTicket = (ticketNumber) => { return FetchPost('/singleTicket', { ticketNumber }, 'getSingleTicket') }
 export const ReturnTicket = (sessionId, seatId, ticketNumber, orderId) => { return FetchPatch('/returnTicket', { sessionId, seatId, ticketNumber, orderId }, 'returnTicket') }
 export const GetReturnedTickets = () => { return FetchGet('/getReturnedTickets', 'getReturnedTickets') }

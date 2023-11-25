@@ -33,18 +33,18 @@ const CreateAd = () => {
         if (form.checkValidity() !== false) {
             dispatch(StartLoading())
             const formdata = new FormData()
+            const myHeaders = new Headers()
             formdata.append("image", file)
             formdata.append("text", text.text_hy)
             formdata.append("text_en", text.text_en)
             formdata.append("text_ru", text.text_ru)
-
+            myHeaders.append('Content-Type', 'application/json')
+            myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
             fetch(`${process.env.REACT_APP_HOSTNAME}/createMainAd`, {
                 method: 'POST',
                 body: formdata,
                 redirect: 'follow',
-                header: {
-                    "Content-Type": "application/json",
-                }
+                headers: myHeaders,
             })
                 .then(response => response.json())
                 .then(result => {
@@ -84,8 +84,6 @@ const CreateAd = () => {
                         defaultValue={text?.text_hy}
                         onChange={(e) => setText({ ...text, text_hy: e.target.value })}
                         label='Տեքստ'
-                        feedbackInvalid='Պարտադիր դաշտ'
-                        required
                     />
                 </CCol>
                 <CCol md={4}>
@@ -93,8 +91,6 @@ const CreateAd = () => {
                         defaultValue={text?.text_en}
                         onChange={(e) => setText({ ...text, text_en: e.target.value })}
                         label='Text'
-                        feedbackInvalid='Required field'
-                        required
                     />
                 </CCol>
                 <CCol md={4}>
@@ -102,8 +98,6 @@ const CreateAd = () => {
                         defaultValue={text?.text_ru}
                         onChange={(e) => setText({ ...text, text_ru: e.target.value })}
                         label='Текст'
-                        feedbackInvalid='Обязательное поле'
-                        required
                     />
                 </CCol>
                 <CCol xs={12}>

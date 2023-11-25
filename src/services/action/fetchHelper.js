@@ -1,5 +1,4 @@
 import { StopLoading, StartLoading } from "./loading_action"
-
 const token = localStorage.getItem('accessToken')
 
 export const FetchPost = (api, data, success, error) => {
@@ -31,7 +30,34 @@ export const FetchPost = (api, data, success, error) => {
     }
 }
 
+export const FetchSearch = (api, data, success, error) => {
+    return (dispatch) => {
+        const myHeaders = new Headers()
+        myHeaders.append('Content-Type', 'application/json')
+        myHeaders.append('Authorization', `Bearer ${token}`)
+        fetch(`${process.env.REACT_APP_HOSTNAME}${api}`, {
+            method: 'POST',
+            headers: myHeaders,
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(res => {
+                dispatch({
+                    type: success,
+                    payload: res
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type: error,
+                    payload: err
+                })
+            })
+    }
+}
+
 export const FetchPatch = (api, data, success, error) => {
+    console.log(data);
     return (dispatch) => {
         dispatch(StartLoading())
         const myHeaders = new Headers()

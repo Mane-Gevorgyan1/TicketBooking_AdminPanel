@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DeleteAd, GetAllAds } from 'src/services/action/ad_action'
 import { CButton, CCard, CCardBody, CCardImage, CCardText, CCardTitle } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilDelete } from '@coreui/icons'
+import { cilDelete, cilPencil } from '@coreui/icons'
+import { useNavigate } from 'react-router-dom'
 
 const AllAds = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const ads = useSelector(st => st.Ad_reducer.ads)
     const loading = useSelector(st => st.Loading_reducer.loading)
     const [openAd, setOpenAd] = useState(false)
@@ -42,7 +44,10 @@ const AllAds = () => {
                                 <CCardTitle>{e?.title}</CCardTitle>
                                 <div className='eventDetails'>
                                     <CCardText className='adText'>{e?.text}</CCardText>
-                                    <CButton onClick={() => dispatch(DeleteAd(e?._id))} color='danger'><CIcon icon={cilDelete} /></CButton>
+                                    <div className='adButtons'>
+                                        <CButton onClick={() => navigate(`/edit-ad/${e?._id}`)}><CIcon icon={cilPencil} /></CButton>
+                                        <CButton onClick={() => dispatch(DeleteAd(e?._id))} color='danger'><CIcon icon={cilDelete} /></CButton>
+                                    </div>
                                 </div>
                             </CCardBody>
                         </CCard>

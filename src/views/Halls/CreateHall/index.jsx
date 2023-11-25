@@ -79,6 +79,9 @@ const CreateHall = () => {
                     hall_en: '',
                     hall_ru: '',
                 })
+                const myHeaders = new Headers()
+                myHeaders.append('Content-Type', 'application/json')
+                myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
                 const formdata = new FormData()
                 formdata.append("image", file)
                 formdata.append("country", details?.country)
@@ -97,7 +100,8 @@ const CreateHall = () => {
                 fetch(`${process.env.REACT_APP_HOSTNAME}/createHall`, {
                     method: 'POST',
                     body: formdata,
-                    redirect: 'follow'
+                    redirect: 'follow',
+                    headers: myHeaders,
                 })
                     .then(response => response.json())
                     .then(result => {

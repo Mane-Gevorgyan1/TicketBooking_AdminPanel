@@ -72,6 +72,9 @@ const CreateSession = () => {
                     date: '',
                     time: ''
                 })
+                const myHeaders = new Headers()
+                myHeaders.append('Content-Type', 'application/json')
+                myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
                 await fetch(`${process.env.REACT_APP_HOSTNAME}/createSession`, {
                     method: 'POST',
                     body: JSON.stringify({
@@ -84,9 +87,7 @@ const CreateSession = () => {
                         price: details?.hall?.price
                     }),
                     redirect: 'follow',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: myHeaders,
                 })
                     .then(response => response.json())
                     .then(result => {

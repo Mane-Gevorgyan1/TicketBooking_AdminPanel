@@ -39,6 +39,9 @@ const Feedback = () => {
         event.stopPropagation()
         if (form.checkValidity() !== false) {
             dispatch(StartLoading())
+            const myHeaders = new Headers()
+            myHeaders.append('Content-Type', 'application/json')
+            myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
             fetch(`${process.env.REACT_APP_HOSTNAME}/editFeedback/${feedbackId}`, {
                 method: 'PATCH',
                 body: JSON.stringify({
@@ -47,7 +50,7 @@ const Feedback = () => {
                     twitter: details?.twitter,
                     phone: details?.phone,
                 }),
-                headers: { "Content-Type": "application/json" }
+                headers: myHeaders,
             })
                 .then(response => response.json())
                 .then(res => {

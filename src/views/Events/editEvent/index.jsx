@@ -38,7 +38,6 @@ const EditEvent = () => {
     })
     const [activeKey, setActiveKey] = useState(1)
 
-
     useEffect(() => {
         dispatch(ResetEvent())
         dispatch(GetSingleEvent(eventId))
@@ -78,11 +77,15 @@ const EditEvent = () => {
 
             setEventDetails({
                 title: event?.title,
+                title_en: event?.title_en,
+                title_ru: event?.title_ru,
                 topEvent: event?.topEvent,
                 generalEvent: event?.generalEvent,
                 category: event?.category?._id,
                 subcategory: '',
-                description: event?.description
+                description: event?.description,
+                description_en: event?.description_en,
+                description_ru: event?.description_ru,
             })
 
             let sponsors = []
@@ -107,6 +110,9 @@ const EditEvent = () => {
         if (form.checkValidity() !== false) {
             dispatch(StartLoading())
             const formdata = new FormData()
+            const myHeaders = new Headers()
+            myHeaders.append('Content-Type', 'application/json')
+            myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
             formdata.append("image", file)
             formdata.append("id", eventId)
             formdata.append("title", eventDetails?.title)
@@ -115,7 +121,7 @@ const EditEvent = () => {
             formdata.append("topEvent", eventDetails?.topEvent)
             formdata.append("generalEvent", eventDetails?.generalEvent)
             formdata.append("description", eventDetails?.description)
-            formdata.append("description_en", eventDetails?.description_en)
+            formdata.append("description_en", eventDetails?.description_en?.description_en)
             formdata.append("description_ru", eventDetails?.description_ru)
             formdata.append("category", eventDetails.category)
             formdata.append("subcategories", eventDetails.subcategory)
@@ -129,7 +135,8 @@ const EditEvent = () => {
             fetch(`${process.env.REACT_APP_HOSTNAME}/editEvent`, {
                 method: 'PATCH',
                 body: formdata,
-                redirect: 'follow'
+                redirect: 'follow',
+                headers: myHeaders,
             })
                 .then(response => response.json())
                 .then(result => {

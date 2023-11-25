@@ -99,6 +99,9 @@ const CreateEvent = () => {
                 })
 
                 const formdata = new FormData()
+                const myHeaders = new Headers()
+                myHeaders.append('Content-Type', 'application/json')
+                myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
                 formdata.append("image", file)
                 formdata.append("title", eventDetails?.title)
                 formdata.append("title_en", eventDetails?.title_en)
@@ -118,7 +121,8 @@ const CreateEvent = () => {
                 fetch(`${process.env.REACT_APP_HOSTNAME}/createEvent`, {
                     method: 'POST',
                     body: formdata,
-                    redirect: 'follow'
+                    redirect: 'follow',
+                    headers: myHeaders,
                 })
                     .then(response => response.json())
                     .then(result => {

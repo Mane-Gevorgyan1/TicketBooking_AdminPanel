@@ -8,3 +8,9 @@
     align-items: center;
     gap: 20px;
 }
+
+.adButtons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}

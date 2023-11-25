@@ -31,11 +31,14 @@ const CreateSponsor = () => {
             const formdata = new FormData()
             formdata.append("image", file)
             formdata.append("name", name)
-
+            const myHeaders = new Headers()
+            myHeaders.append('Content-Type', 'application/json')
+            myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
             fetch(`${process.env.REACT_APP_HOSTNAME}/createSponsor`, {
                 method: 'POST',
                 body: formdata,
-                redirect: 'follow'
+                redirect: 'follow',
+                headers: myHeaders,
             })
                 .then(response => response.json())
                 .then(result => {
