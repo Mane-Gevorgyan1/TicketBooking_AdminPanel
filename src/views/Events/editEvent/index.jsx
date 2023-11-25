@@ -136,7 +136,7 @@ const EditEvent = () => {
                 method: 'PATCH',
                 body: formdata,
                 redirect: 'follow',
-                headers: myHeaders,
+                header: myHeaders,
             })
                 .then(response => response.json())
                 .then(result => {
