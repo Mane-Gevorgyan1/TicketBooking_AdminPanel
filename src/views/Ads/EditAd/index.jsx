@@ -64,16 +64,15 @@ const EditAd = () => {
                 method: 'PATCH',
                 body: formdata,
                 redirect: 'follow',
-                headers: myHeaders,
+                header: myHeaders,
             })
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result);
-                    // if (result.success) {
-                    //     dispatch(StopLoading())
-                    //     alert('Գովազդը փոփոխված է')
-                    //     navigate('/all-ads')
-                    // }
+                    if (result.success) {
+                        dispatch(StopLoading())
+                        alert('Գովազդը փոփոխված է')
+                        navigate('/all-ads')
+                    }
                 })
                 .catch(error => console.log('error', error));
         }
