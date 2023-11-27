@@ -24,6 +24,8 @@ import CreateModerator from './views/Moderators/CreateModerator'
 import SingleTicket from './views/Tickets/SingleTicket'
 import AllTickets from './views/Tickets/AllTickets'
 import ReturnedTickets from './views/Tickets/ReturnedTickets'
+import SingleReturedTicket from './views/Tickets/singleReturnedTicket'
+import SingleTicketCount from './views/singleTicketCount'
 
 const App = () => {
   const [valid, setValid] = useState(false)
@@ -31,7 +33,6 @@ const App = () => {
 
   useEffect(() => {
     const myHeaders = new Headers()
-    myHeaders.append('Content-Type', 'application/json')
     myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
     fetch(`${process.env.REACT_APP_HOSTNAME}/eventValidity`, {
       method: 'GET',
@@ -92,6 +93,8 @@ const App = () => {
               <Route path='/all-tickets' element={<PrivateRoute auth={auth}><AllTickets /></PrivateRoute>} />
               <Route path='/ticket/:ticketId' element={<PrivateRoute auth={auth}><SingleTicket /></PrivateRoute>} />
               <Route path='/returned-tickets' element={<PrivateRoute auth={auth}><ReturnedTickets /></PrivateRoute>} />
+              <Route path='/single-returned-ticket/:id' element={<PrivateRoute auth={auth}><SingleReturedTicket /></PrivateRoute>} />
+              <Route path='/single-ticket-count/:id' element={<PrivateRoute auth={auth}><SingleTicketCount /></PrivateRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>

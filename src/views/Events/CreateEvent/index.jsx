@@ -97,11 +97,7 @@ const CreateEvent = () => {
                     description_en: '',
                     description_ru: '',
                 })
-
                 const formdata = new FormData()
-                const myHeaders = new Headers()
-                myHeaders.append('Content-Type', 'application/json')
-                myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
                 formdata.append("image", file)
                 formdata.append("title", eventDetails?.title)
                 formdata.append("title_en", eventDetails?.title_en)
@@ -122,7 +118,9 @@ const CreateEvent = () => {
                     method: 'POST',
                     body: formdata,
                     redirect: 'follow',
-                    headers: myHeaders,
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
+                    },
                 })
                     .then(response => response.json())
                     .then(result => {
@@ -279,7 +277,7 @@ const CreateEvent = () => {
                                     rows={5}
                                 />
                             </CCol>
-                            {(errors?.title_en?.length > 0 || errors?.description_en?.length > 0 || errors?.title_ru?.length > 0 || errors?.description_ru?.length > 0) && <span style={{ color: 'red' }}>Error</span>}
+                            {(errors?.title_en?.length > 0 || errors?.description_en?.length > 0 || errors?.title_ru?.length > 0 || errors?.description_ru?.length > 0) && <span style={{ color: 'red' }}>Անգլերեն և ռուսերեն վերնագրերի դաշտերը պարտադիր են</span>}
                             <CCol xs={12}>
                                 <CButton disabled={loading} type="submit">
                                     {loading && <CSpinner component="span" size="sm" aria-hidden="true" />}

@@ -23,6 +23,7 @@ const CreateCategory = () => {
 
     useEffect(() => {
         if (navigation) {
+            alert('Բաժինը ստեղծված է')
             navigate('/all-categories')
         }
     }, [navigation, navigate])

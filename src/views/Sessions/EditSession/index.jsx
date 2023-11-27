@@ -1,6 +1,6 @@
 import './style.css'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Loading } from 'src/components/loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetAllHalls } from 'src/services/action/hall_action'
@@ -11,7 +11,7 @@ import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CButton, 
 const EditSession = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [sessionId] = useState(window.location.href.split('/edit-session/')[1])
+    const { id } = useParams()
     const session = useSelector(st => st.Session_reducer.session)
     const events = useSelector(st => st.Session_reducer.events)
     const halls = useSelector(st => st.Hall_reducer.halls)
@@ -40,26 +40,30 @@ const EditSession = () => {
         time: '',
     })
 
-    useEffect(() => {
-        dispatch(GetSingleSession(sessionId))
-        dispatch(GetAllSessionEvents())
-        dispatch(GetAllHalls())
-    }, [dispatch, sessionId])
+    console.log(session);
 
     useEffect(() => {
-        if (Object.keys(session).length > 0) {
-            setDetails({
-                event: session?.eventId,
-                hall: session?.hallId,
-                priceStart: session?.priceStart,
-                priceEnd: session?.priceEnd,
-                date: session?.date?.split('T')[0],
-                time: session?.time,
-                price: session?.price
-            })
-            setPrice(session?.price)
-            setHallId(session?.hallId?._id)
-            setInitialPrice(session?.price)
+        dispatch(GetSingleSession(id))
+        dispatch(GetAllSessionEvents())
+        dispatch(GetAllHalls())
+    }, [dispatch, id])
+
+    useEffect(() => {
+        if (session) {
+            if (Object.keys(session).length > 0) {
+                setDetails({
+                    event: session?.eventId,
+                    hall: session?.hallId,
+                    priceStart: session?.priceStart,
+                    priceEnd: session?.priceEnd,
+                    date: session?.date?.split('T')[0],
+                    time: session?.time,
+                    price: session?.price
+                })
+                setPrice(session?.price)
+                setHallId(session?.hallId?._id)
+                setInitialPrice(session?.price)
+            }
         }
     }, [session])
 
@@ -102,7 +106,7 @@ const EditSession = () => {
                 fetch(`${process.env.REACT_APP_HOSTNAME}/editSession`, {
                     method: 'POST',
                     body: JSON.stringify({
-                        id: sessionId,
+                        id,
                         hallId: details?.hall?._id,
                         eventId: details?.event?._id,
                         priceStart: details?.priceStart,
@@ -140,11 +144,8 @@ const EditSession = () => {
                 >
                     <div className='select'>
                         <span>Միջոցառում</span>
-                        <div className='selectedField' onClick={() => {
-                            setOpenEvents(!openEvents)
-                            setOpenHalls(false)
-                        }}>
-                            {details?.event ? <span>{details?.event?.title}</span> : <span>Ընտրել</span>}
+                        <div className='selectedField'>
+                            <span>{details?.event?.title}</span>
                         </div>
                         <div className='selectDropdown' style={openEvents ? { display: 'flex' } : { display: 'none' }}>
                             {events?.length > 0
@@ -166,7 +167,7 @@ const EditSession = () => {
                     </div>
                     <div className='select'>
                         <span>Դահլիճ</span>
-                        <div className='selectedField' onClick={() => {
+                        <div className='selectedField' style={{ cursor: 'pointer' }} onClick={() => {
                             setOpenHalls(!openHalls)
                             setOpenEvents(false)
                         }}>
@@ -195,6 +196,9 @@ const EditSession = () => {
                             }
                         </div>
                     </div>
+
+                    {details?.hall && <img alt='' src={`${process.env.REACT_APP_IMAGE}/${details?.hall?.sectionImage}`} />}
+
 
                     <CAccordion flush className='sessionAccordion'>
                         {price?.length > 0 && price?.map((e, i) => (

@@ -115,7 +115,7 @@ const CreateSession = () => {
                 >
                     <div className='select'>
                         <span>Միջոցառում</span>
-                        <div className='selectedField' onClick={() => {
+                        <div className='selectedField' style={{ cursor: 'pointer' }} onClick={() => {
                             setOpenEvents(!openEvents)
                             setOpenHalls(false)
                         }}>
@@ -141,7 +141,7 @@ const CreateSession = () => {
                     </div>
                     <div className='select'>
                         <span>Դահլիճ</span>
-                        <div className='selectedField' onClick={() => {
+                        <div className='selectedField' style={{ cursor: 'pointer' }} onClick={() => {
                             setOpenHalls(!openHalls)
                             setOpenEvents(false)
                         }}>
@@ -181,7 +181,7 @@ const CreateSession = () => {
                                             ? <label> {e.type} &nbsp;</label>
                                             : <label>Շարք {e.row} &nbsp;</label>
                                         }
-                                        <input value={e?.price} onChange={(event) => handleRowPriceChange(event.target.value, i, j)} />
+                                        <input value={e?.price} type='number' onChange={(event) => handleRowPriceChange(event.target.value, i, j)} />
                                     </CAccordionBody>
                                 ))}
                             </CAccordionItem>

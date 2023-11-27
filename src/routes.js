@@ -44,6 +44,8 @@ const CreateModerator = React.lazy(() => import('./views/Moderators/CreateModera
 const AllTickets = React.lazy(() => import('./views/Tickets/AllTickets'))
 const SingleTicket = React.lazy(() => import('./views/Tickets/SingleTicket/index.jsx'))
 const ReturnedTickets = React.lazy(() => import('./views/Tickets/ReturnedTickets'))
+const SigleReturnedTicket = React.lazy(() => import('./views/Tickets/singleReturnedTicket'))
+const SingleTicketCount = React.lazy(() => import('./views/singleTicketCount'))
 
 const routes = [
   { path: '/login', exact: true, name: 'Login', element: Login },
@@ -79,6 +81,8 @@ const routes = [
   { path: '/all-tickets', name: 'Ակտիվ Տոմսեր', element: AllTickets },
   { path: '/ticket/:ticketId', name: 'Տոմս', element: SingleTicket },
   { path: '/returned-tickets', name: 'Հետ վերադարձ', element: ReturnedTickets },
+  { path: '/single-returned-ticket/:id', name: 'Հետ վերադարձ', element: SigleReturnedTicket },
+  { path: '/single-ticket-count/:id', name: 'Հետ վերադարձ', element: SingleTicketCount },
 ]
 
 export default routes 

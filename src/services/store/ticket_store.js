@@ -7,4 +7,6 @@ export default {
     update: new Date(),
     soldTickets: [],
     soldTicketsDetails: {},
+    singleReturnedTicket: {},
+    session: {},
 }

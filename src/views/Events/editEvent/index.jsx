@@ -82,7 +82,7 @@ const EditEvent = () => {
                 topEvent: event?.topEvent,
                 generalEvent: event?.generalEvent,
                 category: event?.category?._id,
-                subcategory: '',
+                subcategory: event?.subcategories?._id,
                 description: event?.description,
                 description_en: event?.description_en,
                 description_ru: event?.description_ru,
@@ -95,6 +95,8 @@ const EditEvent = () => {
             setSelectedSponsors(sponsors)
         }
     }, [event])
+
+    console.log(eventDetails);
 
     function handleImageChange(e) {
         if (e.target.files.length) {
@@ -121,7 +123,7 @@ const EditEvent = () => {
             formdata.append("topEvent", eventDetails?.topEvent)
             formdata.append("generalEvent", eventDetails?.generalEvent)
             formdata.append("description", eventDetails?.description)
-            formdata.append("description_en", eventDetails?.description_en?.description_en)
+            formdata.append("description_en", eventDetails?.description_en)
             formdata.append("description_ru", eventDetails?.description_ru)
             formdata.append("category", eventDetails.category)
             formdata.append("subcategories", eventDetails.subcategory)
@@ -259,6 +261,7 @@ const EditEvent = () => {
                                     feedbackInvalid='Պարտադիր դաշտ'
                                     label="Ենթաբաժիններ"
                                     required
+                                    value={eventDetails?.subcategory}
                                     onChange={(e) => setEventDetails({ ...eventDetails, subcategory: e.target.value })}
                                 />
                             </CCol>

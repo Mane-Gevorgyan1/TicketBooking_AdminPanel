@@ -32,7 +32,6 @@ const CreateSponsor = () => {
             formdata.append("image", file)
             formdata.append("name", name)
             const myHeaders = new Headers()
-            myHeaders.append('Content-Type', 'application/json')
             myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
             fetch(`${process.env.REACT_APP_HOSTNAME}/createSponsor`, {
                 method: 'POST',
@@ -80,7 +79,6 @@ const CreateSponsor = () => {
                         onChange={(e) => setName(e.target.value)}
                         feedbackInvalid='Պարտադիր դաշտ'
                         label="Անուն"
-                        required
                     />
                 </CCol>
                 <CCol xs={12}>

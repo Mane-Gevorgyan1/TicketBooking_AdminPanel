@@ -57,7 +57,6 @@ export const FetchSearch = (api, data, success, error) => {
 }
 
 export const FetchPatch = (api, data, success, error) => {
-    console.log(data);
     return (dispatch) => {
         dispatch(StartLoading())
         const myHeaders = new Headers()

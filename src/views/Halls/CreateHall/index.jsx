@@ -80,7 +80,6 @@ const CreateHall = () => {
                     hall_ru: '',
                 })
                 const myHeaders = new Headers()
-                myHeaders.append('Content-Type', 'application/json')
                 myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
                 const formdata = new FormData()
                 formdata.append("image", file)

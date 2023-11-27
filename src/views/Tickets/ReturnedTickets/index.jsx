@@ -1,12 +1,14 @@
 import './style.css'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Loading } from 'src/components/loading'
 import { useDispatch, useSelector } from 'react-redux'
-import { CButton, CCard, CCardBody, CCardTitle } from '@coreui/react'
-import { DeleteReturnedTickets, GetReturnedTickets } from 'src/services/action/ticket_action'
+import { CCard, CCardBody, CCardTitle } from '@coreui/react'
+import { GetReturnedTickets } from 'src/services/action/ticket_action'
 
 const ReturnedTickets = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const tickets = useSelector(st => st.Ticket_reducer.returnedTickets)
     const update = useSelector(st => st.Ticket_reducer.update)
     const loading = useSelector(st => st.Loading_reducer.loading)
@@ -15,20 +17,15 @@ const ReturnedTickets = () => {
         dispatch(GetReturnedTickets())
     }, [dispatch, update])
 
-    function handleReturn(event) {
-        dispatch(DeleteReturnedTickets(event?._id))
-    }
-
     return (<>
         {loading
             ? <Loading />
             : <div className='returnedTickets'>
                 {tickets?.length > 0
                     ? tickets?.map((e, i) => (
-                        <CCard style={{ width: '18rem' }} key={i}>
+                        <CCard style={{ width: '18rem', cursor: 'pointer' }} key={i} onClick={() => navigate(`/single-returned-ticket/${e?._id}`)}>
                             <CCardBody>
-                                <CCardTitle>orderId: {e?.orderId}</CCardTitle>
-                                <CButton onClick={() => handleReturn(e)}>Վերադարձված է</CButton>
+                                <CCardTitle>Տոմսի համար: {e?.ticketNumber}</CCardTitle>
                             </CCardBody>
                         </CCard>
                     ))

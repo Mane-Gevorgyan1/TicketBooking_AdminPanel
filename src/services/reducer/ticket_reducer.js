@@ -48,6 +48,22 @@ export const Ticket_reducer = (state = store, action) => {
                 }
             }
             break;
+        case 'getSingleReturnedTicket':
+            if (action.payload.success) {
+                temp.singleReturnedTicket = action.payload.ticket
+            }
+            break;
+        case 'deleteReturnedTicket':
+            if (action.payload.success) {
+                alert('Տոմսը հետ է վերադարձված')
+                window.location = '/all-tickets'
+            }
+            break;
+        case 'singleSession':
+            if (action.payload.success) {
+                temp.session = action.payload.ticket
+            }
+            break;
         default:
             return temp;
     }

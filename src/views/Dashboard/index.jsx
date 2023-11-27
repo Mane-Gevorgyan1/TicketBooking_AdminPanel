@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import { CPagination, CTable } from '@coreui/react'
 import { GetSoldTickets } from 'src/services/action/ticket_action'
+import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const tickets = useSelector(st => st.Ticket_reducer.soldTickets)
   const ticketDetails = useSelector(st => st.Ticket_reducer.soldTicketsDetails)
   const user = useSelector(st => st.Auth_reducer.user)
@@ -37,9 +39,10 @@ const Dashboard = () => {
     if (tickets?.length > 0) {
       let soldTickets = []
       tickets?.forEach((element, index) => {
-        element?.value !== 'undefined' && soldTickets.push({
+        !element?.value.includes('undefined') && soldTickets.push({
           id: index + 1,
-          title: element?.value,
+          title: element?.value?.split('/')[0],
+          ticketId: element?.value?.split('/')[1],
           count: element?.count
         })
       })
@@ -55,7 +58,7 @@ const Dashboard = () => {
           <CTable responsive striped columns={tableColumns}>
             <tbody>
               {tableData?.map((item, index) => (
-                <tr key={index}>
+                <tr key={index} style={{ cursor: 'pointer' }} onClick={() => navigate(`/single-ticket-count/${item?.ticketId}`)}>
                   {tableColumns?.map(column => (
                     <td key={column.key}>{item[column.key]}</td>
                   ))}
