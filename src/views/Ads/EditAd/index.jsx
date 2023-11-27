@@ -44,8 +44,6 @@ const EditAd = () => {
         }
     }
 
-    console.log(text.text_hy);
-
     const handleSubmit = (event) => {
         const form = event.currentTarget
         event.preventDefault()

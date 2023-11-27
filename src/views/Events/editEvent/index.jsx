@@ -96,8 +96,6 @@ const EditEvent = () => {
         }
     }, [event])
 
-    console.log(eventDetails);
-
     function handleImageChange(e) {
         if (e.target.files.length) {
             setBlob(URL.createObjectURL(e.target.files[0]))

@@ -40,8 +40,6 @@ const EditSession = () => {
         time: '',
     })
 
-    console.log(session);
-
     useEffect(() => {
         dispatch(GetSingleSession(id))
         dispatch(GetAllSessionEvents())

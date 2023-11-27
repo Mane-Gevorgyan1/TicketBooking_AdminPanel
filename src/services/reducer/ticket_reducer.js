@@ -19,7 +19,6 @@ export const Ticket_reducer = (state = store, action) => {
             }
             break;
         case 'returnTicket':
-            console.log(action.payload);
             if (action.payload.success) {
                 alert('Տոմսը հասանելի է նորից գնման համար')
                 window.location = '/all-tickets'
