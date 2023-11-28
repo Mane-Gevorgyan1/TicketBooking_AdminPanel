@@ -4,13 +4,14 @@ import { useNavigate } from 'react-router-dom'
 import { Loading } from 'src/components/loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { CFormInput, CPagination, CTable } from '@coreui/react'
-import { GetAllTickets, SearchTicket } from 'src/services/action/ticket_action'
+import { ChangePaymentVerified, GetAllTickets, SearchTicket } from 'src/services/action/ticket_action'
 
 const AllTickets = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const tickets = useSelector(st => st.Ticket_reducer.tickets.tickets)
     const pageInfo = useSelector(st => st.Ticket_reducer.tickets)
+    const update = useSelector(st => st.Ticket_reducer.update)
     const searchData = useSelector(st => st.Ticket_reducer.search)
     const loading = useSelector(st => st.Loading_reducer.loading)
     const tableColumns = [
@@ -64,6 +65,11 @@ const AllTickets = () => {
             label: 'Նշումներ',
             _props: { scope: 'col', className: 'ticketNotes' },
         },
+        {
+            key: 'verify',
+            label: 'Հաստատել վճարումը',
+            _props: { scope: 'col', className: 'ticketWidth' },
+        },
     ]
     const [tableData, setTableData] = useState([])
     const [search, setSearch] = useState('')
@@ -71,7 +77,7 @@ const AllTickets = () => {
 
     useEffect(() => {
         dispatch(GetAllTickets(currentPage))
-    }, [dispatch, currentPage])
+    }, [dispatch, currentPage, update])
 
     useEffect(() => {
         if (tickets?.length > 0) {
@@ -88,11 +94,18 @@ const AllTickets = () => {
                     paymentVerified: element?.paymentVerified === 'PAID' ? 'Այո' : 'Ոչ',
                     delivery: element?.delivery ? 'Այո' : 'Ոչ',
                     notes: element?.buyerNotes,
+                    verify: element?.paymentVerified === 'PAID' ? false : true
                 })
             })
             setTableData(soldTickets)
         }
     }, [tickets])
+
+    function handleClick(event, ticket) {
+        event.preventDefault()
+        event.stopPropagation()
+        dispatch(ChangePaymentVerified(ticket?.ticketNumber))
+    }
 
     return (<>
         {loading
@@ -131,9 +144,13 @@ const AllTickets = () => {
                     <tbody>
                         {tableData?.map((item, index) => (
                             <tr key={index} onClick={() => navigate(`/ticket/${item?.ticketNumber}`)} style={{ cursor: 'pointer' }}>
-                                {tableColumns?.map(column => (
-                                    <td key={column.key}>{item[column.key]}</td>
-                                ))}
+                                {tableColumns?.map(column => {
+                                    if (column.key === 'verify' && item[column.key]) {
+                                        return <button onClick={(e) => handleClick(e, item)}>Հաստատել վճարումը</button>
+                                    } else {
+                                        return <td key={column.key}>{item[column.key]}</td>
+                                    }
+                                })}
                             </tr>
                         ))}
                     </tbody>

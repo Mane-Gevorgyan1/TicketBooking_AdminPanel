@@ -11,3 +11,4 @@ export const GetSoldTickets = (page) => { return FetchGet(`/soldTickets?currentP
 export const GetSingleReturnedTicket = (id) => { return FetchGet(`/getSingleReturnedTicket/${id}`, 'getSingleReturnedTicket') }
 export const DeleteReturnedTicket = (id) => { return FetchDelete('/deleteReturnedTicket', { id }, 'deleteReturnedTicket') }
 export const GetSingleSession = (id) => { return FetchGet(`/singleSessionTicketCount/${id}`, 'singleSession') }
+export const ChangePaymentVerified = (ticketNumber) => { return FetchPatch('/changePaymentVerified', { ticketNumber }, 'changePaymentVerified', 'changePaymentVerifiedError') }

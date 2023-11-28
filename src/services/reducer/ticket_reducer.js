@@ -55,12 +55,17 @@ export const Ticket_reducer = (state = store, action) => {
         case 'deleteReturnedTicket':
             if (action.payload.success) {
                 alert('Տոմսը հետ է վերադարձված')
-                window.location = '/all-tickets'
+                window.location = '/returned-tickets'
             }
             break;
         case 'singleSession':
             if (action.payload.success) {
                 temp.session = action.payload.ticket
+            }
+            break;
+        case 'changePaymentVerified':
+            if (action.payload.success) {
+                temp.update = new Date()
             }
             break;
         default:
