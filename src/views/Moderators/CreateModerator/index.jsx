@@ -1,5 +1,6 @@
 import { Checkbox } from 'antd'
 import { useState } from 'react'
+import { Loading } from 'src/components/loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { CreateUser } from 'src/services/action/user_action'
 import { CButton, CCardText, CCol, CForm, CFormInput, CListGroup, CListGroupItem } from '@coreui/react'
@@ -34,7 +35,7 @@ const CreateModerator = () => {
 
     return (<>
         {loading
-            ? <loading />
+            ? <Loading />
             : <CForm
                 className="row g-3 needs-validation"
                 noValidate

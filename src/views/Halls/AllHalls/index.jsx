@@ -1,5 +1,6 @@
 import './style.css'
 import { useEffect } from 'react'
+import { Loading } from 'src/components/loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetAllHalls } from 'src/services/action/hall_action'
 import { CCard, CCardBody, CCardImage, CCardText, CCardTitle } from '@coreui/react'
@@ -15,7 +16,7 @@ const AllHalls = () => {
 
     return (<>
         {loading
-            ? <loading />
+            ? <Loading />
             : <div className='allHalls'>
                 {halls?.length > 0
                     ? halls?.map((e, i) => (

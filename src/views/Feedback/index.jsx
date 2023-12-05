@@ -7,7 +7,7 @@ import { StopLoading, StartLoading } from 'src/services/action/loading_action'
 
 const Feedback = () => {
     const dispatch = useDispatch()
-    const feedbackId = '6540eccee9189a1965adff0a'
+    const feedbackId = '656f86b0cd7ce45b005bf035'
     const feedback = useSelector(st => st.Feedback_reducer.feedback)
     const loading = useSelector(st => st.Loading_reducer.loading)
     const [validated, setValidated] = useState(false)
@@ -73,7 +73,7 @@ const Feedback = () => {
         >
             <CCol md={8}>
                 <CFormInput
-                    defaultValue={details?.facebook}
+                    defaultValue={details?.facebook || ''}
                     onChange={(e) => setDetails({ ...details, facebook: e.target.value })}
                     label='Facebook'
                     feedbackInvalid='Պարտադիր դաշտ'
@@ -82,7 +82,7 @@ const Feedback = () => {
             </CCol>
             <CCol md={8}>
                 <CFormInput
-                    defaultValue={details?.instagram}
+                    defaultValue={details?.instagram || ''}
                     onChange={(e) => setDetails({ ...details, instagram: e.target.value })}
                     label='Instagram'
                     feedbackInvalid='Պարտադիր դաշտ'
@@ -91,7 +91,7 @@ const Feedback = () => {
             </CCol>
             <CCol md={8}>
                 <CFormInput
-                    defaultValue={details?.twitter}
+                    defaultValue={details?.twitter || ''}
                     onChange={(e) => setDetails({ ...details, twitter: e.target.value })}
                     label='Twitter'
                     feedbackInvalid='Պարտադիր դաշտ'
@@ -100,7 +100,7 @@ const Feedback = () => {
             </CCol>
             <CCol md={8}>
                 <CFormInput
-                    defaultValue={details?.phone}
+                    defaultValue={details?.phone || ''}
                     onChange={(e) => setDetails({ ...details, phone: e.target.value })}
                     label='Phone'
                     feedbackInvalid='Պարտադիր դաշտ'
