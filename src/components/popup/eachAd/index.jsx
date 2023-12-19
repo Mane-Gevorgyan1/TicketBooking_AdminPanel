@@ -1,12 +1,7 @@
 import './style.css'
-import CIcon from '@coreui/icons-react'
-import { cilPencil } from '@coreui/icons'
 import { CloseIcon } from 'src/assets/svg'
-import { useNavigate } from 'react-router-dom'
 
 export const EachAd = ({ open, setOpen, ad }) => {
-    const navigate = useNavigate()
-
     return (
         <div className={open ? 'activePopup' : 'inactive'}>
             <div className='pop' style={{ width: '570px' }}>
