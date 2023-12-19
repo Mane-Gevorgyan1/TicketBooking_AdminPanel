@@ -24,19 +24,25 @@ const EditEvent = () => {
     const [selectedSponsors, setSelectedSponsors] = useState([])
     const [validated, setValidated] = useState(false)
     const [file, setFile] = useState()
+    const [largeFile, setLargeFile] = useState()
     const [blob, setBlob] = useState('')
+    const [largeBlob, setLargeBlob] = useState()
     const [eventDetails, setEventDetails] = useState({
         title: '',
         title_en: '',
         title_ru: '',
-        topEvent: '',
-        generalEvent: '',
         subcategory: '',
         description: '',
         description_en: '',
         description_ru: '',
     })
     const [activeKey, setActiveKey] = useState(1)
+    const mainPage = [
+        { label: 'Գլխավոր', value: 'generalEvent' },
+        { label: 'Թոփ', value: 'topEvent' },
+        { label: 'Բոլորը', value: 'all' },
+    ]
+    const [selectedMainPage, setSelectedMainPage] = useState([])
 
     useEffect(() => {
         dispatch(ResetEvent())
@@ -74,13 +80,19 @@ const EditEvent = () => {
     useEffect(() => {
         if (event) {
             setBlob(`${process.env.REACT_APP_IMAGE}/${event?.image}`)
+            setLargeBlob(`${process.env.REACT_APP_IMAGE}/${event?.largeImage}`)
+            if (event?.topEvent && event?.generalEvent) {
+                setSelectedMainPage([...selectedMainPage, { label: 'Թոփ', value: 'topEvent' }, { label: 'Գլխավոր', value: 'generalEvent' }])
+            } else if (event?.generalEvent) {
+                setSelectedMainPage([...selectedMainPage, { label: 'Գլխավոր', value: 'generalEvent' }])
+            } else if (event?.topEvent) {
+                setSelectedMainPage([...selectedMainPage, { label: 'Թոփ', value: 'topEvent' }])
+            }
 
             setEventDetails({
                 title: event?.title,
                 title_en: event?.title_en,
                 title_ru: event?.title_ru,
-                topEvent: event?.topEvent,
-                generalEvent: event?.generalEvent,
                 category: event?.category?._id,
                 subcategory: event?.subcategories?._id,
                 description: event?.description,
@@ -103,6 +115,13 @@ const EditEvent = () => {
         }
     }
 
+    function handleLargeImageChange(e) {
+        if (e.target.files.length) {
+            setLargeBlob(URL.createObjectURL(e.target.files[0]))
+            setLargeFile(e.target.files[0])
+        }
+    }
+
     const handleSubmit = (event) => {
         const form = event.currentTarget
         event.preventDefault()
@@ -113,13 +132,33 @@ const EditEvent = () => {
             const myHeaders = new Headers()
             myHeaders.append('Content-Type', 'application/json')
             myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
-            formdata.append("image", file)
+            if (file && largeFile) {
+                formdata.append("image", file)
+                formdata.append("image", largeFile)
+                formdata.append('fileLength', 3)
+            } else if (largeFile) {
+                formdata.append("image", largeFile)
+                formdata.append('fileLength', 2)
+            } else if (file) {
+                formdata.append("image", file)
+                formdata.append('fileLength', 1)
+            }
+
+            if (selectedMainPage.find(e => e.value === 'generalEvent')) {
+                formdata.append("generalEvent", true)
+            } else {
+                formdata.append("generalEvent", false)
+            }
+
+            if (selectedMainPage.find(e => e.value === 'topEvent')) {
+                formdata.append("topEvent", true)
+            } else {
+                formdata.append("topEvent", false)
+            }
             formdata.append("id", eventId)
             formdata.append("title", eventDetails?.title)
             formdata.append("title_en", eventDetails?.title_en)
             formdata.append("title_ru", eventDetails?.title_ru)
-            formdata.append("topEvent", eventDetails?.topEvent)
-            formdata.append("generalEvent", eventDetails?.generalEvent)
             formdata.append("description", eventDetails?.description)
             formdata.append("description_en", eventDetails?.description_en)
             formdata.append("description_ru", eventDetails?.description_ru)
@@ -206,11 +245,18 @@ const EditEvent = () => {
                                 <CFormInput
                                     type="file"
                                     onChange={handleImageChange}
-                                    feedbackInvalid='Պարտադիր դաշտ'
-                                    required={!file?.length && !blob?.length}
+                                    label='Փոքր նկար'
                                 />
                             </CCol>
-                            <CCol md={4} /><CCol md={4} />
+                            <CCol md={4}>
+                                <img alt='' src={largeBlob} className='eventImage' />
+                                <CFormInput
+                                    type="file"
+                                    onChange={handleLargeImageChange}
+                                    label='Մեծ նկար'
+                                />
+                            </CCol>
+                            <CCol md={4} />
                             <CCol md={4}>
                                 <CFormInput
                                     type="text"
@@ -222,26 +268,23 @@ const EditEvent = () => {
                                 />
                             </CCol>
                             <CCol md={4}>
-                                <CFormSelect
-                                    type="text"
-                                    feedbackInvalid='Պարտադիր դաշտ'
-                                    label="Առավելություն"
-                                    value={eventDetails?.generalEvent ? 'generalEvent' : eventDetails?.topEvent ? 'topEvent' : ''}
-                                    required
-                                    onChange={(e) => {
-                                        if (e.target.value === 'generalEvent') {
-                                            setEventDetails({ ...eventDetails, generalEvent: true, topEvent: false })
-                                        } else if (e.target.value === 'topEvent') {
-                                            setEventDetails({ ...eventDetails, generalEvent: false, topEvent: true })
-                                        } else {
-                                            setEventDetails({ ...eventDetails, generalEvent: false, topEvent: false })
-                                        }
+                                <CFormLabel>Առավելություն</CFormLabel>
+                                <MultiSelect
+                                    options={mainPage}
+                                    value={selectedMainPage}
+                                    onChange={setSelectedMainPage}
+                                    labelledBy="Select"
+                                    overrideStrings={{
+                                        allItemsAreSelected: 'Բոլորն ընտրված են',
+                                        clearSearch: 'Մաքրել որոնումը',
+                                        clearSelected: 'Մաքրել ընտրվածները',
+                                        noOptions: 'Ոչինչ չի գտնվել',
+                                        search: 'Որոնել',
+                                        selectAll: 'Ընտրել բոլորը',
+                                        selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
+                                        selectSomeItems: 'Ընտրել...',
                                     }}
-                                >
-                                    <option value={'generalEvent'}>Գլխավոր</option>
-                                    <option value={'topEvent'}>Թոփ</option>
-                                    <option value={''}>Բոլորը</option>
-                                </CFormSelect>
+                                />
                             </CCol>
                             <CCol md={4}>
                                 <CFormSelect

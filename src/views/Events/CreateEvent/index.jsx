@@ -21,7 +21,9 @@ const CreateEvent = () => {
     const [selectedSponsors, setSelectedSponsors] = useState([])
     const [validated, setValidated] = useState(false)
     const [file, setFile] = useState()
+    const [largeFile, setLargeFile] = useState()
     const [blob, setBlob] = useState()
+    const [largeBlob, setLargeBlob] = useState()
     const [activeKey, setActiveKey] = useState(1)
     const [eventDetails, setEventDetails] = useState({
         title: '',
@@ -40,7 +42,14 @@ const CreateEvent = () => {
         title_ru: '',
         description_en: '',
         description_ru: '',
+        mainPage: ''
     })
+    const mainPage = [
+        { label: 'Գլխավոր', value: 'generalEvent' },
+        { label: 'Թոփ', value: 'topEvent' },
+        { label: 'Բոլորը', value: 'all' },
+    ]
+    const [selectedMainPage, setSelectedMainPage] = useState([])
 
     useEffect(() => {
         dispatch(GetAllCategories())
@@ -80,15 +89,24 @@ const CreateEvent = () => {
         }
     }
 
+    function handleLargeImageChange(e) {
+        if (e.target.files.length) {
+            setLargeBlob(URL.createObjectURL(e.target.files[0]))
+            setLargeFile(e.target.files[0])
+        }
+    }
+
     const handleSubmit = (event) => {
         const form = event.currentTarget
         event.preventDefault()
         event.stopPropagation()
         if (form.checkValidity() !== false) {
             if (!eventDetails?.title_en?.length) {
-                setErrors({ ...errors, title_en: 'English title is required' })
+                setErrors({ ...errors, title_en: 'Անգլերեն անունը պարտադիր է' })
             } else if (!eventDetails?.title_ru?.length) {
-                setErrors({ ...errors, title_en: '', description_en: '', title_ru: 'Russian title is required' })
+                setErrors({ ...errors, title_en: '', description_en: '', title_ru: 'Ռուսերեն անունը պարտադիր է' })
+            } else if (!selectedMainPage?.length) {
+                setErrors({ ...errors, title_en: '', description_en: '', title_ru: '', mainPage: 'Առավելություն դաշտը պարտադիր է' })
             } else {
                 dispatch(StartLoading())
                 setErrors({
@@ -96,24 +114,38 @@ const CreateEvent = () => {
                     title_ru: '',
                     description_en: '',
                     description_ru: '',
+                    mainPage: '',
                 })
                 const formdata = new FormData()
                 formdata.append("image", file)
+                formdata.append("image", largeFile)
                 formdata.append("title", eventDetails?.title)
                 formdata.append("title_en", eventDetails?.title_en)
                 formdata.append("title_ru", eventDetails?.title_ru)
-                formdata.append("topEvent", eventDetails?.topEvent)
-                formdata.append("generalEvent", eventDetails?.generalEvent)
                 formdata.append("description", eventDetails?.description)
                 formdata.append("description_en", eventDetails?.description_en)
                 formdata.append("description_ru", eventDetails?.description_ru)
                 formdata.append("category", eventDetails?.category)
                 formdata.append("subcategories", eventDetails?.subcategory)
+
                 if (selectedSponsors?.length > 0) {
                     selectedSponsors?.forEach(element => {
                         formdata.append("sponsors[]", element.value)
                     })
                 }
+
+                if (selectedMainPage.find(e => e.value === 'generalEvent')) {
+                    formdata.append("generalEvent", true)
+                } else {
+                    formdata.append("generalEvent", false)
+                }
+
+                if (selectedMainPage.find(e => e.value === 'topEvent')) {
+                    formdata.append("topEvent", true)
+                } else {
+                    formdata.append("topEvent", false)
+                }
+
                 fetch(`${process.env.REACT_APP_HOSTNAME}/createEvent`, {
                     method: 'POST',
                     body: formdata,
@@ -195,9 +227,19 @@ const CreateEvent = () => {
                                     onChange={handleImageChange}
                                     feedbackInvalid='Պարտադիր դաշտ'
                                     required
+                                    label='Փոքր նկար'
                                 />
                             </CCol>
-                            <CCol md={4} /><CCol md={4} />
+                            <CCol md={4}>
+                                <img alt='' src={largeBlob} className='eventImage' />
+                                <CFormInput
+                                    type="file"
+                                    onChange={handleLargeImageChange}
+                                    feedbackInvalid='Պարտադիր դաշտ'
+                                    label='Մեծ նկար'
+                                />
+                            </CCol>
+                            <CCol md={4} />
                             <CCol md={4}>
                                 <CFormInput
                                     type="text"
@@ -209,25 +251,23 @@ const CreateEvent = () => {
                                 />
                             </CCol>
                             <CCol md={4}>
-                                <CFormSelect
-                                    defaultValue='all'
-                                    feedbackInvalid='Պարտադիր դաշտ'
-                                    label="Առավելություն"
-                                    required
-                                    onChange={(e) => {
-                                        if (e.target.value === 'generalEvent') {
-                                            setEventDetails({ ...eventDetails, generalEvent: true, topEvent: false })
-                                        } else if (e.target.value === 'topEvent') {
-                                            setEventDetails({ ...eventDetails, generalEvent: false, topEvent: true })
-                                        } else {
-                                            setEventDetails({ ...eventDetails, generalEvent: false, topEvent: false })
-                                        }
+                                <CFormLabel>Առավելություն</CFormLabel>
+                                <MultiSelect
+                                    options={mainPage}
+                                    value={selectedMainPage}
+                                    onChange={setSelectedMainPage}
+                                    labelledBy="Select"
+                                    overrideStrings={{
+                                        allItemsAreSelected: 'Բոլորն ընտրված են',
+                                        clearSearch: 'Մաքրել որոնումը',
+                                        clearSelected: 'Մաքրել ընտրվածները',
+                                        noOptions: 'Ոչինչ չի գտնվել',
+                                        search: 'Որոնել',
+                                        selectAll: 'Ընտրել բոլորը',
+                                        selectAllFiltered: 'Ընտրել բոլոր (ֆիլտրված)',
+                                        selectSomeItems: 'Ընտրել...',
                                     }}
-                                >
-                                    <option value={'generalEvent'}>Գլխավոր</option>
-                                    <option value={'topEvent'}>Թոփ</option>
-                                    <option value={'all'}>Բոլորը</option>
-                                </CFormSelect>
+                                />
                             </CCol>
                             <CCol md={4}>
                                 <CFormSelect
@@ -278,6 +318,7 @@ const CreateEvent = () => {
                                 />
                             </CCol>
                             {(errors?.title_en?.length > 0 || errors?.description_en?.length > 0 || errors?.title_ru?.length > 0 || errors?.description_ru?.length > 0) && <span style={{ color: 'red' }}>Անգլերեն և ռուսերեն վերնագրերի դաշտերը պարտադիր են</span>}
+                            {errors?.mainPage?.length > 0 && <span style={{ color: 'red' }}>{errors?.mainPage}</span>}
                             <CCol xs={12}>
                                 <CButton disabled={loading} type="submit">
                                     {loading && <CSpinner component="span" size="sm" aria-hidden="true" />}
