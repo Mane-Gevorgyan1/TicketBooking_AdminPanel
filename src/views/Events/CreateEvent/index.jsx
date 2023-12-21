@@ -117,8 +117,6 @@ const CreateEvent = () => {
                     mainPage: '',
                 })
                 const formdata = new FormData()
-                formdata.append("image", file)
-                formdata.append("image", largeFile)
                 formdata.append("title", eventDetails?.title)
                 formdata.append("title_en", eventDetails?.title_en)
                 formdata.append("title_ru", eventDetails?.title_ru)
@@ -127,6 +125,15 @@ const CreateEvent = () => {
                 formdata.append("description_ru", eventDetails?.description_ru)
                 formdata.append("category", eventDetails?.category)
                 formdata.append("subcategories", eventDetails?.subcategory)
+
+                if (file && largeFile) {
+                    formdata.append("image", file)
+                    formdata.append("image", largeFile)
+                    formdata.append('fileLength', 2)
+                } else {
+                    formdata.append("image", file)
+                    formdata.append('fileLength', 1)
+                }
 
                 if (selectedSponsors?.length > 0) {
                     selectedSponsors?.forEach(element => {
