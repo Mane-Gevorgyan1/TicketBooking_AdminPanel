@@ -5,7 +5,6 @@
 .allAds {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: 20px;
 }
 
@@ -13,4 +12,8 @@
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+.adText {
+    word-break: break-all;
 }

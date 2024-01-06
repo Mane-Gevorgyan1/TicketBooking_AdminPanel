@@ -17,6 +17,7 @@ export const EachAd = ({ open, setOpen, ad }) => {
                         <p>HY: {ad.text}</p>
                         <p>EN: {ad.text_en}</p>
                         <p>RU: {ad.text_ru}</p>
+                        <p>URL: {ad.url}</p>
                     </div>
                 </div>
             </div>

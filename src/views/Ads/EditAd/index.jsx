@@ -21,6 +21,7 @@ const EditAd = () => {
         text_en: '',
         text_ru: '',
     })
+    const [url, setUrl] = useState('')
 
     useEffect(() => {
         dispatch(GetSingleAd(params.id))
@@ -56,6 +57,7 @@ const EditAd = () => {
             formdata.append("text", text.text_hy)
             formdata.append("text_en", text.text_en)
             formdata.append("text_ru", text.text_ru)
+            formdata.append("url", url)
             myHeaders.append('Content-Type', 'application/json')
             myHeaders.append('Authorization', `Bearer ${localStorage.getItem('accessToken')}`)
             fetch(`${process.env.REACT_APP_HOSTNAME}/editAd/${params.id}`, {
@@ -114,6 +116,13 @@ const EditAd = () => {
                         value={text?.text_ru}
                         onChange={(e) => setText({ ...text, text_ru: e.target.value })}
                         label='Текст'
+                    />
+                </CCol>
+                <CCol md={4}>
+                    <CFormInput
+                        defaultValue={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        label='URL'
                     />
                 </CCol>
                 <CCol xs={12}>

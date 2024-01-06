@@ -15,7 +15,7 @@
 
 .eventDetails {
     display: flex;
-    align-items: center;
+    align-items: start;
     gap: 10px;
     justify-content: space-between;
     width: 100%;
